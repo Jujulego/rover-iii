@@ -1,9 +1,11 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import HTMLWebpackPlugin from 'html-webpack-plugin';
+import path from 'path';
+import webpack from 'webpack';
 
-module.exports = {
+// Config
+const config: webpack.Configuration = {
   entry: {
     main: './src/index'
   },
@@ -52,10 +54,12 @@ module.exports = {
         {
           from: '**',
           context: path.resolve(__dirname, 'public'),
-          globOptions: { ignore: '**/public/index.html' }
+          globOptions: { ignore: ['**/public/index.html'] }
         },
       ]
     }),
     new ForkTsCheckerWebpackPlugin()
   ],
 };
+
+export default config;
