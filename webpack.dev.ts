@@ -9,11 +9,6 @@ export default merge(common, {
   devServer: {
     port: 4000,
     hot: true,
-    historyApiFallback: true,
-    proxy: {
-      '/graphql': {
-        target: 'http://localhost:5000',
-      }
-    }
+    historyApiFallback: true
   }
 });
