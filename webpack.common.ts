@@ -10,10 +10,11 @@ const config: webpack.Configuration = {
     main: './src/index'
   },
   output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
     clean: true,
     publicPath: '/',
+    filename: '[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+    assetModuleFilename: 'assets/[hash][ext][query]'
   },
   optimization: {
     runtimeChunk: 'single',
@@ -39,6 +40,10 @@ const config: webpack.Configuration = {
         exclude: /node_modules/,
         use: 'babel-loader',
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: 'asset'
+      }
     ],
   },
   resolve: {
