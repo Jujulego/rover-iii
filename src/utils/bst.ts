@@ -22,7 +22,7 @@ export class BST<T, K = T> {
     return new BST<T, K>(extractor, comparator);
   }
 
-  static fromArray<T, K>(elements: T[], extractor: ExtractKey<T, K>, comparator: Comparator<K>): BST<T, K> {
+  static fromArray<T, K = T>(elements: T[], extractor: ExtractKey<T, K>, comparator: Comparator<K>): BST<T, K> {
     // Add and sort elements
     const array = Array.from(elements);
     array.sort((a, b) => comparator(extractor(a), extractor(b)));

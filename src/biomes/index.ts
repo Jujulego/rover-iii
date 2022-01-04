@@ -7,6 +7,7 @@ import water from './water';
 
 // Types
 export type Biome = ItemOf<typeof BIOMES>;
+export type BiomeName = Biome['name'];
 
 // Constants
 export const BIOMES = [grass, rock, sand, water];
