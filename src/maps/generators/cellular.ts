@@ -3,7 +3,7 @@ import seedrandom from 'seedrandom';
 import { BiomeName, BIOME_NAMES } from '../../biomes';
 import { Rect, ISize, Vector } from '../../math2d';
 
-import { Layer } from '../layer';
+import { Map } from '../map';
 
 // Constants
 const DIRECTIONS = [
@@ -100,7 +100,7 @@ function evaluateSurroundings(matrix: BiomeMatrix, bbox: Rect, pos: Vector, outB
   return biomes;
 }
 
-export function cellularLayer(size: ISize, biomes: Partial<BiomesFrequencies>, options: CellularOptions = {}): Layer {
+export function cellularMap(size: ISize, biomes: Partial<BiomesFrequencies>, options: CellularOptions = {}): Map {
   const {
     seed,
     iterations = 5,
@@ -128,5 +128,5 @@ export function cellularLayer(size: ISize, biomes: Partial<BiomesFrequencies>, o
     }
   }
 
-  return Layer.fromMatrix(matrix);
+  return Map.fromMatrix(matrix);
 }

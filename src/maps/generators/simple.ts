@@ -1,11 +1,11 @@
 import { BiomeName } from '../../biomes';
 import { ISize, Vector } from '../../math2d';
 
-import { Layer } from '../layer';
+import { Map } from '../map';
 import { Tile } from '../tile';
 
 // Generator
-export function simpleLayer(size: ISize, biome: BiomeName): Layer {
+export function simpleMap(size: ISize, biome: BiomeName): Map {
   const tiles: Tile[] = [];
 
   for (let y = 0; y < size.h; ++y) {
@@ -19,5 +19,5 @@ export function simpleLayer(size: ISize, biome: BiomeName): Layer {
     }
   }
 
-  return Layer.fromArray(tiles);
+  return Map.fromArray(tiles);
 }

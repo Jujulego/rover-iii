@@ -5,7 +5,7 @@ import { Tile } from './tile';
 import { BiomeName } from '../biomes';
 
 // Class
-export class Layer {
+export class Map {
   // Attributes
   readonly bbox: Rect;
 
@@ -18,7 +18,7 @@ export class Layer {
 
   // Statics
   static fromArray(tiles: Tile[]) {
-    return new Layer(
+    return new Map(
       BST.fromArray(tiles, (t) => t.pos, (a, b) => a.compare(b))
     );
   }
@@ -41,8 +41,8 @@ export class Layer {
     return this.fromArray(tiles);
   }
 
-  static copy(layer: Layer): Layer {
-    return new Layer(BST.copy(layer.tiles));
+  static copy(layer: Map): Map {
+    return new Map(BST.copy(layer.tiles));
   }
 
   // Methods
@@ -71,7 +71,7 @@ export class Layer {
   }
 
   // - utils
-  sublayer(bbox: Rect): Layer {
+  sublayer(bbox: Rect): Map {
     // Simple cases
     if (this.bbox.within(bbox)) return this;
 
@@ -84,6 +84,6 @@ export class Layer {
       }
     }
 
-    return Layer.fromArray(tiles);
+    return Map.fromArray(tiles);
   }
 }

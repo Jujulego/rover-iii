@@ -1,3 +1,3 @@
 export * from './generators';
-export * from './layer';
+export * from './map';
 export * from './tile';
