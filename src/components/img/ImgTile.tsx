@@ -1,8 +1,8 @@
+import { Box } from '@mui/material';
 import { FC } from 'react';
 
 import { BiomeName, BIOMES } from '../../biomes';
 import { Vector } from '../../math2d';
-import { Box } from '@mui/material';
 
 // Types
 export interface TileProps {

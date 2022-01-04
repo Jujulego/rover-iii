@@ -11,3 +11,4 @@ export type BiomeName = Biome['name'];
 
 // Constants
 export const BIOMES = [grass, rock, sand, water];
+export const BIOME_NAMES = BIOMES.map(b => b.name);

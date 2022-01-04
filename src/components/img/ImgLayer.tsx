@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { FC } from 'react';
 
-import { Layer } from '../../maps/layer';
+import { Layer } from '../../maps';
 
 import { ImgTile } from './ImgTile';
 
