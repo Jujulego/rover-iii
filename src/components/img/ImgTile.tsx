@@ -18,6 +18,8 @@ export const ImgTile: FC<TileProps> = (props) => {
   return (
     <Box
       component="img"
+      height="100%"
+      width="100%"
       gridRow={props.pos.y + 1}
       gridColumn={props.pos.x + 1}
       src={biome?.texture?.toString() || ''}
