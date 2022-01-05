@@ -1803,6 +1803,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jujulego/alma-utils@npm:^1.0.10":
+  version: 1.0.10
+  resolution: "@jujulego/alma-utils@npm:1.0.10"
+  dependencies:
+    dequal: ^2.0.2
+  peerDependencies:
+    react: ^17.0.0
+    react-dom: ^17.0.0
+  checksum: af8a76213442463e9bff0a093c2e3f4283dacfd28ed67d8be7dc3b1da4d441bfb3449f5b8d3ca60b8aca1d473d6d19c33b01b6564d8b7f8f2451335bf722870c
+  languageName: node
+  linkType: hard
+
 "@mui/base@npm:5.0.0-alpha.63":
   version: 5.0.0-alpha.63
   resolution: "@mui/base@npm:5.0.0-alpha.63"
@@ -4180,6 +4192,13 @@ __metadata:
   version: 1.1.2
   resolution: "depd@npm:1.1.2"
   checksum: 6b406620d269619852885ce15965272b829df6f409724415e0002c8632ab6a8c0a08ec1f0bd2add05dc7bd7507606f7e2cc034fa24224ab829580040b835ecd9
+  languageName: node
+  linkType: hard
+
+"dequal@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "dequal@npm:2.0.2"
+  checksum: 86c7a2c59f7b0797ed397c74b5fcdb744e48fc19440b70ad6ac59f57550a96b0faef3f1cfd5760ec5e6d3f7cb101f634f1f80db4e727b1dc8389bf62d977c0a0
   languageName: node
   linkType: hard
 
@@ -8110,6 +8129,7 @@ __metadata:
     "@babel/runtime": 7.16.7
     "@emotion/react": ^11.7.1
     "@emotion/styled": ^11.6.0
+    "@jujulego/alma-utils": ^1.0.10
     "@mui/icons-material": ^5.2.5
     "@mui/material": ^5.2.7
     "@types/copy-webpack-plugin": 8.0.1
