@@ -16,7 +16,7 @@ export abstract class Ant extends Thing {
   }
 
   // Methods
-  protected abstract compute(): Vector;
+  protected abstract compute(target: Vector): Vector;
 
   private move(move: Vector): boolean {
     const pos = this._position.add(move);
@@ -36,8 +36,8 @@ export abstract class Ant extends Thing {
     return true;
   }
 
-  step(): void {
-    const move = this.compute();
+  step(target: Vector): void {
+    const move = this.compute(target);
     this.move(move);
   }
 

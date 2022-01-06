@@ -20,7 +20,12 @@ export class StupidAnt extends Ant {
   private _dir = 0;
 
   // Methods
-  protected compute(): Vector {
+  protected compute(target: Vector): Vector {
+    // Arrived !
+    if (this.position.equals(target)) {
+      return NULL_VECTOR;
+    }
+
     // Inspect next tile
     for (let i = 0; i < DIRECTIONS.length; ++i) {
       const next = this.position.add(DIRECTIONS[this._dir]);

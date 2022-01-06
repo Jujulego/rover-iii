@@ -1,5 +1,5 @@
 import { useInterval } from '@jujulego/alma-utils';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 
 import { StupidAnt, Thing } from '../ants';
 import { cellularMap } from '../maps';
@@ -18,13 +18,15 @@ const map = cellularMap(
 );
 
 const ant1 = new StupidAnt(map, 'blue', new Vector({ x: 5, y: 5 }));
-const ant2 = new StupidAnt(map, 'yellow', new Vector({ x: 25, y: 5 }));
+const ant2 = new StupidAnt(map, 'yellow', new Vector({ x: 35, y: 5 }));
+
+const target = new Vector({ x: 20, y: 15 });
 
 // Component
 export const App: FC = () => {
-  useInterval(1000, () => {
-    ant1.step();
-    ant2.step();
+  useInterval(500, () => {
+    ant1.step(target);
+    ant2.step(target);
   });
 
   // Render
@@ -36,7 +38,7 @@ export const App: FC = () => {
       <ImgThingLayer
         map={map}
         things={[
-          Thing.createTarget(new Vector({ x: 20, y: 15 })),
+          Thing.createTarget(target),
           ant1, ant2
         ]}
       />
