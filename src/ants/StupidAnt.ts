@@ -27,7 +27,7 @@ export class StupidAnt extends Ant {
       const tile = this.map.tile(next);
 
       if (!tile || tile.biome === 'water') {
-        this._dir = (this._dir + Math.floor(Math.random() * 4)) % DIRECTIONS.length;
+        this._dir = (this._dir + Math.ceil(Math.random() * DIRECTIONS.length)) % DIRECTIONS.length;
       } else {
         return DIRECTIONS[this._dir];
       }

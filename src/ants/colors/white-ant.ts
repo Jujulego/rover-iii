@@ -1,0 +1,10 @@
+import { IAntColor } from './color';
+
+// Constants
+const whiteAnt: IAntColor<'white'> = {
+  name: 'white',
+  texture: new URL('./white-ant.png', import.meta.url),
+  color: '#e0e0e0',
+};
+
+export default whiteAnt;
