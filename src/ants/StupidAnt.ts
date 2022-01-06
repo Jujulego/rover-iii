@@ -1,18 +1,7 @@
 import { NULL_VECTOR, Vector } from '../math2d';
 
 import { Ant } from './Ant';
-
-// Constants
-const DIRECTIONS = [
-  new Vector(1, 0),
-  new Vector(1, 1),
-  new Vector(0, 1),
-  new Vector(-1, 1),
-  new Vector(-1, 0),
-  new Vector(-1, -1),
-  new Vector(0, -1),
-  new Vector(1, -1),
-];
+import { MOVES } from './utils';
 
 // Class
 export class StupidAnt extends Ant {
@@ -27,14 +16,14 @@ export class StupidAnt extends Ant {
     }
 
     // Inspect next tile
-    for (let i = 0; i < DIRECTIONS.length; ++i) {
-      const next = this.position.add(DIRECTIONS[this._dir]);
+    for (let i = 0; i < MOVES.length; ++i) {
+      const next = this.position.add(MOVES[this._dir]);
       const tile = this.map.tile(next);
 
       if (!tile || tile.biome === 'water') {
-        this._dir = (this._dir + Math.ceil(Math.random() * DIRECTIONS.length)) % DIRECTIONS.length;
+        this._dir = (this._dir + Math.ceil(Math.random() * MOVES.length)) % MOVES.length;
       } else {
-        return DIRECTIONS[this._dir];
+        return MOVES[this._dir];
       }
     }
 

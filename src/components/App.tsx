@@ -1,7 +1,7 @@
 import { useInterval } from '@jujulego/alma-utils';
 import { FC } from 'react';
 
-import { StupidAnt, Thing } from '../ants';
+import { SmartAnt, StupidAnt, Thing } from '../ants';
 import { cellularMap } from '../maps';
 import { Vector } from '../math2d';
 
@@ -18,7 +18,7 @@ const map = cellularMap(
 );
 
 const ant1 = new StupidAnt(map, 'blue', new Vector({ x: 5, y: 5 }));
-const ant2 = new StupidAnt(map, 'yellow', new Vector({ x: 35, y: 5 }));
+const ant2 = new SmartAnt(map, 'yellow', new Vector({ x: 35, y: 5 }));
 
 const target = new Vector({ x: 20, y: 15 });
 
