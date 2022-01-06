@@ -8,6 +8,7 @@ import { Vector } from '../../math2d';
 export interface TileProps {
   pos: Vector;
   biome: BiomeName;
+  onClick?: () => void;
 }
 
 // Component
@@ -24,6 +25,7 @@ export const ImgTile: FC<TileProps> = (props) => {
       gridColumn={props.pos.x + 1}
       src={biome?.texture?.toString() || ''}
       alt={props.biome}
+      onClick={props.onClick}
     />
   );
 };

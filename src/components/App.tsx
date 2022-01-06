@@ -1,7 +1,7 @@
 import { useInterval } from '@jujulego/alma-utils';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
-import { SmartAnt, StupidAnt, Thing } from '../ants';
+import { SmartAnt, Thing } from '../ants';
 import { cellularMap } from '../maps';
 import { Vector } from '../math2d';
 
@@ -9,6 +9,7 @@ import { ImgGrid } from './img/ImgGrid';
 import { ImgMapLayer } from './img/ImgMapLayer';
 import { ImgThingLayer } from './img/ImgThingLayer';
 import { ImgHistoryLayer } from './img/ImgHistoryLayer';
+import { ImgTreeLayer } from './img/ImgTreeLayer';
 
 // Constants
 const map = cellularMap(
@@ -17,29 +18,28 @@ const map = cellularMap(
   { seed: 'toto', iterations: 5, outBiome: 'water' }
 );
 
-const ant1 = new StupidAnt(map, 'blue', new Vector({ x: 5, y: 5 }));
-const ant2 = new SmartAnt(map, 'yellow', new Vector({ x: 35, y: 5 }));
-
-const target = new Vector({ x: 20, y: 15 });
+const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 5 }));
 
 // Component
 export const App: FC = () => {
-  useInterval(500, () => {
-    ant1.step(target);
-    ant2.step(target);
-  });
+  // State
+  const [target, setTarget] = useState(new Vector({ x: 20, y: 15 }));
 
   // Render
+  useInterval(500, () => {
+    ant.step(target);
+  });
+
   return (
     <ImgGrid tileSize={32}>
-      <ImgMapLayer map={map} />
-      <ImgHistoryLayer ant={ant1} map={map} />
-      <ImgHistoryLayer ant={ant2} map={map} />
+      <ImgMapLayer map={map} onTileClick={setTarget} />
+      <ImgHistoryLayer ant={ant} map={map} />
+      <ImgTreeLayer ant={ant} map={map} from={target} />
       <ImgThingLayer
         map={map}
         things={[
           Thing.createTarget(target),
-          ant1, ant2
+          ant
         ]}
       />
     </ImgGrid>

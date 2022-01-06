@@ -41,6 +41,7 @@ export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
       height="100%"
       gridColumn={`1 / ${map.bbox.w + 2}`}
       gridRow={`1 / ${map.bbox.h + 2}`}
+      pointerEvents="none"
     >
       <path
         d={path}
@@ -49,7 +50,6 @@ export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth=".1"
-        opacity=".5"
       />
     </Box>
   );

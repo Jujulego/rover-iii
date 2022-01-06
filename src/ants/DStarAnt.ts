@@ -195,7 +195,10 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
   // - callbacks
   private init() {
-    this._data = {};
+    for (const d of Object.values(this._data)) {
+      d.cost = Infinity;
+    }
+
     this.setDStarData(this._target, { from: this._target, cost: 0 });
 
     this.expand([{ pos: this._target, flag: 'NEW' }]);
@@ -250,16 +253,6 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
     return NULL_VECTOR;
   }
-
-  /*restart(keep = false) {
-    super.restart(keep);
-
-    if (!keep) {
-      this.init();
-    } else {
-      this.expand([{ pos: this._target, flag: 'RAISE' }]);
-    }
-  }*/
 
   // Properties
   private get size(): Size {
