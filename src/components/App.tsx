@@ -35,7 +35,7 @@ export const App: FC = () => {
     <ImgGrid tileSize={32}>
       <ImgMapLayer map={map} onTileClick={(pos) => { ant.teleport(pos); setTarget(new Vector(target)); }} />
       <ImgFogLayer ant={ant} map={map} />
-      {/*<ImgHistoryLayer ant={ant} map={map} limit={20} />*/}
+      {/*<ImgHistoryLayer ant={ant} map={map} />*/}
       <ImgTreeLayer ant={ant} map={map} from={target} />
       <ImgThingLayer
         map={map}

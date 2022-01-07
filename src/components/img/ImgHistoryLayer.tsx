@@ -29,8 +29,18 @@ export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
 
   // Memos
   const path = useMemo(() => {
-    return history.reduceRight((path, pos) => `${path} L ${pos.x - map.bbox.l + 0.5} ${pos.y - map.bbox.t + 0.5}`, `M ${position.x - map.bbox.l + 0.5} ${position.y - map.bbox.t + 0.5}`);
-  }, [history, map, position]);
+    const parts: string[] = [];
+    let prev = position;
+
+    for (const pos of history) {
+      const cmd = parts.length > 0 && prev.distance(pos) < 2 ? 'L' : 'M';
+
+      parts.push(`${cmd} ${pos.x - map.bbox.l + 0.5} ${pos.y - map.bbox.t + 0.5}`);
+      prev = pos;
+    }
+
+    return parts.join(' ');
+  }, [history, map]);
 
   // Render
   return (

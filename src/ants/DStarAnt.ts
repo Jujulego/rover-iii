@@ -23,7 +23,8 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   private _treeVersion = 0;
 
   // Abstract methods
-  protected abstract heuristic(from: Vector, to: Vector): number
+  protected abstract heuristic(from: Vector, to: Vector): number;
+  protected abstract look(next: Vector): Vector[];
 
   // Methods
   getDStarData(p: Vector): Data {
@@ -211,8 +212,12 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
     this.getDStarData(pos).detected = true;
 
     if (!tile || (tile?.biome === 'water')) {
-      this.getDStarData(pos).obstacle = true;
-      updates.raise(pos);
+      const data = this.getDStarData(pos);
+
+      if (!data.obstacle) {
+        data.obstacle = true;
+        updates.raise(pos);
+      }
     }
   }
 
@@ -242,8 +247,14 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
       // Check if there is an obstacle
       const updates = this.createList();
-      this.detect(updates, this.position);
-      this.detect(updates, dp.from);
+
+      for (const pos of this.look(dp.from)) {
+        if (!pos.within(this.map.bbox)) {
+          continue;
+        }
+
+        this.detect(updates, pos);
+      }
 
       if (updates.length <= 0) {
         return dp.from.sub(this.position);
