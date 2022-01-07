@@ -10,11 +10,12 @@ import { Vector } from '../../math2d';
 export interface ImgHistoryLayerProps {
   ant: Ant;
   map: Map;
+  limit?: number;
 }
 
 // Component
 export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
-  const { ant, map } = props;
+  const { ant, map, limit = 0 } = props;
 
   // State
   const [history, setHistory] = useState<Vector[]>([]);
@@ -23,8 +24,8 @@ export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
   const position = useDeepMemo(ant.position);
 
   useEffect(() => {
-    setHistory((old) => [...old, position]);
-  }, [position]);
+    setHistory((old) => [...old.slice(-limit), position]);
+  }, [limit, position]);
 
   // Memos
   const path = useMemo(() => {

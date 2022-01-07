@@ -5,14 +5,14 @@ import { BiomeName, BIOMES } from '../../biomes';
 import { Vector } from '../../math2d';
 
 // Types
-export interface TileProps {
+export interface ImgTileProps {
   pos: Vector;
   biome: BiomeName;
   onClick?: () => void;
 }
 
 // Component
-export const ImgTile: FC<TileProps> = (props) => {
+export const ImgTile: FC<ImgTileProps> = (props) => {
   // Render
   const biome = BIOMES.find(biome => biome.name === props.biome);
 

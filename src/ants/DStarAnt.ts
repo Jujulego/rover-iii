@@ -1,4 +1,4 @@
-import { NULL_VECTOR, Size, Vector } from '../math2d';
+import { NULL_VECTOR, Vector } from '../math2d';
 
 import { Ant } from './Ant';
 import { TreeMixin, TNode } from './TreeMixin';
@@ -9,6 +9,7 @@ import Queue from '../utils/queue';
 // Types
 interface Data {
   from: Vector | null;
+  detected?: boolean;
   obstacle?: boolean;
   cost: number;
 }
@@ -204,13 +205,14 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
     this.expand([{ pos: this._target, flag: 'NEW' }]);
   }
 
-  protected detect(updates: UpdateList, data: { from: Vector, cost: number }) {
+  protected detect(updates: UpdateList, pos: Vector) {
     // Check if there is an obstacle
-    const tile = this.map.tile(data.from);
+    const tile = this.map.tile(pos);
+    this.getDStarData(pos).detected = true;
 
     if (!tile || (tile?.biome === 'water')) {
-      this.getDStarData(data.from).obstacle = true;
-      updates.raise(data.from);
+      this.getDStarData(pos).obstacle = true;
+      updates.raise(pos);
     }
   }
 
@@ -240,7 +242,8 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
       // Check if there is an obstacle
       const updates = this.createList();
-      this.detect(updates, { from: dp.from, cost: dp.cost });
+      this.detect(updates, this.position);
+      this.detect(updates, dp.from);
 
       if (updates.length <= 0) {
         return dp.from.sub(this.position);
@@ -252,10 +255,5 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
     }
 
     return NULL_VECTOR;
-  }
-
-  // Properties
-  private get size(): Size {
-    return this.map.bbox.size;
   }
 }

@@ -6,13 +6,13 @@ import { Vector } from '../../math2d';
 import { ImgTile } from './ImgTile';
 
 // Types
-export interface ImgAntLayerProps {
+export interface ImgMapLayerProps {
   map: Map;
   onTileClick?: (pos: Vector) => void;
 }
 
 // Component
-export const ImgMapLayer: FC<ImgAntLayerProps> = (props) => {
+export const ImgMapLayer: FC<ImgMapLayerProps> = (props) => {
   const { map, onTileClick } = props;
 
   // Render

@@ -10,20 +10,21 @@ import { ImgMapLayer } from './img/ImgMapLayer';
 import { ImgThingLayer } from './img/ImgThingLayer';
 import { ImgHistoryLayer } from './img/ImgHistoryLayer';
 import { ImgTreeLayer } from './img/ImgTreeLayer';
+import { ImgFogLayer } from './img/ImgFogLayer';
 
 // Constants
 const map = cellularMap(
   { w: 40, h: 20 },
   { water: 3, grass: 4, sand: 3 },
-  { seed: 'toto', iterations: 5, outBiome: 'water' }
+  { seed: 'tata', iterations: 5, outBiome: 'water' }
 );
 
-const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 5 }));
+const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
 
 // Component
 export const App: FC = () => {
   // State
-  const [target, setTarget] = useState(new Vector({ x: 20, y: 15 }));
+  const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
 
   // Render
   useInterval(500, () => {
@@ -32,8 +33,9 @@ export const App: FC = () => {
 
   return (
     <ImgGrid tileSize={32}>
-      <ImgMapLayer map={map} onTileClick={setTarget} />
-      <ImgHistoryLayer ant={ant} map={map} />
+      <ImgMapLayer map={map} onTileClick={(pos) => { ant.teleport(pos); setTarget(new Vector(target)); }} />
+      <ImgFogLayer ant={ant} map={map} />
+      {/*<ImgHistoryLayer ant={ant} map={map} limit={20} />*/}
       <ImgTreeLayer ant={ant} map={map} from={target} />
       <ImgThingLayer
         map={map}

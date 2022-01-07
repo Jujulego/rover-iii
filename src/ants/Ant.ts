@@ -41,6 +41,10 @@ export abstract class Ant extends Thing {
     this.move(move);
   }
 
+  teleport(pos: Vector): void {
+    this._position = pos;
+  }
+
   // Properties
   get color(): AntColor {
     return ANT_COLORS[this._color];
