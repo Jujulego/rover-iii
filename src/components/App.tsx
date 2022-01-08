@@ -2,7 +2,7 @@ import { useInterval } from '@jujulego/alma-utils';
 import { FC, useState } from 'react';
 
 import { SmartAnt, Thing } from '../ants';
-import { cellularMap } from '../maps';
+import { cellularMap, simpleMap, Map } from '../maps';
 import { Vector } from '../math2d';
 
 import { ImgGrid } from './img/ImgGrid';
@@ -18,6 +18,13 @@ const map = cellularMap(
   { water: 3, grass: 4, sand: 3 },
   { seed: 'tata', iterations: 5, outBiome: 'water' }
 );
+// const map = Map.fromMatrix([
+//   ['grass', 'grass', 'grass', 'grass', 'grass'],
+//   ['grass', 'grass', 'water', 'grass', 'grass'],
+//   ['grass', 'water', 'water', 'water', 'water'],
+//   ['grass', 'water', 'water', 'grass', 'grass'],
+//   ['grass', 'grass', 'grass', 'grass', 'grass'],
+// ]);
 
 const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
 

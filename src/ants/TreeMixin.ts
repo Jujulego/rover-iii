@@ -4,9 +4,8 @@ import { Ant } from './Ant';
 
 // Type
 export interface TNode {
-  pos: Vector,
-  from: Vector | null,
-  obstacle?: boolean
+  pos: Vector;
+  from: Vector | null;
 }
 
 // Interface

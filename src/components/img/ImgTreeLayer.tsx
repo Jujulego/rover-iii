@@ -14,10 +14,6 @@ export interface ImgTreeLayerProps {
 
 // Utils
 function generatePath(ant: TreeMixin, node: TNode): string {
-  if (node?.obstacle) {
-    return '';
-  }
-
   // Path
   let path = `L ${node.pos.x - ant.map.bbox.l + 0.5} ${node.pos.y - ant.map.bbox.t + 0.5}`;
 
@@ -41,7 +37,7 @@ export const ImgTreeLayer: FC<ImgTreeLayerProps> = (props) => {
     const node = ant.getNode(from);
 
     return node ? generatePath(ant, node).replace(/^L/, 'M') : '';
-  }, [ant, ant.treeVersion, map, from]);
+  }, [ant, ant.treeVersion, from]);
 
   // Render
   return (

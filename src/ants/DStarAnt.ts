@@ -2,37 +2,48 @@ import { NULL_VECTOR, Vector } from '../math2d';
 
 import { Ant } from './Ant';
 import { TreeMixin, TNode } from './TreeMixin';
-import { MOVES, surroundings } from './utils';
-import { Flagged, UpdateList } from '../maps/update-list';
-import Queue from '../utils/queue';
 
 // Types
-interface Data {
-  from: Vector | null;
+interface TileData {
+  next: Vector | null;
   detected?: boolean;
   obstacle?: boolean;
   cost: number;
+}
+
+interface TileUpdate {
+  pos: Vector;
+  next: Vector | null;
+  cost: number;
+}
+
+// Utils
+function hash(v: Vector): string {
+  return [v.x, v.y].join(':');
 }
 
 // Class
 export abstract class DStarAnt extends Ant implements TreeMixin {
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
-  private _target: Vector = NULL_VECTOR;
-  private _data: Record<string, Data> = {};
+  private _target?: Vector;
   private _treeVersion = 0;
+
+  private _map = new Map<string, TileData>();
+  private _updates: TileUpdate[] = [];
 
   // Abstract methods
   protected abstract heuristic(from: Vector, to: Vector): number;
   protected abstract look(next: Vector): Vector[];
 
   // Methods
-  getDStarData(p: Vector): Data {
-    return this._data[`${p.x}:${p.y}`];
+  // - map data
+  getMapData(p: Vector): TileData | undefined {
+    return this._map.get(hash(p));
   }
 
-  private setDStarData(p: Vector, d: Data) {
-    this._data[`${p.x}:${p.y}`] = d;
+  private setMapData(p: Vector, d: TileData) {
+    this._map.set(hash(p), d);
   }
 
   // - tree
@@ -41,230 +52,165 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   }
 
   getNode(pos: Vector): TNode | undefined {
-    const d = this.getDStarData(pos);
-    return { pos, ...d };
+    const d = this.getMapData(pos);
+    return d && { pos, from: d.next };
   }
 
   getChildren(node: TNode): TNode[] {
-    return surroundings(node.pos).reduce((acc, p) => {
-      const n = this.getNode(p);
-      if (n && !n.obstacle && n.from && node.pos.equals(n.from)) {
-        acc.push(n);
+    const children: TNode[] = [];
+
+    for (const pos of this.surroundings(node.pos)) {
+      const n = this.getNode(pos);
+
+      if (n && n.from?.equals(node.pos)) {
+        children.push(n);
       }
+    }
 
-      return acc;
-    }, new Array<TNode>());
-  }
-
-  // - utils
-  private surroundings(p: Vector): Array<Vector> {
-    return MOVES.reduce(
-      (acc, dir) => {
-        const c = p.add(dir);
-        if (c.within(this.map.bbox)) acc.push(c);
-
-        return acc;
-      },
-      new Array<Vector>()
-    );
-  }
-
-  private createList(): UpdateList {
-    return new UpdateList((c) => c.within(this.map.bbox));
-  }
-
-  protected raise(pos: Vector) {
-    this.expand([{ pos, flag: 'RAISE' }]);
+    return children;
   }
 
   // - algorithm
-  //@measure({ limit: 10 })
-  private expand(updates: UpdateList | Flagged[]) {
-    // Setup queue
-    const queue = new Queue<Flagged>();
-
-    for (const u of updates) {
-      if (u.pos.within(this.map.bbox)) {
-        queue.enqueue(u);
-      }
-    }
-
-    while (!queue.isEmpty) {
-      // dequeue
-      const flagged = queue.dequeue() as Flagged;
-      while (queue.next) { // remove copies
-        if (queue.next.pos.equals(flagged.pos) && queue.next.flag === flagged.flag) {
-          queue.dequeue();
-        } else {
-          break;
-        }
-      }
-
-      // expand to neighbors
-      const { pos, flag } = flagged;
-      const data = this.getDStarData(pos);
-      //console.log(`from ${pos.x},${pos.y} (${flag})`);
-
-      this.surroundings(pos).forEach(p => {
-        const d = this.getDStarData(p);
-        if (d && d.obstacle) return;
-
-        let cost = data.cost + this.heuristic(pos, p);
-        //console.log(`to ${p.x},${p.y} (${d ? d.cost : 'infinity'} => ${cost})`);
-
-        switch (flag) {
-          case 'NEW':
-            if (!d) { // no data => new node
-              //console.log(`new:   ${p.x},${p.y} (${cost})`);
-
-              this.setDStarData(p, { cost, from: pos });
-              queue.enqueue({ pos: p, flag: 'NEW' });
-            } else if (d.cost > cost) { // can reduce cost ?
-              //console.log(`lower: ${p.x},${p.y} (${d.cost} => ${cost} by ${pos.x},${pos.y})`);
-
-              this.getDStarData(p).cost = cost;
-              this.getDStarData(p).from = pos;
-              queue.enqueue({ pos: p, flag: 'LOWER' });
-            }
-
-            break;
-
-          case 'LOWER':
-            if (!d) break; // should not happen
-
-            if (!d.from || d.cost > cost) {
-              //console.log(`lower: ${p.x},${p.y} (${d.from ? d.cost : 'infinite'} => ${cost} by ${pos.x},${pos.y})`);
-
-              this.getDStarData(p).cost = cost;
-              this.getDStarData(p).from = pos;
-              queue.enqueue({ pos: p, flag: 'LOWER' });
-            }
-
-            break;
-
-          case 'RAISE':
-            if (!d) break; // should not happen
-            if (!d.from) break;
-
-            if (data.obstacle || !data.from) { // pos became unreachable
-              if (d.from.equals(pos)) { // path goes threw pos
-                //console.log(`raise: ${p.x},${p.y} (${d.cost} => infinite)`);
-
-                // p should be unreachable too
-                this.getDStarData(p).from = null;
-                queue.enqueue({ pos: p, flag: 'RAISE' });
-              } else if (!d.obstacle && !data.obstacle) { // will lower from there
-                const nc = d.cost + this.heuristic(p, pos);
-                //console.log(`lower: ${pos.x},${pos.y} (infinite => ${nc} by ${p.x},${p.y})`);
-
-                cost += nc - data.cost;
-                this.getDStarData(pos).cost = nc;
-                this.getDStarData(pos).from = p;
-
-                queue.enqueue({ pos, flag: 'LOWER' });
-              }
-            } else {
-              if (d.from.equals(pos)) { // path goes threw pos
-                if (d.cost !== cost) {
-                  //console.log(`raise: ${p.x},${p.y} (${d.cost} => ${cost})`);
-
-                  // p should be raised too
-                  this.getDStarData(p).cost = cost;
-                  queue.enqueue({ pos: p, flag: 'RAISE' });
-                }
-              } else if (!d.obstacle) { // maybe can lower from there
-                const nc = d.cost + this.heuristic(p, pos);
-
-                if (data.cost > nc) {
-                  //console.log(`lower: ${pos.x},${pos.y} (${data.cost} => ${nc} by ${p.x},${p.y})`);
-
-                  cost += nc - data.cost;
-                  this.getDStarData(pos).cost = nc;
-                  this.getDStarData(pos).from = p;
-
-                  queue.enqueue({pos, flag: 'LOWER'});
-                }
-              }
-            }
-
-            break;
-        }
-      });
-    }
-
-    ++this._treeVersion;
-  }
-
-  // - callbacks
-  private init() {
-    for (const d of Object.values(this._data)) {
-      d.cost = Infinity;
-    }
-
-    this.setDStarData(this._target, { from: this._target, cost: 0 });
-
-    this.expand([{ pos: this._target, flag: 'NEW' }]);
-  }
-
-  protected detect(updates: UpdateList, pos: Vector) {
-    // Check if there is an obstacle
-    const tile = this.map.tile(pos);
-    this.getDStarData(pos).detected = true;
-
-    if (!tile || (tile?.biome === 'water')) {
-      const data = this.getDStarData(pos);
-
-      if (!data.obstacle) {
-        data.obstacle = true;
-        updates.raise(pos);
-      }
-    }
-  }
-
   protected compute(target: Vector): Vector {
-    // Initialise data
-    if (!this._target.equals(target)) {
-      this._target = target;
-      this.init();
-    }
+    // Update target
+    this.updateTarget(target);
+
+    // Detect and recompute costs
+    do {
+      this._expand();
+
+      const data = this.getMapData(this.position);
+
+      for (const p of this.look(data?.next ?? this.position)) {
+        const d = this.getMapData(p);
+        if (d?.detected) continue;
+
+        const tile = this.map.tile(p);
+
+        if (tile) {
+          this.setMapData(p, {
+            next: null,
+            cost: Infinity,
+            ...d,
+            detected: true,
+            obstacle: tile.biome === 'water',
+          });
+
+          if (tile.biome === 'water') {
+            this.updateTile({ pos: p, next: null, cost: Infinity });
+          }
+        }
+      }
+    } while (this._updates.length > 0);
 
     // Compute next move
-    let i = 8;
+    const d = this.getMapData(this.position)?.next;
+    return d ? d.sub(this.position) : NULL_VECTOR;
+  }
 
-    while (i > 0) {
-      const dp = this.getDStarData(this.position);
+  protected updateTarget(target: Vector): void {
+    if (this._target?.equals(target)) return;
 
-      if (dp.from == null) {
-        return NULL_VECTOR;
-      }
+    // Set new target cost to 0
+    this.updateTile({ pos: target, next: null, cost: 0 });
 
-      const df = this.getDStarData(dp.from);
+    // Recompute old target cost
+    if (this._target) {
+      this.updateTile({ pos: this._target, next: null, cost: Infinity });
+    }
 
-      // Check if known as an obstacle
-      if (df.obstacle) {
-        return NULL_VECTOR;
-      }
+    // Update target
+    this._target = target;
+  }
 
-      // Check if there is an obstacle
-      const updates = this.createList();
+  private _expand(): void {
+    while (this._updates.length > 0) {
+      const upd = this._popNextUpdate();
+      const isRaising = this._isRaising(upd);
+      console.log(`(${upd.pos.x}, ${upd.pos.y}) => (${upd.next?.x ?? 'n'}, ${upd.next?.y ?? 'n'}) for ${upd.cost}`);
 
-      for (const pos of this.look(dp.from)) {
-        if (!pos.within(this.map.bbox)) {
-          continue;
+      this.setMapData(upd.pos, { ...this.getMapData(upd.pos), next: upd.next, cost: upd.cost });
+
+      for (const p of this.surroundings(upd.pos)) {
+        const d = this.getMapData(p);
+        if (d?.obstacle) continue;
+
+        if (isRaising) {
+          if (d?.next?.equals(upd.pos)) {
+            this.updateTile({ pos: p, next: upd.pos, cost: Infinity });
+          } else {
+            const cost = upd.cost + this.heuristic(p, upd.pos);
+
+            if (cost < this._tileCost(p)) {
+              this.setMapData(p, { ...this.getMapData(p), next: upd.pos, cost });
+              this.updateTile({ pos: p, next: upd.pos, cost });
+            }
+          }
+        } else {
+          const cost = upd.cost + this.heuristic(p, upd.pos);
+
+          if (cost < this._tileCost(p)) {
+            this.updateTile({ pos: p, next: upd.pos, cost });
+          }
         }
-
-        this.detect(updates, pos);
-      }
-
-      if (updates.length <= 0) {
-        return dp.from.sub(this.position);
-      } else {
-        this.expand(updates);
-
-        --i;
       }
     }
 
-    return NULL_VECTOR;
+    this._treeVersion++;
+  }
+
+  private _isRaising(upd: TileUpdate): boolean {
+    if (this.getMapData(upd.pos)?.obstacle) {
+      return true;
+    }
+
+    const min = this._tileCost(upd.pos);
+
+    if (upd.cost > min) {
+      for (const p of this.surroundings(upd.pos)) {
+        if (this.getMapData(p)?.obstacle) continue;
+
+        const cost = this._tileCost(p) + this.heuristic(upd.pos, p);
+
+        if (cost < upd.cost) {
+          upd.next = p;
+          upd.cost = cost;
+        }
+      }
+    }
+
+    return upd.cost > min;
+  }
+
+  private _tileCost(pos: Vector): number {
+    return this.getMapData(pos)?.cost ?? Infinity;
+  }
+
+  protected updateTile(upd: TileUpdate) {
+    if (Math.abs(upd.cost - this._tileCost(upd.pos)) < 0.001) {
+      return;
+    }
+
+    if (this._updates[0]?.pos?.equals(upd.pos)) {
+      return;
+    }
+
+    this._updates.unshift(upd);
+    this._updates.sort((a, b) => this._tileCost(a.pos) - this._tileCost(b.pos));
+  }
+
+  private _popNextUpdate(): TileUpdate {
+    const upd = this._updates.pop()!;
+
+    while (this._updates.length > 0) {
+      const next = this._updates.pop()!;
+
+      if (!next.pos.equals(upd.pos)) {
+        this._updates.push(next);
+        break;
+      }
+    }
+
+    return upd;
   }
 }

@@ -17,7 +17,7 @@ export const ImgFogLayer: FC<ImgFogLayerProps> = (props) => {
   // Render
   return (
     <>
-      { map.tiles.filter(({ pos }) => !ant.getDStarData(pos)?.detected).map(({ pos }) => (
+      { map.tiles.filter(({ pos }) => !ant.getMapData(pos)?.detected).map(({ pos }) => (
         <Box
           key={`${pos.x}:${pos.y}`}
 
