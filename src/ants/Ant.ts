@@ -7,6 +7,9 @@ import { surroundings } from './utils';
 
 // Class
 export abstract class Ant extends Thing {
+  // Attributes
+  private _computing = false;
+
   // Constructor
   constructor(
     readonly map: Map,
@@ -53,8 +56,13 @@ export abstract class Ant extends Thing {
 
   // - interact
   step(target: Vector): void {
-    const move = this.compute(target);
-    this.move(move);
+    if (!this._computing) {
+      this._computing = true;
+      const move = this.compute(target);
+      this.move(move);
+    }
+
+    this._computing = false;
   }
 
   teleport(pos: Vector): void {

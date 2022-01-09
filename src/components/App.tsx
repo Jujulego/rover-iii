@@ -19,14 +19,14 @@ const map = cellularMap(
   { seed: 'tata', iterations: 5, outBiome: 'water' }
 );
 // const map = Map.fromMatrix([
-//   ['grass', 'grass', 'grass', 'grass', 'grass'],
 //   ['grass', 'grass', 'water', 'grass', 'grass'],
-//   ['grass', 'water', 'water', 'water', 'water'],
-//   ['grass', 'water', 'water', 'grass', 'grass'],
-//   ['grass', 'grass', 'grass', 'grass', 'grass'],
+//   ['grass', 'grass', 'water', 'grass', 'grass'],
+//   ['grass', 'grass', 'water', 'grass', 'grass'],
+//   ['grass', 'grass', 'water', 'grass', 'grass'],
+//   ['grass', 'grass', 'water', 'grass', 'grass'],
 // ]);
 
-const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
+const ant = new SmartAnt(map, 'blue', new Vector({ x: 4, y: 5 }));
 
 // Component
 export const App: FC = () => {
@@ -43,7 +43,9 @@ export const App: FC = () => {
       <ImgMapLayer map={map} onTileClick={(pos) => { ant.teleport(pos); setTarget(new Vector(target)); }} />
       <ImgFogLayer ant={ant} map={map} />
       {/*<ImgHistoryLayer ant={ant} map={map} />*/}
-      <ImgTreeLayer ant={ant} map={map} from={target} />
+      { ant.getRoots().map(root => (
+        <ImgTreeLayer key={`${root.pos.x}:${root.pos.y}`} ant={ant} map={map} from={root.pos} />
+      )) }
       <ImgThingLayer
         map={map}
         things={[

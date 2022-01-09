@@ -14,6 +14,7 @@ export interface TreeMixin extends Ant {
   get treeVersion(): number;
 
   // Methods
+  getRoots(): TNode[];
   getNode(pos: Vector): TNode | undefined;
   getChildren(node: TNode): TNode[];
 }

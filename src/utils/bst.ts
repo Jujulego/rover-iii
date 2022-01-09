@@ -111,6 +111,14 @@ export class BST<T, K = T> {
     }
   }
 
+  pop(): T | null {
+    if (this.length === 0) {
+      return null;
+    }
+
+    return this._array.splice(this._array.length - 1, 1)[0];
+  }
+
   // - iterate
   *[Symbol.iterator]() {
     yield* this._array;

@@ -1,4 +1,5 @@
 import { NULL_VECTOR, Vector } from '../math2d';
+import { BST } from '../utils';
 
 import { Ant } from './Ant';
 import { TreeMixin, TNode } from './TreeMixin';
@@ -25,7 +26,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   private _treeVersion = 0;
 
   private _map = new Map<string, TileData>();
-  private _updates: Vector[] = [];
+  private _updates = BST.empty<Vector>((a) => a, (a, b) => this._tileMinCost(b) - this._tileMinCost(a));
 
   // Abstract methods
   protected abstract heuristic(from: Vector, to: Vector): number;
@@ -50,6 +51,21 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   // - tree
   get treeVersion(): number {
     return this._treeVersion;
+  }
+
+  getRoots(): TNode[] {
+    const roots: TNode[] = [];
+
+    for (const [key, data] of this._map) {
+      if (data.next !== null) continue;
+
+      const [x, y] = key.split(':').map(v => parseInt(v));
+      const pos = new Vector(x, y);
+
+      roots.push({ pos, from: null });
+    }
+
+    return roots;
   }
 
   getNode(pos: Vector): TNode | undefined {
@@ -136,35 +152,42 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   }
 
   private _expand(): void {
-    while (this._updates.length > 0) {
-      const pos = this._popNextUpdate();
-      const isRaising = this._isRaising(pos);
-      // console.log(`${isRaising ? 'RAISE' : 'LOWER'} (${pos.x}, ${pos.y})`);
+    if (this._updates.length === 0) return;
 
-      for (const p of this.surroundings(pos)) {
-        const d = this.getMapData(p);
-        const cost = this._tileCost(pos) + this.heuristic(p, pos);
+    try {
+      while (this._updates.length > 0) {
+        const pos = this._popNextUpdate();
+        if (this.getMapData(pos).obstacle) continue;
 
-        if (isRaising) {
-          if (d.next?.equals(pos)) {
-            this._updateMapData(p, { next: pos, cost });
-            this.updateTile(p);
+        const isRaising = this._isRaising(pos);
+
+        for (const p of this.surroundings(pos)) {
+          const d = this.getMapData(p);
+          const cost = this._tileCost(pos) + this.heuristic(p, pos);
+
+          if (isRaising) {
+            if (d.next?.equals(pos)) {
+              this._updateMapData(p, { cost });
+              this.updateTile(p);
+            } else {
+              if (cost < d.cost) {
+                this._updateMapData(pos, { minCost: this._tileCost(pos) });
+                this.updateTile(p);
+              }
+            }
           } else {
             if (cost < d.cost) {
-              this._updateMapData(pos, { minCost: this._tileCost(pos) });
+              if (this._cycleCheck(p, pos)) continue;
+
+              this._updateMapData(p, { next: pos, cost });
               this.updateTile(p);
             }
           }
-        } else {
-          if (cost < d.cost) {
-            this._updateMapData(p, { next: pos, cost });
-            this.updateTile(p);
-          }
         }
       }
+    } finally {
+      this._treeVersion++;
     }
-
-    this._treeVersion++;
   }
 
   private _isRaising(pos: Vector): boolean {
@@ -172,6 +195,8 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
     if (this._tileCost(pos) > min) {
       for (const p of this.surroundings(pos)) {
+        if (this._cycleCheck(pos, p)) continue;
+
         const cost = this._tileCost(p) + this.heuristic(pos, p);
 
         if (cost < this._tileCost(pos)) {
@@ -186,32 +211,40 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
     return this._tileCost(pos) > min;
   }
 
+  private _cycleCheck(pos: Vector, next: Vector | null): boolean {
+    while (next) {
+      const d = this.getMapData(next);
+
+      if (d.next?.equals(pos)) {
+        return true;
+      }
+
+      next = d.next;
+    }
+
+    return false;
+  }
+
   private _tileCost(pos: Vector): number {
-    return this.getMapData(pos)?.cost ?? Infinity;
+    return this.getMapData(pos).cost;
   }
 
   private _tileMinCost(pos: Vector): number {
-    return this.getMapData(pos)?.minCost ?? Infinity;
+    return this.getMapData(pos).minCost;
   }
 
   protected updateTile(...upd: Vector[]) {
-    this._updates.push(...upd);
-    this._updates.sort((a, b) => this._tileMinCost(b) - this._tileMinCost(a));
+    for (const u of upd) {
+      const idx = this._updates.shouldBeAt(u);
+
+      if (!this._updates.item(idx - 1)?.equals(u)) {
+        this._updates.insert(u);
+      }
+    }
   }
 
   private _popNextUpdate(): Vector {
-    const upd = this._updates.pop()!;
-
-    while (this._updates.length > 0) {
-      const next = this._updates.pop()!;
-
-      if (!next.equals(upd)) {
-        this._updates.push(next);
-        break;
-      }
-    }
-
-    return upd;
+    return this._updates.pop()!;
   }
 
   protected surroundings(pos: Vector): Vector[] {

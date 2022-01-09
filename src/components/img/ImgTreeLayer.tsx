@@ -35,8 +35,16 @@ export const ImgTreeLayer: FC<ImgTreeLayerProps> = (props) => {
   // Memos
   const path = useMemo(() => {
     const node = ant.getNode(from);
+    if (!node) return '';
 
-    return node ? generatePath(ant, node).replace(/^L/, 'M') : '';
+    // Compute path
+    let path = generatePath(ant, node).replace(/^L/, 'M');
+
+    if (path.indexOf('L') === -1) {
+      path += 'Z';
+    }
+
+    return path;
   }, [ant, ant.treeVersion, from]);
 
   // Render
