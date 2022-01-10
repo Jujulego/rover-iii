@@ -113,7 +113,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
     // Recompute old target cost
     if (this._target) {
-      this._updateMapData(target, { next: null, cost: Infinity });
+      this._updateMapData(this._target, { next: null, cost: Infinity });
       this.updateTile(this._target);
     }
 

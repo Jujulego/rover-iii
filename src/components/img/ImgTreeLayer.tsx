@@ -9,7 +9,6 @@ import { Vector } from '../../math2d';
 export interface ImgTreeLayerProps {
   ant: TreeMixin;
   map: Map;
-  from: Vector;
 }
 
 // Utils
@@ -30,22 +29,25 @@ function generatePath(ant: TreeMixin, node: TNode): string {
 
 // Component
 export const ImgTreeLayer: FC<ImgTreeLayerProps> = (props) => {
-  const { ant, map, from } = props;
+  const { ant, map } = props;
 
   // Memos
-  const path = useMemo(() => {
-    const node = ant.getNode(from);
-    if (!node) return '';
+  const paths = useMemo(() => {
+    const paths: [Vector, string][] = [];
 
-    // Compute path
-    let path = generatePath(ant, node).replace(/^L/, 'M');
+    for (const root of ant.getRoots()) {
+      // Compute path
+      let path = generatePath(ant, root).replace(/^L/, 'M');
 
-    if (path.indexOf('L') === -1) {
-      path += 'Z';
+      if (path.indexOf('L') === -1) {
+        path += 'Z';
+      }
+
+      paths.push([root.pos, path]);
     }
 
-    return path;
-  }, [ant, ant.treeVersion, from]);
+    return paths;
+  }, [ant, ant.treeVersion]);
 
   // Render
   return (
@@ -59,15 +61,18 @@ export const ImgTreeLayer: FC<ImgTreeLayerProps> = (props) => {
       gridRow={`1 / ${map.bbox.h + 2}`}
       pointerEvents="none"
     >
-      <path
-        d={path}
-        fill="transparent"
-        stroke={ant.color.color}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth=".1"
-        opacity=".33"
-      />
+      { paths.map(([root, path]) => (
+        <path
+          key={`${root.x}:${root.y}`}
+          d={path}
+          fill="transparent"
+          stroke={ant.color.color}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth=".1"
+          opacity=".33"
+        />
+      ))}
     </Box>
   );
 };

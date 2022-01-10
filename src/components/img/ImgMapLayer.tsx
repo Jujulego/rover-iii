@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 import { Map } from '../../maps';
 import { Vector } from '../../math2d';
@@ -12,7 +12,7 @@ export interface ImgMapLayerProps {
 }
 
 // Component
-export const ImgMapLayer: FC<ImgMapLayerProps> = (props) => {
+export const ImgMapLayer: FC<ImgMapLayerProps> = memo<ImgMapLayerProps>(function ImgMapLayer(props) {
   const { map, onTileClick } = props;
 
   // Render
@@ -28,4 +28,4 @@ export const ImgMapLayer: FC<ImgMapLayerProps> = (props) => {
       ))}
     </>
   );
-};
+});

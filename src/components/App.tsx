@@ -1,5 +1,5 @@
 import { useInterval } from '@jujulego/alma-utils';
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import { SmartAnt, Thing } from '../ants';
 import { cellularMap, simpleMap, Map } from '../maps';
@@ -15,7 +15,7 @@ import { ImgFogLayer } from './img/ImgFogLayer';
 // Constants
 const map = cellularMap(
   { w: 40, h: 20 },
-  { water: 3, grass: 4, sand: 3 },
+  { water: 3, grass: 4, sand: 3, rock: 1 },
   { seed: 'tata', iterations: 5, outBiome: 'water' }
 );
 // const map = Map.fromMatrix([
@@ -33,6 +33,12 @@ export const App: FC = () => {
   // State
   const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
 
+  // Callback
+  const handleTileClick = useCallback((pos: Vector) => {
+    ant.teleport(pos);
+    setTarget((old) => new Vector(old));
+  }, [setTarget]);
+
   // Render
   useInterval(500, () => {
     ant.step(target);
@@ -40,12 +46,10 @@ export const App: FC = () => {
 
   return (
     <ImgGrid tileSize={32}>
-      <ImgMapLayer map={map} onTileClick={(pos) => { ant.teleport(pos); setTarget(new Vector(target)); }} />
+      <ImgMapLayer map={map} onTileClick={handleTileClick} />
       <ImgFogLayer ant={ant} map={map} />
-      {/*<ImgHistoryLayer ant={ant} map={map} />*/}
-      { ant.getRoots().map(root => (
-        <ImgTreeLayer key={`${root.pos.x}:${root.pos.y}`} ant={ant} map={map} from={root.pos} />
-      )) }
+      <ImgHistoryLayer ant={ant} map={map} />
+      <ImgTreeLayer ant={ant} map={map} />
       <ImgThingLayer
         map={map}
         things={[
