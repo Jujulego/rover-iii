@@ -26,7 +26,7 @@ const map = cellularMap(
 //   ['grass', 'grass', 'water', 'grass', 'grass'],
 // ]);
 
-const ant = new SmartAnt(map, 'blue', new Vector({ x: 4, y: 5 }));
+const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
 
 // Component
 export const App: FC = () => {

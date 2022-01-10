@@ -147,6 +147,17 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
             }
           }
         }
+
+        const data = this.getMapData(pos);
+
+        if (data.next) {
+          const cost = this.heuristic(pos, data.next) + this._tileCost(data.next);
+
+          if (Math.abs(data.cost - cost) > 0.01) {
+            this._updateMapData(pos, { cost });
+            this.updateTile(pos);
+          }
+        }
       }
     }
   }
