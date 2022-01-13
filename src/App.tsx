@@ -1,17 +1,17 @@
 import { useInterval } from '@jujulego/alma-utils';
 import { FC, useCallback, useState } from 'react';
 
-import { SmartAnt, Thing } from '../ants';
-import { LayerBar } from '../layers/LayerBar';
-import { cellularMap, simpleMap, Map } from '../maps';
-import { Vector } from '../math2d';
+import { SmartAnt, Thing } from './ants';
+import { LayerBar } from './layers/LayerBar';
+import { cellularMap, simpleMap, Map } from './maps';
+import { Vector } from './math2d';
 
-import { ImgGrid } from './img/ImgGrid';
-import { ImgMapLayer } from './img/ImgMapLayer';
-import { ImgThingLayer } from './img/ImgThingLayer';
-import { ImgHistoryLayer } from './img/ImgHistoryLayer';
-import { ImgTreeLayer } from './img/ImgTreeLayer';
-import { ImgFogLayer } from './img/ImgFogLayer';
+import { ImgGrid } from './layers/img/ImgGrid';
+import { ImgMapLayer } from './layers/img/ImgMapLayer';
+import { ImgThingLayer } from './layers/img/ImgThingLayer';
+import { ImgHistoryLayer } from './layers/img/ImgHistoryLayer';
+import { ImgTreeLayer } from './layers/img/ImgTreeLayer';
+import { ImgFogLayer } from './layers/img/ImgFogLayer';
 import { Box } from '@mui/material';
 
 // Constants
