@@ -17,8 +17,8 @@ import { Box } from '@mui/material';
 // Constants
 const map = cellularMap(
   { w: 40, h: 20 },
-  { water: 3, grass: 4, sand: 3, rock: 1 },
-  { seed: 'toto', iterations: 5, outBiome: 'water' }
+  { water: 3, grass: 4, sand: 3 },
+  { seed: 'perceval', iterations: 5, outBiome: 'water' }
 );
 // const map = Map.fromMatrix([
 //   ['grass', 'grass', 'water', 'grass', 'grass'],
@@ -33,7 +33,7 @@ const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
 // Component
 export const App: FC = () => {
   // State
-  const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
+  const [target, setTarget] = useState(new Vector({ x: 20, y: 15 }));
 
   // Callback
   const handleTileClick = useCallback((pos: Vector) => {
@@ -43,7 +43,7 @@ export const App: FC = () => {
 
   // Render
   useInterval(500, () => {
-    //ant.step(target);
+    ant.step(target);
   });
 
   return (
@@ -53,8 +53,8 @@ export const App: FC = () => {
         <ImgGrid tileSize={32}>
           <ImgMapLayer map={map} onTileClick={handleTileClick} />
           <ImgFogLayer ant={ant} map={map} />
-          <ImgHistoryLayer ant={ant} map={map} />
           <ImgTreeLayer ant={ant} map={map} />
+          <ImgHistoryLayer ant={ant} map={map} limit={100} />
           <ImgThingLayer
             map={map}
             things={[

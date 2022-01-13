@@ -1,5 +1,6 @@
 import { useDeepMemo } from '@jujulego/alma-utils';
 import { Box } from '@mui/material';
+import { keyframes } from '@mui/material/styles';
 import { FC, useEffect, useMemo, useState } from 'react';
 
 import { Ant } from '../../ants';
@@ -12,6 +13,17 @@ export interface ImgHistoryLayerProps {
   map: Map;
   limit?: number;
 }
+
+// Animations
+const movingDash = keyframes`
+  0% {
+    stroke-dashoffset: .4;
+  }
+  
+  100% {
+    stroke-dashoffset: 0;
+  }
+`;
 
 // Component
 export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
@@ -53,11 +65,16 @@ export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
       gridColumn={`1 / ${map.bbox.w + 2}`}
       gridRow={`1 / ${map.bbox.h + 2}`}
       pointerEvents="none"
+
+      sx={{
+        animation: ({ transitions }) => `${movingDash} 750ms infinite ${transitions.easing.easeInOut}`
+      }}
     >
       <path
         d={path}
         fill="transparent"
         stroke={ant.color.color}
+        strokeDasharray=".1 .3"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth=".1"
