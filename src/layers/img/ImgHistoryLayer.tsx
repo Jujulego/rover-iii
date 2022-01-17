@@ -1,11 +1,11 @@
-import { useDeepMemo } from '@jujulego/alma-utils';
 import { Box } from '@mui/material';
 import { keyframes } from '@mui/material/styles';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { Ant } from '../../ants';
 import { Map } from '../../maps';
-import { Vector } from '../../math2d';
+import { NULL_VECTOR, Vector } from '../../math2d';
+import { distinctUntilChanged } from 'rxjs';
 
 // Types
 export interface ImgHistoryLayerProps {
@@ -26,23 +26,29 @@ const movingDash = keyframes`
 `;
 
 // Component
-export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
+export const ImgHistoryLayer = memo<ImgHistoryLayerProps>(function ImgHistoryLayer(props) {
   const { ant, map, limit = 0 } = props;
 
   // State
   const [history, setHistory] = useState<Vector[]>([]);
 
   // Effects
-  const position = useDeepMemo(ant.position);
-
   useEffect(() => {
-    setHistory((old) => [...old.slice(-limit), position]);
-  }, [limit, position]);
+    const sub = ant.position$
+      .pipe(
+        distinctUntilChanged((a, b) => a.equals(b))
+      )
+      .subscribe((pos) => {
+        setHistory((old) => [...old.slice(-limit), pos]);
+      });
+
+    return () => sub.unsubscribe();
+  }, [ant, limit]);
 
   // Memos
   const path = useMemo(() => {
     const parts: string[] = [];
-    let prev = position;
+    let prev = NULL_VECTOR;
 
     for (const pos of history) {
       const cmd = parts.length > 0 && prev.distance(pos) < 2 ? 'L' : 'M';
@@ -52,7 +58,7 @@ export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
     }
 
     return parts.join(' ');
-  }, [history, map]);
+  }, [map, history]);
 
   // Render
   return (
@@ -81,4 +87,4 @@ export const ImgHistoryLayer: FC<ImgHistoryLayerProps> = (props) => {
       />
     </Box>
   );
-};
+});

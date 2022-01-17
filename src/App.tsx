@@ -23,7 +23,7 @@ export const App: FC = () => {
 
   // Callback
   const handleTileClick = useCallback((pos: Vector) => {
-    ant?.teleport(pos);
+    if (ant) ant.position = pos;
   }, [ant]);
 
   // Effects
@@ -48,7 +48,7 @@ export const App: FC = () => {
 
   return (
     <Box component="main" display="flex" height="100vh">
-      <LayerBar />
+      {/*<LayerBar />*/}
       <Box flex={1} overflow="auto">
         { map && (
           <ImgGrid tileSize={32}>

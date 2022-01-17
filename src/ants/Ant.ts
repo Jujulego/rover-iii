@@ -24,7 +24,7 @@ export abstract class Ant extends Thing {
 
   // - internals
   private move(move: Vector): boolean {
-    const pos = this._position.add(move);
+    const pos = this.position.add(move);
 
     // Out of range / stay
     if (Math.max(Math.abs(move.x), Math.abs(move.y)) !== 1) {
@@ -36,7 +36,7 @@ export abstract class Ant extends Thing {
       return false;
     }
 
-    this._position = pos;
+    this.position = pos;
 
     return true;
   }
@@ -62,10 +62,6 @@ export abstract class Ant extends Thing {
     }
 
     this._computing = false;
-  }
-
-  teleport(pos: Vector): void {
-    this._position = pos;
   }
 
   // Properties

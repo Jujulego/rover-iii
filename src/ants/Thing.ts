@@ -1,10 +1,16 @@
+import { BehaviorSubject } from 'rxjs';
+
 import { Vector } from '../math2d';
 
 // Class
 export class Thing {
+  // Attributes
+  private readonly _position$ = new BehaviorSubject<Vector>(this._position);
+  readonly position$ = this._position$.asObservable();
+
   // Constructor
   constructor(
-    protected _position: Vector,
+    private _position: Vector,
     readonly image: URL,
   ) {}
 
@@ -16,5 +22,10 @@ export class Thing {
   // Properties
   get position(): Vector {
     return this._position;
+  }
+
+  set position(pos: Vector) {
+    this._position$.next(pos);
+    this._position = pos;
   }
 }
