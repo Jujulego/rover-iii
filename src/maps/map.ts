@@ -1,53 +1,17 @@
+import { BiomeName } from '../biomes';
+import { db } from '../db';
 import { Rect, Vector } from '../math2d';
-import { BST } from '../utils';
 
 import { Tile } from './tile';
-import { BiomeName } from '../biomes';
+import Dexie from 'dexie';
 
 // Class
 export class Map {
-  // Attributes
-  readonly bbox: Rect;
-
   // Constructor
-  private constructor(
-    readonly tiles: BST<Tile, Vector>
-  ) {
-    this.bbox = this._computeBBox();
-  }
+  constructor(readonly name: string, readonly bbox: Rect) {}
 
   // Statics
-  static fromArray(tiles: Tile[]) {
-    return new Map(
-      BST.fromArray(tiles, (t) => t.pos, (a, b) => a.compare(b))
-    );
-  }
-
-  static fromMatrix(matrix: (BiomeName | null)[][]) {
-    const tiles: Tile[] = [];
-
-    for (let y = 0; y < matrix.length; ++y) {
-      const line = matrix[y];
-
-      for (let x = 0; x < line.length; ++x) {
-        const biome = line[x];
-
-        if (biome) {
-          tiles.push({ pos: new Vector(x, y), biome });
-        }
-      }
-    }
-
-    return this.fromArray(tiles);
-  }
-
-  static copy(layer: Map): Map {
-    return new Map(BST.copy(layer.tiles));
-  }
-
-  // Methods
-  private _computeBBox(): Rect {
-    // Compute bbox
+  static async fromArray(name: string, tiles: Tile[]): Promise<Map> {
     const bbox = {
       t: Infinity,
       r: -Infinity,
@@ -55,35 +19,72 @@ export class Map {
       l: Infinity
     };
 
-    for (const tile of this.tiles) {
+    // Insert all tiles into database
+    for (const tile of tiles) {
+      await db.tiles.add({ map: name, ...tile });
+
+      // Compute bbox
       bbox.t = Math.min(bbox.t, tile.pos.y);
       bbox.l = Math.min(bbox.l, tile.pos.x);
       bbox.b = Math.max(bbox.b, tile.pos.y);
       bbox.r = Math.max(bbox.r, tile.pos.x);
     }
 
-    return new Rect(bbox);
+    return new Map(name, new Rect(bbox));
   }
 
-  // - accessing
-  tile(pos: Vector): Tile | null {
-    return this.tiles.find(pos);
-  }
+  static async fromMatrix(name: string, matrix: (BiomeName | null)[][]): Promise<Map> {
+    // Compute bbox
+    const bbox = {
+      t: 0,
+      r: Math.max(...matrix.map(l => l.length)) - 1,
+      b: matrix.length - 1,
+      l: 0
+    };
 
-  // - utils
-  sublayer(bbox: Rect): Map {
-    // Simple cases
-    if (this.bbox.within(bbox)) return this;
+    // Insert all tiles into database
+    for (let y = 0; y < matrix.length; ++y) {
+      const line = matrix[y];
 
-    // Compute sublayer
-    const tiles: Tile[] = [];
+      for (let x = 0; x < line.length; ++x) {
+        const biome = line[x];
 
-    for (const tile of this.tiles) {
-      if (tile.pos.within(bbox)) {
-        tiles.push(tile);
+        if (biome) {
+          await db.tiles.add({ map: name, pos: { x, y }, biome });
+        }
       }
     }
 
-    return Map.fromArray(tiles);
+    return new Map(name, new Rect(bbox));
   }
+
+  // Methods
+  async tiles(): Promise<Tile[]> {
+    const res = await db.tiles
+      .where('[map+pos.x+pos.y]').between(
+        [this.name, Dexie.minKey, Dexie.minKey],
+        [this.name, Dexie.maxKey, Dexie.maxKey],
+        )
+      .toArray();
+
+    return res.map(t => ({ ...t, pos: new Vector(t.pos) }));
+  }
+
+  async tile(pos: Vector): Promise<Tile | null> {
+    const res = await db.tiles.get([this.name, pos.x, pos.y]);
+
+    if (!res) {
+      return null;
+    }
+
+    return {
+      ...res,
+      pos: new Vector(res.pos)
+    };
+  }
+
+  // - utils
+  // sublayer(bbox: Rect): Map {
+  //   return new Map(this.name, bbox);
+  // }
 }

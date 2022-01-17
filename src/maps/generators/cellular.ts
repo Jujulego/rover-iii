@@ -100,7 +100,7 @@ function evaluateSurroundings(matrix: BiomeMatrix, bbox: Rect, pos: Vector, outB
   return biomes;
 }
 
-export function cellularMap(size: ISize, biomes: Partial<BiomesFrequencies>, options: CellularOptions = {}): Map {
+export async function cellularMap(name: string, size: ISize, biomes: Partial<BiomesFrequencies>, options: CellularOptions = {}): Promise<Map> {
   const {
     seed,
     iterations = 5,
@@ -128,5 +128,5 @@ export function cellularMap(size: ISize, biomes: Partial<BiomesFrequencies>, opt
     }
   }
 
-  return Map.fromMatrix(matrix);
+  return await Map.fromMatrix(name, matrix);
 }

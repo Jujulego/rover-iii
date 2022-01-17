@@ -20,7 +20,7 @@ export abstract class Ant extends Thing {
   }
 
   // Methods
-  protected abstract compute(target: Vector): Vector;
+  protected abstract compute(target: Vector): Promise<Vector>;
 
   // - internals
   private move(move: Vector): boolean {
@@ -55,10 +55,10 @@ export abstract class Ant extends Thing {
   }
 
   // - interact
-  step(target: Vector): void {
+  async step(target: Vector): Promise<void> {
     if (!this._computing) {
       this._computing = true;
-      const move = this.compute(target);
+      const move = await this.compute(target);
       this.move(move);
     }
 

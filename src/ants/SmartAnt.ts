@@ -6,17 +6,17 @@ import { MOVES } from './utils';
 // Class
 export class SmartAnt extends DStarAnt {
   // Methods
-  protected heuristic(from: Vector, to: Vector): number {
-    return from.distance(to) * (this._tile(from) + this._tile(to)) / 2;
+  protected async heuristic(from: Vector, to: Vector): Promise<number> {
+    return from.distance(to) * (await this._tile(from) + await this._tile(to)) / 2;
   }
 
-  private _tile(pos: Vector): number {
+  private async _tile(pos: Vector): Promise<number> {
     if (this.getMapData(pos).detected) {
-      const tile = this.map.tile(pos)!;
+      const tile = await this.map.tile(pos);
 
-      if (tile.biome === 'sand') {
+      if (tile!.biome === 'sand') {
         return 5;
-      } else if (tile.biome === 'rock') {
+      } else if (tile!.biome === 'rock') {
         return 0.5;
       } else {
         return 1;

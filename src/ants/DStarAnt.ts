@@ -29,7 +29,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   private _updates = BST.empty<Vector>((a) => a, (a, b) => this._tileMinCost(b) - this._tileMinCost(a));
 
   // Abstract methods
-  protected abstract heuristic(from: Vector, to: Vector): number;
+  protected abstract heuristic(from: Vector, to: Vector): Promise<number>;
   protected abstract look(next: Vector): Vector[];
 
   // Methods
@@ -88,15 +88,15 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   }
 
   // - algorithm
-  protected compute(target: Vector): Vector {
+  protected async compute(target: Vector): Promise<Vector> {
     // Update target, detect and expand
     this.updateTarget(target);
 
     do {
-      this._expand();
+      await this._expand();
 
       const { next } = this.getMapData(this.position);
-      this.detect(next ?? this.position);
+      await this.detect(next ?? this.position);
     } while (this._updates.length > 0);
 
     // Compute next move
@@ -121,7 +121,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
     this._target = target;
   }
 
-  protected detect(next: Vector): void {
+  protected async detect(next: Vector): Promise<void> {
     for (const pos of this.look(next)) {
       const d = this.getMapData(pos);
 
@@ -129,7 +129,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
         continue;
       }
 
-      const tile = this.map.tile(pos);
+      const tile = await this.map.tile(pos);
 
       if (tile) {
         this._updateMapData(pos, {
@@ -151,7 +151,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
         const data = this.getMapData(pos);
 
         if (data.next) {
-          const cost = this.heuristic(pos, data.next) + this._tileCost(data.next);
+          const cost = await this.heuristic(pos, data.next) + this._tileCost(data.next);
 
           if (Math.abs(data.cost - cost) > 0.01) {
             this._updateMapData(pos, { cost });
@@ -162,7 +162,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
     }
   }
 
-  private _expand(): void {
+  private async _expand(): Promise<void> {
     if (this._updates.length === 0) return;
 
     try {
@@ -170,11 +170,11 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
         const pos = this._popNextUpdate();
         if (this.getMapData(pos).obstacle) continue;
 
-        const isRaising = this._isRaising(pos);
+        const isRaising = await this._isRaising(pos);
 
         for (const p of this.surroundings(pos)) {
           const d = this.getMapData(p);
-          const cost = this._tileCost(pos) + this.heuristic(p, pos);
+          const cost = this._tileCost(pos) + await this.heuristic(p, pos);
 
           if (isRaising) {
             if (d.next?.equals(pos)) {
@@ -201,14 +201,14 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
     }
   }
 
-  private _isRaising(pos: Vector): boolean {
+  private async _isRaising(pos: Vector): Promise<boolean> {
     const min = this._tileMinCost(pos);
 
     if (this._tileCost(pos) > min) {
       for (const p of this.surroundings(pos)) {
         if (this._cycleCheck(pos, p)) continue;
 
-        const cost = this._tileCost(p) + this.heuristic(pos, p);
+        const cost = this._tileCost(p) + await this.heuristic(pos, p);
 
         if (cost < this._tileCost(pos)) {
           this._updateMapData(pos, {

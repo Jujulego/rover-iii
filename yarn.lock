@@ -4223,6 +4223,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dexie-react-hooks@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "dexie-react-hooks@npm:1.1.1"
+  peerDependencies:
+    "@types/react": ">=16"
+    dexie: ">=3.1.0-alpha.1 <5.0.0"
+    react: ">=16"
+  checksum: 09e1b1d4ebc248d103eb13c8f77733f4c140478350d2b8f3989af2fedb45e0d4ae7a07df9281ade162a3264ff621db35899b47d6edf5bf532ba22d571f6f1496
+  languageName: node
+  linkType: hard
+
+"dexie@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "dexie@npm:3.2.0"
+  checksum: 59b6fd600ad23fab57d70ed86e97b0c16a4ca570e7aa4556a9e6ad1fe594bd539d9ab9315b64d5523864fc8f89e26f371d98cf72d4a13ae77068825d1e09ed57
+  languageName: node
+  linkType: hard
+
 "diff-sequences@npm:^27.4.0":
   version: 27.4.0
   resolution: "diff-sequences@npm:27.4.0"
@@ -8146,6 +8164,8 @@ __metadata:
     babel-loader: 8.2.3
     babel-plugin-import: 1.13.3
     copy-webpack-plugin: 9.1.0
+    dexie: ^3.2.0
+    dexie-react-hooks: ^1.1.1
     eslint: 8.6.0
     eslint-plugin-jest: 25.3.4
     eslint-plugin-react: 7.28.0

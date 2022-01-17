@@ -5,7 +5,7 @@ import { Map } from '../map';
 import { Tile } from '../tile';
 
 // Generator
-export function simpleMap(size: ISize, biome: BiomeName): Map {
+export async function simpleMap(name: string, size: ISize, biome: BiomeName): Promise<Map> {
   const tiles: Tile[] = [];
 
   for (let y = 0; y < size.h; ++y) {
@@ -19,5 +19,5 @@ export function simpleMap(size: ISize, biome: BiomeName): Map {
     }
   }
 
-  return Map.fromArray(tiles);
+  return await Map.fromArray(name, tiles);
 }
