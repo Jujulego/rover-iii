@@ -58,8 +58,7 @@ export abstract class Ant extends Thing {
   async step(target: Vector): Promise<void> {
     if (!this._computing) {
       this._computing = true;
-      const move = await this.compute(target);
-      this.move(move);
+      this.move(await this.compute(target));
     }
 
     this._computing = false;

@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { FC } from 'react';
+import { memo } from 'react';
 
 import { Thing } from '../../ants';
 import { Map } from '../../maps';
@@ -11,8 +11,8 @@ export interface ImgThingLayerProps {
 }
 
 // Component
-export const ImgThingLayer: FC<ImgThingLayerProps> = ({ map, things }) => (
-  <>
+export const ImgThingLayer = memo<ImgThingLayerProps>(function ImgThingLayer({ map, things }) {
+  return <>
     { things.map((thg, i) => (
       <Box
         key={i}
@@ -24,5 +24,11 @@ export const ImgThingLayer: FC<ImgThingLayerProps> = ({ map, things }) => (
         src={thg?.image?.toString() || ''}
       />
     )) }
-  </>
+  </>;
+}, (prev, next) =>
+  prev.map.name === next.map.name &&
+  prev.things.every((pt, i) =>
+    next.things[i]?.position?.equals(pt.position) &&
+    next.things[i]?.image === pt.image
+  )
 );

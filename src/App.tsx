@@ -19,7 +19,7 @@ export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
   const [ant, setAnt] = useState<SmartAnt>();
-  const [target, setTarget] = useState(new Vector({ x: 20, y: 15 }));
+  const [target,] = useState(new Vector({ x: 20, y: 15 }));
 
   // Callback
   const handleTileClick = useCallback((pos: Vector) => {
@@ -42,7 +42,7 @@ export const App: FC = () => {
   })(), []);
 
   // Render
-  useInterval(500, () => {
+  useInterval(1000, () => {
     ant?.step(target);
   });
 
@@ -50,23 +50,25 @@ export const App: FC = () => {
     <Box component="main" display="flex" height="100vh">
       <LayerBar />
       <Box flex={1} overflow="auto">
-        <ImgGrid tileSize={32}>
-          { map && ant && (
-            <>
-              <ImgMapLayer map={map} onTileClick={handleTileClick} />
-              <ImgFogLayer ant={ant} map={map} />
-              <ImgTreeLayer ant={ant} map={map} />
-              <ImgHistoryLayer ant={ant} map={map} limit={100} />
-              <ImgThingLayer
-                map={map}
-                things={[
-                  Thing.createTarget(target),
-                  ant
-                ]}
-              />
-            </>
-          ) }
-        </ImgGrid>
+        { map && (
+          <ImgGrid tileSize={32}>
+            <ImgMapLayer map={map} onTileClick={handleTileClick} />
+            { ant && (
+              <>
+                <ImgFogLayer ant={ant} map={map} />
+                <ImgTreeLayer ant={ant} map={map} />
+                <ImgHistoryLayer ant={ant} map={map} limit={100} />
+                <ImgThingLayer
+                  map={map}
+                  things={[
+                    Thing.createTarget(target),
+                    ant
+                  ]}
+                />
+              </>
+            ) }
+          </ImgGrid>
+        ) }
       </Box>
     </Box>
   );
