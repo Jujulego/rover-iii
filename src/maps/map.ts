@@ -3,7 +3,6 @@ import { db } from '../db';
 import { Rect, Vector } from '../math2d';
 
 import { Tile } from './tile';
-import Dexie from 'dexie';
 
 // Class
 export class Map {
@@ -62,8 +61,8 @@ export class Map {
   async tiles(): Promise<Tile[]> {
     const res = await db.tiles
       .where('[map+pos.x+pos.y]').between(
-        [this.name, Dexie.minKey, Dexie.minKey],
-        [this.name, Dexie.maxKey, Dexie.maxKey],
+        [this.name, this.bbox.l, this.bbox.t],
+        [this.name, this.bbox.r, this.bbox.b],
         )
       .toArray();
 
@@ -84,7 +83,7 @@ export class Map {
   }
 
   // - utils
-  // sublayer(bbox: Rect): Map {
-  //   return new Map(this.name, bbox);
-  // }
+  sublayer(bbox: Rect): Map {
+    return new Map(this.name, bbox);
+  }
 }

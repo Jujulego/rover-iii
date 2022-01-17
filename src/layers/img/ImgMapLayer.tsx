@@ -1,10 +1,10 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { memo } from 'react';
 
 import { Map } from '../../maps';
 import { Vector } from '../../math2d';
 
 import { ImgTile } from './ImgTile';
-import { useLiveQuery } from 'dexie-react-hooks';
 
 // Types
 export interface ImgMapLayerProps {

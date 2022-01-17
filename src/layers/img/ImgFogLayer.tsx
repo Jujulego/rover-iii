@@ -1,8 +1,9 @@
 import { Box } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { FC } from 'react';
 
 import { DStarAnt } from '../../ants';
-import { Map, Tile } from '../../maps';
+import { Map } from '../../maps';
 
 // Types
 export interface ImgFogLayerProps {
@@ -15,12 +16,7 @@ export const ImgFogLayer: FC<ImgFogLayerProps> = (props) => {
   const { ant, map } = props;
 
   // State
-  const [tiles, setTiles] = useState<Tile[]>([]);
-
-  // Effects
-  useEffect(() => {
-    map.tiles().then(setTiles);
-  }, [map]);
+  const tiles = useLiveQuery(() => map.tiles(), [map], []);
 
   // Render
   return (
