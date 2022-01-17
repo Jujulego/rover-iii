@@ -55,8 +55,8 @@ export const App: FC = () => {
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
             { ant && (
               <>
-                <ImgFogLayer ant={ant} map={map} />
-                <ImgTreeLayer ant={ant} map={map} />
+                {/*<ImgFogLayer ant={ant} map={map} />*/}
+                {/*<ImgTreeLayer ant={ant} map={map} />*/}
                 <ImgHistoryLayer ant={ant} map={map} limit={100} />
                 <ImgThingLayer
                   map={map}

@@ -8177,6 +8177,7 @@ __metadata:
     react-dom: ^17.0.2
     regenerator-runtime: ^0.13.9
     rxjs: ^7.5.2
+    rxjs-hooks: ^0.7.0
     seedrandom: ^3.0.5
     ts-jest: 27.1.2
     ts-node: 10.4.0
@@ -8195,6 +8196,19 @@ __metadata:
   dependencies:
     queue-microtask: ^1.2.2
   checksum: cb4f97ad25a75ebc11a8ef4e33bb962f8af8516bb2001082ceabd8902e15b98f4b84b4f8a9b222e5d57fc3bd1379c483886ed4619367a7680dad65316993021d
+  languageName: node
+  linkType: hard
+
+"rxjs-hooks@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "rxjs-hooks@npm:0.7.0"
+  dependencies:
+    tslib: ^2.1.0
+    use-constant: ^1.0.0
+  peerDependencies:
+    react: 17.0.1
+    rxjs: ^6.5.3
+  checksum: da0318af7ae2a13a066f05e4011b8345b2bdd8e59a65ef157eb0e425c95817ec97d4c668bea603440401be490cf0a8e5167a1376ee1d24febd81864ce82be80d
   languageName: node
   linkType: hard
 
@@ -9219,6 +9233,15 @@ __metadata:
   dependencies:
     punycode: ^2.1.0
   checksum: 7167432de6817fe8e9e0c9684f1d2de2bb688c94388f7569f7dbdb1587c9f4ca2a77962f134ec90be0cc4d004c939ff0d05acc9f34a0db39a3c797dada262633
+  languageName: node
+  linkType: hard
+
+"use-constant@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "use-constant@npm:1.1.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+  checksum: 51026866a8552237ff3958f365953f1b1f1e1c2f9edd1909e0ffd35e27efebe70f94bc14d63c6a839b4d4fe40382f084983ccbb87f48de932e7cc44f61f09891
   languageName: node
   linkType: hard
 
