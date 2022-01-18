@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
+import { useObservableState } from 'observable-hooks';
 import { memo } from 'react';
-import { useObservable } from 'rxjs-hooks';
 
 import { Thing } from '../../ants';
 import { Map } from '../../maps';
@@ -17,7 +17,7 @@ export const ImgThing = memo<ImgThingProps>(function ImgThing(props) {
   const { map, thing } = props;
 
   // State
-  const position = useObservable(() => thing.position$, NULL_VECTOR);
+  const position = useObservableState(thing.position$, NULL_VECTOR);
 
   // Render
   return (

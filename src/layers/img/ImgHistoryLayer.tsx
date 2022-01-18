@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 import { keyframes } from '@mui/material/styles';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { pluckFirst, useObservable, useObservableState } from 'observable-hooks';
+import { memo } from 'react';
+import { distinctUntilChanged, map, pairwise, scan, withLatestFrom } from 'rxjs';
 
 import { Ant } from '../../ants';
 import { Map } from '../../maps';
-import { NULL_VECTOR, Vector } from '../../math2d';
-import { distinctUntilChanged } from 'rxjs';
 
 // Types
 export interface ImgHistoryLayerProps {
@@ -27,49 +27,34 @@ const movingDash = keyframes`
 
 // Component
 export const ImgHistoryLayer = memo<ImgHistoryLayerProps>(function ImgHistoryLayer(props) {
-  const { ant, map, limit = 0 } = props;
+  const { ant } = props;
+
+  // Observables
+  const map$ = useObservable(pluckFirst, [props.map]);
+  const limit$ = useObservable(pluckFirst, [props.limit ?? 0]);
 
   // State
-  const [history, setHistory] = useState<Vector[]>([]);
-
-  // Effects
-  useEffect(() => {
-    const sub = ant.position$
-      .pipe(
-        distinctUntilChanged((a, b) => a.equals(b))
-      )
-      .subscribe((pos) => {
-        setHistory((old) => [...old.slice(-limit), pos]);
-      });
-
-    return () => sub.unsubscribe();
-  }, [ant, limit]);
-
-  // Memos
-  const path = useMemo(() => {
-    const parts: string[] = [];
-    let prev = NULL_VECTOR;
-
-    for (const pos of history) {
-      const cmd = parts.length > 0 && prev.distance(pos) < 2 ? 'L' : 'M';
-
-      parts.push(`${cmd} ${pos.x - map.bbox.l + 0.5} ${pos.y - map.bbox.t + 0.5}`);
-      prev = pos;
-    }
-
-    return parts.join(' ');
-  }, [map, history]);
+  const [path] = useObservableState(() => ant.position$.pipe(
+    distinctUntilChanged((a, b) => a.equals(b)),
+    withLatestFrom(map$),
+    map(([pos, map]) => pos.sub(map.bbox.tl).add(0.5, 0.5)),
+    pairwise(),
+    map(([prev, pos]) => `${prev.distance(pos) > 2 ? 'M' : 'L'} ${pos.x} ${pos.y}`),
+    withLatestFrom(limit$),
+    scan((old, [pos, limit]) => [...old.slice(-limit), pos], [] as string[]),
+    map((history) => history.join(' ').replace(/^L/, 'M'))
+  ), '');
 
   // Render
   return (
     <Box
       component="svg"
-      viewBox={`0 0 ${map.bbox.w + 1} ${map.bbox.h + 1}`}
+      viewBox={`0 0 ${props.map.bbox.w + 1} ${props.map.bbox.h + 1}`}
 
       width="100%"
       height="100%"
-      gridColumn={`1 / ${map.bbox.w + 2}`}
-      gridRow={`1 / ${map.bbox.h + 2}`}
+      gridColumn={`1 / ${props.map.bbox.w + 2}`}
+      gridRow={`1 / ${props.map.bbox.h + 2}`}
       pointerEvents="none"
 
       sx={{
