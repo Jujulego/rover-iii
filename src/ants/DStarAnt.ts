@@ -1,5 +1,5 @@
 import { BiomeName } from '../biomes';
-import { NULL_VECTOR, Vector } from '../math2d';
+import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { Ant } from './Ant';
@@ -16,7 +16,7 @@ interface TileData {
 }
 
 // Utils
-function hash(v: Vector): string {
+function hash(v: IVector): string {
   return [v.x, v.y].join(':');
 }
 
@@ -36,7 +36,7 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
   // Methods
   // - map data
-  getMapData(p: Vector): TileData {
+  getMapData(p: IVector): TileData {
     return this._map.get(hash(p)) ?? { next: null, cost: Infinity, minCost: Infinity };
   }
 

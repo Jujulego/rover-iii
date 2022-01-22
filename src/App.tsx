@@ -2,9 +2,8 @@ import { useInterval } from '@jujulego/alma-utils';
 import { FC, useCallback, useEffect, useState } from 'react';
 
 import { SmartAnt, Thing } from './ants';
-import { LayerBar } from './layers/LayerBar';
 import { cellularMap, Map } from './maps';
-import { Vector } from './math2d';
+import { IVector, Vector } from './math2d';
 
 import { ImgGrid } from './layers/img/ImgGrid';
 import { ImgMapLayer } from './layers/img/ImgMapLayer';
@@ -22,8 +21,8 @@ export const App: FC = () => {
   const [target,] = useState(new Vector({ x: 20, y: 15 }));
 
   // Callback
-  const handleTileClick = useCallback((pos: Vector) => {
-    if (ant) ant.position = pos;
+  const handleTileClick = useCallback((pos: IVector) => {
+    if (ant) ant.position = new Vector(pos);
   }, [ant]);
 
   // Effects

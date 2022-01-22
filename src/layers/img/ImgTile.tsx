@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
-import { FC } from 'react';
+import { styled } from '@mui/material/styles';
+import { FC, useMemo } from 'react';
 
 import { BiomeName, BIOMES } from '../../biomes';
 import { Vector } from '../../math2d';
@@ -11,18 +11,28 @@ export interface ImgTileProps {
   onClick?: () => void;
 }
 
+interface TileProps {
+  x: number;
+  y: number;
+}
+
+// Styles
+const Tile = styled('img', { skipSx: true })<TileProps>((props) => ({
+  height: '100%',
+  width: '100%',
+  gridRow: props.y + 1,
+  gridColumn: props.x + 1,
+}));
+
 // Component
 export const ImgTile: FC<ImgTileProps> = (props) => {
   // Render
-  const biome = BIOMES.find(biome => biome.name === props.biome);
+  const biome = useMemo(() => BIOMES.find(biome => biome.name === props.biome), [props.biome]);
 
   return (
-    <Box
-      component="img"
-      height="100%"
-      width="100%"
-      gridRow={props.pos.y + 1}
-      gridColumn={props.pos.x + 1}
+    <Tile
+      x={props.pos.x}
+      y={props.pos.y}
       src={biome?.texture?.toString() || ''}
       alt={props.biome}
       onClick={props.onClick}
