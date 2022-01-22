@@ -1,26 +1,41 @@
-import { Box } from '@mui/material';
-import { FC, useMemo } from 'react';
+import { styled } from '@mui/material/styles';
+import { useObservableState } from 'observable-hooks';
+import { FC } from 'react';
+import { map } from 'rxjs';
 
-import { TNode, TreeMixin } from '../ants';
+import { AntTree, AntWithTree, TreeData } from '../ants';
 import { Map } from '../maps';
-import { Vector } from '../math2d';
+import { IVector, Vector } from '../math2d';
 
 // Types
 export interface ImgTreeLayerProps {
-  ant: TreeMixin;
-  map: Map;
+  ant: AntWithTree<TreeData>;
 }
 
-// Utils
-function generatePath(ant: TreeMixin, node: TNode): string {
-  // Path
-  let path = `L ${node.pos.x - ant.map.bbox.l + 0.5} ${node.pos.y - ant.map.bbox.t + 0.5}`;
+interface LayerProps {
+  h: number;
+  w: number;
+}
 
-  for (const n of ant.getChildren(node)) {
-    const p = generatePath(ant, n);
+// Styles
+const Layer = styled('svg', { skipSx: true })<LayerProps>((props) => ({
+  width: '100%',
+  height: '100%',
+  gridColumn: `1 / ${props.w + 2}`,
+  gridRow: `1 / ${props.h + 2}`,
+  pointerEvents: 'none',
+}));
+
+// Utils
+function generatePath(map: Map, tree: AntTree<TreeData>, node: Vector): string {
+  // Path
+  let path = `L ${node.x - map.bbox.l + 0.5} ${node.y - map.bbox.t + 0.5}`;
+
+  for (const n of tree.children(node)) {
+    const p = generatePath(map, tree, new Vector(n));
 
     if (p) {
-      path += `${p} M ${node.pos.x - ant.map.bbox.l + 0.5} ${node.pos.y - ant.map.bbox.t + 0.5}`;
+      path += `${p} M ${node.x - map.bbox.l + 0.5} ${node.y - map.bbox.t + 0.5}`;
     }
   }
 
@@ -29,41 +44,37 @@ function generatePath(ant: TreeMixin, node: TNode): string {
 
 // Component
 export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
-  const { ant, map } = props;
+  const { ant } = props;
 
-  // Memos
-  const paths = useMemo(() => {
-    const paths: [Vector, string][] = [];
+  // State
+  const [paths] = useObservableState(() => ant.tree.version$.pipe(
+    map(() => {
+      const paths: [IVector, string][] = [];
 
-    for (const root of ant.getRoots()) {
-      // Compute path
-      let path = generatePath(ant, root).replace(/^L/, 'M');
+      for (const root of ant.tree.roots()) {
+        // Compute path
+        let path = generatePath(ant.map, ant.tree, new Vector(root)).replace(/^L/, 'M');
 
-      if (path.indexOf('L') === -1) {
-        path += 'Z';
+        if (path.indexOf('L') === -1) {
+          path += 'Z';
+        }
+
+        paths.push([root, path]);
       }
 
-      paths.push([root.pos, path]);
-    }
-
-    return paths;
-  }, [ant, ant.treeVersion]);
+      return paths;
+    })
+  ), []);
 
   // Render
   return (
-    <Box
-      component="svg"
-      viewBox={`0 0 ${map.bbox.w + 1} ${map.bbox.h + 1}`}
-
-      width="100%"
-      height="100%"
-      gridColumn={`1 / ${map.bbox.w + 2}`}
-      gridRow={`1 / ${map.bbox.h + 2}`}
-      pointerEvents="none"
+    <Layer
+      w={ant.map.bbox.w} h={ant.map.bbox.h}
+      viewBox={`0 0 ${ant.map.bbox.w + 1} ${ant.map.bbox.h + 1}`}
     >
       { paths.map(([root, path]) => (
         <path
-          key={`${root.x}:${root.y}`}
+          key={root.x + ':' + root.y}
           d={path}
           fill="transparent"
           stroke={ant.color.color}
@@ -73,6 +84,6 @@ export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
           opacity=".33"
         />
       ))}
-    </Box>
+    </Layer>
   );
 };

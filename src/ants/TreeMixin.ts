@@ -18,8 +18,3 @@ export interface TreeMixin extends Ant {
   getNode(pos: Vector): TNode | undefined;
   getChildren(node: TNode): TNode[];
 }
-
-// Utils
-export function hasTree(rover: Ant): rover is TreeMixin {
-  return ('treeVersion' in rover) && ('getNode' in rover) && ('getChildren' in rover);
-}

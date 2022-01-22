@@ -1,17 +1,19 @@
-import { Box } from '@mui/material';
-import { keyframes } from '@mui/material/styles';
+import { keyframes, styled } from '@mui/material/styles';
 import { pluckFirst, useObservable, useObservableState } from 'observable-hooks';
 import { memo } from 'react';
 import { distinctUntilChanged, map, pairwise, scan, withLatestFrom } from 'rxjs';
 
 import { Ant } from '../ants';
-import { Map } from '../maps';
 
 // Types
-export interface ImgHistoryLayerProps {
+export interface HistoryLayerProps {
   ant: Ant;
-  map: Map;
   limit?: number;
+}
+
+interface LayerProps {
+  h: number;
+  w: number;
 }
 
 // Animations
@@ -25,19 +27,27 @@ const movingDash = keyframes`
   }
 `;
 
+// Styles
+const Layer = styled('svg', { skipSx: true })<LayerProps>((props) => ({
+  width: '100%',
+  height: '100%',
+  gridColumn: `1 / ${props.w + 2}`,
+  gridRow: `1 / ${props.h + 2}`,
+  pointerEvents: 'none',
+  animation: `${movingDash} 750ms infinite ease`
+}));
+
 // Component
-export const HistoryLayer = memo<ImgHistoryLayerProps>(function ImgHistoryLayer(props) {
+export const HistoryLayer = memo<HistoryLayerProps>(function HistoryLayer(props) {
   const { ant } = props;
 
   // Observables
-  const map$ = useObservable(pluckFirst, [props.map]);
   const limit$ = useObservable(pluckFirst, [props.limit ?? 0]);
 
   // State
   const [path] = useObservableState(() => ant.position$.pipe(
     distinctUntilChanged((a, b) => a.equals(b)),
-    withLatestFrom(map$),
-    map(([pos, map]) => pos.sub(map.bbox.tl).add(0.5, 0.5)),
+    map((pos) => pos.sub(ant.map.bbox.tl).add(0.5, 0.5)),
     pairwise(),
     map(([prev, pos]) => `${prev.distance(pos) > 2 ? 'M' : 'L'} ${pos.x} ${pos.y}`),
     withLatestFrom(limit$),
@@ -47,19 +57,9 @@ export const HistoryLayer = memo<ImgHistoryLayerProps>(function ImgHistoryLayer(
 
   // Render
   return (
-    <Box
-      component="svg"
-      viewBox={`0 0 ${props.map.bbox.w + 1} ${props.map.bbox.h + 1}`}
-
-      width="100%"
-      height="100%"
-      gridColumn={`1 / ${props.map.bbox.w + 2}`}
-      gridRow={`1 / ${props.map.bbox.h + 2}`}
-      pointerEvents="none"
-
-      sx={{
-        animation: ({ transitions }) => `${movingDash} 750ms infinite ${transitions.easing.easeInOut}`
-      }}
+    <Layer
+      w={ant.map.bbox.w} h={ant.map.bbox.h}
+      viewBox={`0 0 ${ant.map.bbox.w + 1} ${ant.map.bbox.h + 1}`}
     >
       <path
         d={path}
@@ -70,6 +70,6 @@ export const HistoryLayer = memo<ImgHistoryLayerProps>(function ImgHistoryLayer(
         strokeLinejoin="round"
         strokeWidth=".1"
       />
-    </Box>
+    </Layer>
   );
 });

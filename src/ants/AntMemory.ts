@@ -1,7 +1,8 @@
+import { Subject } from 'rxjs';
+
 import { IVector } from '../math2d';
 
 import { Ant } from './Ant';
-import { Subject } from 'rxjs';
 
 // Interface
 export interface AntWithMemory<T> extends Ant {

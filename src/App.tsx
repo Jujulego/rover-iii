@@ -1,4 +1,5 @@
 import { useInterval } from '@jujulego/alma-utils';
+import { Box } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 
 import { SmartAnt, Thing } from './ants';
@@ -11,7 +12,6 @@ import { ImgThingLayer } from './layers/img/ImgThingLayer';
 import { HistoryLayer } from './layers/HistoryLayer';
 import { TreeLayer } from './layers/TreeLayer';
 import { FogLayer } from './layers/FogLayer';
-import { Box } from '@mui/material';
 
 // Component
 export const App: FC = () => {
@@ -54,9 +54,9 @@ export const App: FC = () => {
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
             { ant && (
               <>
-                <FogLayer ant={ant} map={map} />
-                <TreeLayer ant={ant} map={map} />
-                <HistoryLayer ant={ant} map={map} limit={100} />
+                <FogLayer ant={ant} />
+                <TreeLayer ant={ant} />
+                <HistoryLayer ant={ant} />
                 <ImgThingLayer
                   map={map}
                   things={[

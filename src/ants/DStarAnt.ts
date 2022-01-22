@@ -4,14 +4,14 @@ import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { Ant } from './Ant';
-import { TreeMixin, TNode } from './TreeMixin';
-import { AntMemory, AntWithMemory } from './AntMemory';
+import { AntMemory } from './AntMemory';
+import { AntTree, AntWithTree, TreeData } from './AntTree';
 
 // Types
-interface DStarData extends FogData {
+interface DStarData extends FogData, TreeData {
   // Attributes
   // - algorithm data
-  next: Vector | null;
+  next?: Vector;
   cost: number;
   minCost: number;
 
@@ -21,14 +21,14 @@ interface DStarData extends FogData {
 }
 
 // Class
-export abstract class DStarAnt extends Ant implements AntWithMemory<DStarData>, TreeMixin {
+export abstract class DStarAnt extends Ant implements AntWithTree<DStarData> {
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
   private _target?: Vector;
-  private _treeVersion = 0;
   private _updates = BST.empty<Vector>((a) => a, (a, b) => this._tileMinCost(b) - this._tileMinCost(a));
 
   readonly memory = new AntMemory<DStarData>();
+  readonly tree = new AntTree<DStarData>(this.memory);
 
   // Abstract methods
   protected abstract heuristic(from: Vector, to: Vector): number;
@@ -37,7 +37,7 @@ export abstract class DStarAnt extends Ant implements AntWithMemory<DStarData>, 
   // Methods
   // - map data
   getMapData(p: IVector): DStarData {
-    return this.memory.get(p) ?? { next: null, cost: Infinity, minCost: Infinity };
+    return this.memory.get(p) ?? { cost: Infinity, minCost: Infinity };
   }
 
   private _updateMapData(p: Vector, update: Partial<DStarData>) {
@@ -50,69 +50,37 @@ export abstract class DStarAnt extends Ant implements AntWithMemory<DStarData>, 
     });
   }
 
-  // - tree
-  get treeVersion(): number {
-    return this._treeVersion;
-  }
-
-  getRoots(): TNode[] {
-    const roots: TNode[] = [];
-
-    for (const [pos, data] of this.memory) {
-      if (data.next !== null) continue;
-
-      roots.push({ pos: new Vector(pos), from: null });
-    }
-
-    return roots;
-  }
-
-  getNode(pos: Vector): TNode | undefined {
-    const d = this.getMapData(pos);
-    return d && { pos, from: d.next };
-  }
-
-  getChildren(node: TNode): TNode[] {
-    const children: TNode[] = [];
-
-    for (const pos of this.surroundings(node.pos)) {
-      const n = this.getNode(pos);
-
-      if (n && n.from?.equals(node.pos)) {
-        children.push(n);
-      }
-    }
-
-    return children;
-  }
-
   // - algorithm
   protected async compute(target: Vector): Promise<Vector> {
-    // Update target, detect and expand
-    this.updateTarget(target);
+    try {
+      // Update target, detect and expand
+      this.updateTarget(target);
 
-    do {
-      this._expand();
+      do {
+        this._expand();
 
+        const { next } = this.getMapData(this.position);
+        await this.detect(next ?? this.position);
+      } while (this._updates.length > 0);
+
+      // Compute next move
       const { next } = this.getMapData(this.position);
-      await this.detect(next ?? this.position);
-    } while (this._updates.length > 0);
-
-    // Compute next move
-    const { next } = this.getMapData(this.position);
-    return next ? next.sub(this.position) : NULL_VECTOR;
+      return next ? next.sub(this.position) : NULL_VECTOR;
+    } finally {
+      this.tree.emit();
+    }
   }
 
   protected updateTarget(target: Vector): void {
     if (this._target?.equals(target)) return;
 
     // Set new target cost to 0
-    this._updateMapData(target, { next: null, cost: 0 });
+    this._updateMapData(target, { next: undefined, cost: 0 });
     this.updateTile(target);
 
     // Recompute old target cost
     if (this._target) {
-      this._updateMapData(this._target, { next: null, cost: Infinity });
+      this._updateMapData(this._target, { next: undefined, cost: Infinity });
       this.updateTile(this._target);
     }
 
@@ -138,11 +106,11 @@ export abstract class DStarAnt extends Ant implements AntWithMemory<DStarData>, 
         });
 
         if (tile.biome === 'water') {
-          this._updateMapData(pos, { next: null, cost: Infinity });
+          this._updateMapData(pos, { next: undefined, cost: Infinity });
 
           for (const p of this.surroundings(pos)) {
             if (this.getMapData(p).next?.equals(pos)) {
-              this._updateMapData(p, { next: null, cost: Infinity });
+              this._updateMapData(p, { next: undefined, cost: Infinity });
               this.updateTile(p);
             }
           }
@@ -163,41 +131,35 @@ export abstract class DStarAnt extends Ant implements AntWithMemory<DStarData>, 
   }
 
   private _expand(): void {
-    if (this._updates.length === 0) return;
+    while (this._updates.length > 0) {
+      const pos = this._popNextUpdate();
+      if (this.getMapData(pos).obstacle) continue;
 
-    try {
-      while (this._updates.length > 0) {
-        const pos = this._popNextUpdate();
-        if (this.getMapData(pos).obstacle) continue;
+      const isRaising = this._isRaising(pos);
 
-        const isRaising = this._isRaising(pos);
+      for (const p of this.surroundings(pos)) {
+        const d = this.getMapData(p);
+        const cost = this._tileCost(pos) + this.heuristic(p, pos);
 
-        for (const p of this.surroundings(pos)) {
-          const d = this.getMapData(p);
-          const cost = this._tileCost(pos) + this.heuristic(p, pos);
-
-          if (isRaising) {
-            if (d.next?.equals(pos)) {
-              this._updateMapData(p, { cost });
-              this.updateTile(p);
-            } else {
-              if (cost < d.cost) {
-                this._updateMapData(pos, { minCost: this._tileCost(pos) });
-                this.updateTile(p);
-              }
-            }
+        if (isRaising) {
+          if (d.next?.equals(pos)) {
+            this._updateMapData(p, { cost });
+            this.updateTile(p);
           } else {
             if (cost < d.cost) {
-              if (this._cycleCheck(p, pos)) continue;
-
-              this._updateMapData(p, { next: pos, cost });
+              this._updateMapData(pos, { minCost: this._tileCost(pos) });
               this.updateTile(p);
             }
           }
+        } else {
+          if (cost < d.cost) {
+            if (this._cycleCheck(p, pos)) continue;
+
+            this._updateMapData(p, { next: pos, cost });
+            this.updateTile(p);
+          }
         }
       }
-    } finally {
-      this._treeVersion++;
     }
   }
 
@@ -222,7 +184,7 @@ export abstract class DStarAnt extends Ant implements AntWithMemory<DStarData>, 
     return this._tileCost(pos) > min;
   }
 
-  private _cycleCheck(pos: Vector, next: Vector | null): boolean {
+  private _cycleCheck(pos: Vector, next?: Vector): boolean {
     while (next) {
       const d = this.getMapData(next);
 
