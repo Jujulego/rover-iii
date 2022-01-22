@@ -1,5 +1,5 @@
 import { BiomeName } from '../biomes';
-import { FogData } from '../layers/img/ImgFogTile';
+import { FogData } from '../layers/FogTile';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { BST } from '../utils';
 

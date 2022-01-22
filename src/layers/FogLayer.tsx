@@ -1,10 +1,10 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo } from 'react';
 
-import { AntWithMemory } from '../../ants';
-import { Map } from '../../maps';
+import { AntWithMemory } from '../ants';
+import { Map } from '../maps';
 
-import { FogData, ImgFogTile } from './ImgFogTile';
+import { FogData, FogTile } from './FogTile';
 
 // Types
 export interface ImgFogLayerProps {
@@ -13,7 +13,7 @@ export interface ImgFogLayerProps {
 }
 
 // Component
-export const ImgFogLayer = memo<ImgFogLayerProps>(function ImgFogLayer (props) {
+export const FogLayer = memo<ImgFogLayerProps>(function ImgFogLayer (props) {
   const { ant, map } = props;
 
   // State
@@ -23,7 +23,7 @@ export const ImgFogLayer = memo<ImgFogLayerProps>(function ImgFogLayer (props) {
   return (
     <>
       { tiles.map(({ pos }) => (
-        <ImgFogTile key={pos.x + ':' + pos.y} pos={pos} ant={ant} />
+        <FogTile key={pos.x + ':' + pos.y} pos={pos} ant={ant} />
       )) }
     </>
   );

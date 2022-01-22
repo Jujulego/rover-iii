@@ -5,12 +5,12 @@ import { SmartAnt, Thing } from './ants';
 import { cellularMap, Map } from './maps';
 import { IVector, Vector } from './math2d';
 
-import { ImgGrid } from './layers/img/ImgGrid';
+import { LayerGrid } from './layers/LayerGrid';
 import { ImgMapLayer } from './layers/img/ImgMapLayer';
 import { ImgThingLayer } from './layers/img/ImgThingLayer';
-import { ImgHistoryLayer } from './layers/img/ImgHistoryLayer';
-import { ImgTreeLayer } from './layers/img/ImgTreeLayer';
-import { ImgFogLayer } from './layers/img/ImgFogLayer';
+import { HistoryLayer } from './layers/HistoryLayer';
+import { TreeLayer } from './layers/TreeLayer';
+import { FogLayer } from './layers/FogLayer';
 import { Box } from '@mui/material';
 
 // Component
@@ -41,7 +41,7 @@ export const App: FC = () => {
   })(), []);
 
   // Render
-  useInterval(500, () => {
+  useInterval(1000, () => {
     ant?.step(target);
   });
 
@@ -50,13 +50,13 @@ export const App: FC = () => {
       {/*<LayerBar />*/}
       <Box flex={1} overflow="auto">
         { map && (
-          <ImgGrid tileSize={32}>
+          <LayerGrid tileSize={32}>
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
             { ant && (
               <>
-                <ImgFogLayer ant={ant} map={map} />
-                {/*<ImgTreeLayer ant={ant} map={map} />*/}
-                <ImgHistoryLayer ant={ant} map={map} limit={100} />
+                <FogLayer ant={ant} map={map} />
+                <TreeLayer ant={ant} map={map} />
+                <HistoryLayer ant={ant} map={map} limit={100} />
                 <ImgThingLayer
                   map={map}
                   things={[
@@ -66,7 +66,7 @@ export const App: FC = () => {
                 />
               </>
             ) }
-          </ImgGrid>
+          </LayerGrid>
         ) }
       </Box>
     </Box>

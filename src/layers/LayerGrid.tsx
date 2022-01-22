@@ -7,7 +7,7 @@ export interface ImgGridProps {
 }
 
 // Component
-export const ImgGrid: FC<ImgGridProps> = ({ tileSize = 64, children }) => (
+export const LayerGrid: FC<ImgGridProps> = ({ tileSize = 64, children }) => (
   <Box display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}>
     { children }
   </Box>

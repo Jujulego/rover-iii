@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { FC, useMemo } from 'react';
 
-import { TNode, TreeMixin } from '../../ants';
-import { Map } from '../../maps';
-import { Vector } from '../../math2d';
+import { TNode, TreeMixin } from '../ants';
+import { Map } from '../maps';
+import { Vector } from '../math2d';
 
 // Types
 export interface ImgTreeLayerProps {
@@ -28,7 +28,7 @@ function generatePath(ant: TreeMixin, node: TNode): string {
 }
 
 // Component
-export const ImgTreeLayer: FC<ImgTreeLayerProps> = (props) => {
+export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
   const { ant, map } = props;
 
   // Memos

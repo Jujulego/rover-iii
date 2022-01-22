@@ -4,8 +4,8 @@ import { pluckFirst, useObservable, useObservableState } from 'observable-hooks'
 import { memo } from 'react';
 import { distinctUntilChanged, map, pairwise, scan, withLatestFrom } from 'rxjs';
 
-import { Ant } from '../../ants';
-import { Map } from '../../maps';
+import { Ant } from '../ants';
+import { Map } from '../maps';
 
 // Types
 export interface ImgHistoryLayerProps {
@@ -26,7 +26,7 @@ const movingDash = keyframes`
 `;
 
 // Component
-export const ImgHistoryLayer = memo<ImgHistoryLayerProps>(function ImgHistoryLayer(props) {
+export const HistoryLayer = memo<ImgHistoryLayerProps>(function ImgHistoryLayer(props) {
   const { ant } = props;
 
   // Observables

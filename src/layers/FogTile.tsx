@@ -2,8 +2,8 @@ import { styled } from '@mui/material/styles';
 import { pluckFirst, useObservable, useObservableState } from 'observable-hooks';
 import { FC } from 'react';
 
-import { IVector, Vector } from '../../math2d';
-import { AntWithMemory } from '../../ants';
+import { IVector, Vector } from '../math2d';
+import { AntWithMemory } from '../ants';
 import { filter, map, withLatestFrom } from 'rxjs';
 
 // Types
@@ -33,7 +33,7 @@ const Tile = styled('div', { skipSx: true })<TileProps>((props) => ({
 }));
 
 // Component
-export const ImgFogTile: FC<ImgFogTileProps> = (props) => {
+export const FogTile: FC<ImgFogTileProps> = (props) => {
   const { ant } = props;
 
   // Observables
