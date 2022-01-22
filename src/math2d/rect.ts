@@ -86,6 +86,13 @@ export class Rect implements IRect {
     return this.l >= r.l && this.r <= r.r && this.t >= r.t && this.b <= r.b;
   }
 
+  contains(v: IVector): boolean;
+  contains(x: number, y: number): boolean;
+  contains(...args: VectorArgs): boolean {
+    const [v] = parseVectorArgs(args);
+    return v.x >= this.l && v.x <= this.r && v.y >= this.t && v.y <= this.b;
+  }
+
   // Properties
   get tl(): Vector {
     return new Vector(this.l, this.t);

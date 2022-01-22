@@ -1,4 +1,5 @@
 export * from './Ant';
+export * from './AntMemory';
 export * from './DStarAnt';
 export * from './SmartAnt';
 export * from './StupidAnt';

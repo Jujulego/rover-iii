@@ -41,7 +41,7 @@ export const App: FC = () => {
   })(), []);
 
   // Render
-  useInterval(1000, () => {
+  useInterval(500, () => {
     ant?.step(target);
   });
 
@@ -55,7 +55,7 @@ export const App: FC = () => {
             { ant && (
               <>
                 <ImgFogLayer ant={ant} map={map} />
-                <ImgTreeLayer ant={ant} map={map} />
+                {/*<ImgTreeLayer ant={ant} map={map} />*/}
                 <ImgHistoryLayer ant={ant} map={map} limit={100} />
                 <ImgThingLayer
                   map={map}

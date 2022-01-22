@@ -5,8 +5,8 @@ import { Vector } from '../math2d';
 // Class
 export class Thing {
   // Attributes
-  private readonly _position$ = new BehaviorSubject<Vector>(this._position);
-  readonly position$ = this._position$.asObservable();
+  private readonly _position$$ = new BehaviorSubject<Vector>(this._position);
+  readonly position$ = this._position$$.asObservable();
 
   // Constructor
   constructor(
@@ -25,7 +25,7 @@ export class Thing {
   }
 
   set position(pos: Vector) {
-    this._position$.next(pos);
+    this._position$$.next(pos);
     this._position = pos;
   }
 }

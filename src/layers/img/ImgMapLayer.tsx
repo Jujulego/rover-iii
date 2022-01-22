@@ -24,7 +24,7 @@ export const ImgMapLayer = memo<ImgMapLayerProps>(function ImgMapLayer(props) {
     <>
       { tiles.map(({ pos, biome }) => (
         <ImgTile
-          key={`${pos.x}:${pos.y}`}
+          key={pos.x + ':' + pos.y}
           pos={map.bbox.tl.mul(-1).add(pos)}
           biome={biome}
           onClick={() => onTileClick && onTileClick(pos)}

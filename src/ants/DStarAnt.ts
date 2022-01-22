@@ -1,34 +1,34 @@
 import { BiomeName } from '../biomes';
+import { FogData } from '../layers/img/ImgFogTile';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { Ant } from './Ant';
 import { TreeMixin, TNode } from './TreeMixin';
+import { AntMemory, AntWithMemory } from './AntMemory';
 
 // Types
-interface TileData {
+interface DStarData extends FogData {
+  // Attributes
+  // - algorithm data
   next: Vector | null;
-  detected?: boolean;
-  obstacle?: boolean;
-  biome?: BiomeName;
   cost: number;
   minCost: number;
-}
 
-// Utils
-function hash(v: IVector): string {
-  return [v.x, v.y].join(':');
+  // - map data
+  obstacle?: boolean;
+  biome?: BiomeName;
 }
 
 // Class
-export abstract class DStarAnt extends Ant implements TreeMixin {
+export abstract class DStarAnt extends Ant implements AntWithMemory<DStarData>, TreeMixin {
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
   private _target?: Vector;
   private _treeVersion = 0;
-
-  private _map = new Map<string, TileData>();
   private _updates = BST.empty<Vector>((a) => a, (a, b) => this._tileMinCost(b) - this._tileMinCost(a));
+
+  readonly memory = new AntMemory<DStarData>();
 
   // Abstract methods
   protected abstract heuristic(from: Vector, to: Vector): number;
@@ -36,14 +36,14 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
 
   // Methods
   // - map data
-  getMapData(p: IVector): TileData {
-    return this._map.get(hash(p)) ?? { next: null, cost: Infinity, minCost: Infinity };
+  getMapData(p: IVector): DStarData {
+    return this.memory.get(p) ?? { next: null, cost: Infinity, minCost: Infinity };
   }
 
-  private _updateMapData(p: Vector, update: Partial<TileData>) {
+  private _updateMapData(p: Vector, update: Partial<DStarData>) {
     const old = this.getMapData(p);
 
-    this._map.set(hash(p), {
+    this.memory.put(p, {
       ...old,
       minCost: Math.min(update.cost ?? old.cost, old.minCost),
       ...update
@@ -58,13 +58,10 @@ export abstract class DStarAnt extends Ant implements TreeMixin {
   getRoots(): TNode[] {
     const roots: TNode[] = [];
 
-    for (const [key, data] of this._map) {
+    for (const [pos, data] of this.memory) {
       if (data.next !== null) continue;
 
-      const [x, y] = key.split(':').map(v => parseInt(v));
-      const pos = new Vector(x, y);
-
-      roots.push({ pos, from: null });
+      roots.push({ pos: new Vector(pos), from: null });
     }
 
     return roots;

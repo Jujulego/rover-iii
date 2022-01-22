@@ -1,35 +1,19 @@
-import { Box } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { FC } from 'react';
+import { memo } from 'react';
 
-import { DStarAnt } from '../../ants';
+import { AntWithMemory } from '../../ants';
 import { Map } from '../../maps';
+
+import { FogData, ImgFogTile } from './ImgFogTile';
 
 // Types
 export interface ImgFogLayerProps {
-  ant: DStarAnt;
+  ant: AntWithMemory<FogData>;
   map: Map;
 }
 
-interface TileProps {
-  x: number;
-  y: number;
-
-}
-
-// Styles
-const Tile = styled('div', { skipSx: true })<TileProps>((props) => ({
-  gridRow: props.y + 1,
-  gridColumn: props.x + 1,
-
-  background: 'white',
-  opacity: 0.5,
-  pointerEvents: 'none'
-}));
-
 // Component
-export const ImgFogLayer: FC<ImgFogLayerProps> = (props) => {
+export const ImgFogLayer = memo<ImgFogLayerProps>(function ImgFogLayer (props) {
   const { ant, map } = props;
 
   // State
@@ -38,13 +22,9 @@ export const ImgFogLayer: FC<ImgFogLayerProps> = (props) => {
   // Render
   return (
     <>
-      { tiles.filter(({ pos }) => !ant.getMapData(pos)?.detected).map(({ pos }) => (
-        <Tile
-          key={`${pos.x}:${pos.y}`}
-          x={pos.x - map.bbox.l}
-          y={pos.y - map.bbox.t}
-        />
+      { tiles.map(({ pos }) => (
+        <ImgFogTile key={pos.x + ':' + pos.y} pos={pos} ant={ant} />
       )) }
     </>
   );
-};
+});
