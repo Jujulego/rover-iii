@@ -20,15 +20,17 @@ export class Map {
     };
 
     // Insert all tiles into database
-    for (const tile of tiles) {
-      await db.tiles.add({ map: name, ...tile });
+    await db.transaction('rw', db.tiles, () => {
+      for (const tile of tiles) {
+        db.tiles.add({ map: name, ...tile });
 
-      // Compute bbox
-      bbox.t = Math.min(bbox.t, tile.pos.y);
-      bbox.l = Math.min(bbox.l, tile.pos.x);
-      bbox.b = Math.max(bbox.b, tile.pos.y);
-      bbox.r = Math.max(bbox.r, tile.pos.x);
-    }
+        // Compute bbox
+        bbox.t = Math.min(bbox.t, tile.pos.y);
+        bbox.l = Math.min(bbox.l, tile.pos.x);
+        bbox.b = Math.max(bbox.b, tile.pos.y);
+        bbox.r = Math.max(bbox.r, tile.pos.x);
+      }
+    });
 
     return new Map(name, new Rect(bbox));
   }
@@ -43,17 +45,19 @@ export class Map {
     };
 
     // Insert all tiles into database
-    for (let y = 0; y < matrix.length; ++y) {
-      const line = matrix[y];
+    await db.transaction('rw', db.tiles, () => {
+      for (let y = 0; y < matrix.length; ++y) {
+        const line = matrix[y];
 
-      for (let x = 0; x < line.length; ++x) {
-        const biome = line[x];
+        for (let x = 0; x < line.length; ++x) {
+          const biome = line[x];
 
-        if (biome) {
-          await db.tiles.add({ map: name, pos: { x, y }, biome });
+          if (biome) {
+            db.tiles.add({ map: name, pos: { x, y }, biome });
+          }
         }
       }
-    }
+    });
 
     return new Map(name, new Rect(bbox));
   }
