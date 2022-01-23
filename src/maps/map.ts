@@ -1,9 +1,10 @@
+import { Collection } from 'dexie';
+
 import { BiomeName } from '../biomes';
 import { db } from '../db';
 import { Rect, Vector } from '../math2d';
 
 import { Tile } from './tile';
-import { Collection } from 'dexie';
 
 // Class
 export class Map {

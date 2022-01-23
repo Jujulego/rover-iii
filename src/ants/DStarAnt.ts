@@ -53,6 +53,11 @@ export abstract class DStarAnt extends Ant implements AntWithTree<DStarData> {
   // - algorithm
   protected async compute(target: Vector): Promise<Vector> {
     try {
+      // Arrived !
+      if (this.position.equals(target)) {
+        return NULL_VECTOR;
+      }
+
       // Update target, detect and expand
       this.updateTarget(target);
 

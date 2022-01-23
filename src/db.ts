@@ -26,7 +26,9 @@ export class AntsDatabase extends Dexie {
       tiles: '&[map+pos.x+pos.y]'
     });
 
-    this.tiles.clear();
+    if (self.document) {
+      this.tiles.clear();
+    }
   }
 }
 
