@@ -4,7 +4,7 @@ import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { Ant } from './Ant';
-import { AntMemory } from './AntMemory';
+import { AntMapMemory } from './AntMemory';
 import { AntTree, AntWithTree, TreeData } from './AntTree';
 
 // Types
@@ -27,7 +27,7 @@ export abstract class DStarAnt extends Ant implements AntWithTree<DStarData> {
   private _target?: Vector;
   private _updates = BST.empty<Vector>((a) => a, (a, b) => this._tileMinCost(b) - this._tileMinCost(a));
 
-  readonly memory = new AntMemory<DStarData>();
+  readonly memory = new AntMapMemory<DStarData>();
   readonly tree = new AntTree<DStarData>(this.memory);
 
   // Abstract methods

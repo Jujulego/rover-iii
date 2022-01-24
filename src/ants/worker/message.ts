@@ -4,8 +4,11 @@ import { AntColorName } from '../colors';
 
 // Types
 export interface AntMessage<T extends string = string> {
+  id?: number;
   type: T;
 }
+
+export type AntResultOf<R extends AntRequest> = Extract<AntResult, { type: R['type'] }>;
 
 // - requests
 export interface AntWorkerSetup extends AntMessage<'setup'> {
@@ -28,7 +31,12 @@ export interface AntWorkerMove extends AntMessage<'move'> {
   position: IVector;
 }
 
-export type AntRequest = AntWorkerSetup | AntWorkerCompute | AntWorkerMove;
+export interface AntWorkerGetMemory extends AntMessage<'getMemory'> {
+  type: 'getMemory';
+  position: IVector;
+}
+
+export type AntRequest = AntWorkerSetup | AntWorkerCompute | AntWorkerMove | AntWorkerGetMemory;
 
 // - results
 export interface AntWorkerComputeResult extends AntMessage<'compute'> {
@@ -36,4 +44,14 @@ export interface AntWorkerComputeResult extends AntMessage<'compute'> {
   move: IVector;
 }
 
-export type AntResult = AntWorkerComputeResult;
+export interface AntWorkerGetMemoryResult extends AntMessage<'getMemory'> {
+  type: 'getMemory';
+  data: unknown;
+}
+
+export interface AntWorkerMemoryUpdate extends AntMessage<'memoryUpdate'> {
+  type: 'memoryUpdate';
+  position: IVector;
+}
+
+export type AntResult = AntWorkerComputeResult | AntWorkerGetMemoryResult | AntWorkerMemoryUpdate;

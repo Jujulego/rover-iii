@@ -1,4 +1,4 @@
-import { scan, Subject } from 'rxjs';
+import { concatMap, scan, Subject } from 'rxjs';
 
 import { IVector, Vector } from '../math2d';
 import { BST } from '../utils';
@@ -32,17 +32,19 @@ export class AntTree<T extends TreeData> {
   // Constructor
   constructor(readonly memory: AntMemory<T>) {
     // Follow memory updates
-    memory.updates$.subscribe((pos) => {
-      const data = memory.get(pos);
-
-      if (data?.next) {
-        // Not a root anymore
-        this._roots.remove(new Vector(pos));
-      } else if (this._roots.indexOf(new Vector(pos)) === -1) {
-        // New root
-        this._roots.insert(new Vector(pos));
-      }
-    });
+    memory.updates$
+      .pipe(
+        concatMap(async (pos) => [pos, await memory.get(pos)] as [IVector, T | undefined])
+      )
+      .subscribe(([pos, data]) => {
+        if (data?.next) {
+          // Not a root anymore
+          this._roots.remove(new Vector(pos));
+        } else if (this._roots.indexOf(new Vector(pos)) === -1) {
+          // New root
+          this._roots.insert(new Vector(pos));
+        }
+      });
   }
 
   // Methods
@@ -58,11 +60,11 @@ export class AntTree<T extends TreeData> {
     return res;
   }
 
-  children(pos: Vector): IVector[] {
+  async children(pos: Vector): Promise<IVector[]> {
     const res: IVector[] = [];
 
     for (const p of surroundings(pos)) {
-      const node = this.memory.get(p);
+      const node = await this.memory.get(p);
 
       if (node?.next && pos.equals(node.next)) {
         res.push(p);

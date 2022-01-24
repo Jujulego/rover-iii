@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useObservableState } from 'observable-hooks';
 import { FC } from 'react';
-import { map } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 import { AntTree, AntWithTree, TreeData } from '../ants';
 import { Map } from '../maps';
@@ -27,12 +27,12 @@ const Layer = styled('svg', { skipSx: true })<LayerProps>((props) => ({
 }));
 
 // Utils
-function generatePath(map: Map, tree: AntTree<TreeData>, node: Vector): string {
+async function generatePath(map: Map, tree: AntTree<TreeData>, node: Vector): Promise<string> {
   // Path
   let path = `L ${node.x - map.bbox.l + 0.5} ${node.y - map.bbox.t + 0.5}`;
 
-  for (const n of tree.children(node)) {
-    const p = generatePath(map, tree, new Vector(n));
+  for (const n of await tree.children(node)) {
+    const p = await generatePath(map, tree, new Vector(n));
 
     if (p) {
       path += `${p} M ${node.x - map.bbox.l + 0.5} ${node.y - map.bbox.t + 0.5}`;
@@ -48,12 +48,12 @@ export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
 
   // State
   const [paths] = useObservableState(() => ant.tree.version$.pipe(
-    map(() => {
+    switchMap(async () => {
       const paths: [IVector, string][] = [];
 
       for (const root of ant.tree.roots()) {
         // Compute path
-        let path = generatePath(ant.map, ant.tree, new Vector(root)).replace(/^L/, 'M');
+        let path = (await generatePath(ant.map, ant.tree, new Vector(root))).replace(/^L/, 'M');
 
         if (path.indexOf('L') === -1) {
           path += 'Z';

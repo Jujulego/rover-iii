@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import { IVector, Vector } from '../math2d';
 import { AntWithMemory } from '../ants';
-import { filter, map, withLatestFrom } from 'rxjs';
+import { filter, map, switchMap, withLatestFrom } from 'rxjs';
 
 // Types
 export interface FogData {
@@ -43,7 +43,8 @@ export const FogTile: FC<ImgFogTileProps> = (props) => {
   const [detected] = useObservableState(() => ant.memory.updates$.pipe(
     withLatestFrom(pos$),
     filter(([update, pos]) => new Vector(pos).equals(update)),
-    map(([update]) => ant.memory.get(update)?.detected)
+    switchMap(async ([update]) => ant.memory.get(update)),
+    map((data) => data?.detected)
   ));
 
   // Render
