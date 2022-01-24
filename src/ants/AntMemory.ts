@@ -8,7 +8,7 @@ import { Ant } from './Ant';
 // Interfaces
 export interface AntMemory<T> {
   // Attributes
-  readonly updates$: Observable<IVector>;
+  readonly updates$: Observable<[IVector, T]>;
 
   // Methods
   get(pos: IVector): Awaitable<T | undefined>;
@@ -30,7 +30,7 @@ export class AntMapMemory<T> implements AntMemory<T> {
   // Attributes
   private _data = new Map<string, [IVector, T]>();
 
-  private _updates$$ = new Subject<IVector>();
+  private _updates$$ = new Subject<[IVector, T]>();
   readonly updates$ = this._updates$$.asObservable();
 
   // Methods
@@ -45,6 +45,6 @@ export class AntMapMemory<T> implements AntMemory<T> {
 
   put(pos: IVector, data: T) {
     this._data.set(hash(pos), [pos, data]);
-    this._updates$$.next(pos);
+    this._updates$$.next([pos, data]);
   }
 }

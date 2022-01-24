@@ -34,8 +34,8 @@ export abstract class AntWorker extends Ant {
   // Methods
   protected setupWorker(): void {
     if (this.memory) {
-      this.memory.updates$.subscribe((pos) => {
-        this.sendResult({ type: 'memoryUpdate', position: pos });
+      this.memory.updates$.subscribe(([position, data]) => {
+        this.sendResult({ type: 'memoryUpdate', position, data });
       });
     }
   }

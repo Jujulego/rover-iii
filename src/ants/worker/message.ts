@@ -52,6 +52,7 @@ export interface AntWorkerGetMemoryResult extends AntMessage<'getMemory'> {
 export interface AntWorkerMemoryUpdate extends AntMessage<'memoryUpdate'> {
   type: 'memoryUpdate';
   position: IVector;
+  data: unknown;
 }
 
 export type AntResult = AntWorkerComputeResult | AntWorkerGetMemoryResult | AntWorkerMemoryUpdate;

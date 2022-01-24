@@ -1,4 +1,3 @@
-import { useInterval } from '@jujulego/alma-utils';
 import { Box } from '@mui/material';
 import { FC, useCallback, useEffect, useState } from 'react';
 
@@ -12,12 +11,14 @@ import { ImgThingLayer } from './layers/img/ImgThingLayer';
 import { HistoryLayer } from './layers/HistoryLayer';
 import { TreeLayer } from './layers/TreeLayer';
 import { FogLayer } from './layers/FogLayer';
+import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
+import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
 // Component
 export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
-  const [ant, setAnt] = useState<StupidAnt>();
+  const [ant, setAnt] = useState<SmartAnt>();
   const [target,] = useState(new Vector({ x: 20, y: 15 }));
 
   // Callback
@@ -34,17 +35,20 @@ export const App: FC = () => {
       { seed: 'perceval', iterations: 5, outBiome: 'water' }
     );
 
-    const ant = new StupidAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
+    const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
 
     setMap(map);
     setAnt(ant);
   })(), []);
 
-  // Render
-  useInterval(500, () => {
-    ant?.step(target);
-  });
+  // Observables
+  const $ant = useObservable(pluckFirst, [ant]);
+  useSubscription(interval(750).pipe(
+    withLatestFrom($ant),
+    exhaustMap(async ([,ant]) => ant?.step(target))
+  ));
 
+  // Render
   return (
     <Box component="main" display="flex" height="100vh">
       {/*<LayerBar />*/}
@@ -54,7 +58,7 @@ export const App: FC = () => {
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
             { ant && (
               <>
-                {/*<FogLayer ant={ant} />*/}
+                <FogLayer ant={ant} />
                 {/*<TreeLayer ant={ant} />*/}
                 <HistoryLayer ant={ant} />
                 <ImgThingLayer

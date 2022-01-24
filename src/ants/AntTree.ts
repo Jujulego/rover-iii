@@ -1,4 +1,4 @@
-import { concatMap, scan, Subject } from 'rxjs';
+import { scan, Subject } from 'rxjs';
 
 import { IVector, Vector } from '../math2d';
 import { BST } from '../utils';
@@ -32,19 +32,15 @@ export class AntTree<T extends TreeData> {
   // Constructor
   constructor(readonly memory: AntMemory<T>) {
     // Follow memory updates
-    memory.updates$
-      .pipe(
-        concatMap(async (pos) => [pos, await memory.get(pos)] as [IVector, T | undefined])
-      )
-      .subscribe(([pos, data]) => {
-        if (data?.next) {
-          // Not a root anymore
-          this._roots.remove(new Vector(pos));
-        } else if (this._roots.indexOf(new Vector(pos)) === -1) {
-          // New root
-          this._roots.insert(new Vector(pos));
-        }
-      });
+    memory.updates$.subscribe(([pos, data]) => {
+      if (data?.next) {
+        // Not a root anymore
+        this._roots.remove(new Vector(pos));
+      } else if (this._roots.indexOf(new Vector(pos)) === -1) {
+        // New root
+        this._roots.insert(new Vector(pos));
+      }
+    });
   }
 
   // Methods
