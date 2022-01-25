@@ -1,76 +1,103 @@
-import { scan, Subject } from 'rxjs';
+import { map, sample, scan, Subject } from 'rxjs';
 
 import { IVector, Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { Ant } from './Ant';
 import { AntMemory } from './AntMemory';
-import { surroundings } from './utils';
 
-// Types
+// Interface
+export interface TreeNode {
+  pos: Vector;
+  parent?: TreeNode;
+  children: Set<TreeNode>;
+}
+
 export interface TreeData {
   // Attributes
   next?: IVector;
 }
 
-// Interface
-export interface AntWithTree<T extends TreeData> extends Ant {
+export interface AntWithTree<T extends TreeData = TreeData> extends Ant {
   // Attributes
   readonly tree: AntTree<T>;
+}
+
+// Utils
+function hash(pos: IVector): string {
+  return pos.x + ':' + pos.y;
 }
 
 // Class
 export class AntTree<T extends TreeData> {
   // Attributes
-  private _roots = BST.empty<Vector>((v) => v, (a, b) => a.compare(b));
+  private readonly _roots = BST.empty<TreeNode, Vector>((n) => n.pos, (a, b) => a.compare(b));
+  private readonly _nodes = new Map<string, TreeNode>();
 
+  private readonly _complete$$ = new Subject<void>();
   private readonly _version$$ = new Subject<void>();
   readonly version$ = this._version$$.asObservable().pipe(
+    sample(this._complete$$.asObservable()),
     scan((n) => n + 1, 0)
   );
 
   // Constructor
   constructor(readonly memory: AntMemory<T>) {
     // Follow memory updates
-    memory.updates$.subscribe(([pos, data]) => {
-      if (data?.next) {
-        // Not a root anymore
-        this._roots.remove(new Vector(pos));
-      } else if (this._roots.indexOf(new Vector(pos)) === -1) {
-        // New root
-        this._roots.insert(new Vector(pos));
-      }
-    });
+    memory.updates$
+      .pipe(
+        map(([pos, data]) => [this.node(new Vector(pos)), data] as [TreeNode, T])
+      )
+      .subscribe(([node, data]) => {
+        if (data.next) { // not a root
+          // became a children
+          if (!node.parent) {
+            const parent = this.node(new Vector(data.next));
+
+            node.parent = parent;
+            parent.children.add(node);
+            this._roots.remove(node.pos);
+            this._version$$.next();
+          }
+
+          // changed of parent
+          if (!node.parent.pos.equals(data.next)) {
+            const parent = this.node(new Vector(data.next));
+
+            node.parent.children.delete(node);
+
+            node.parent = parent;
+            parent.children.add(node);
+            this._version$$.next();
+          }
+        } else if (node.parent) { // became a root
+          node.parent.children.delete(node);
+          node.parent = undefined;
+
+          this._roots.insert(node);
+          this._version$$.next();
+        }
+
+        this._complete$$.next();
+      });
   }
 
   // Methods
-  roots(): IVector[] {
-    const res: IVector[] = [];
+  node(pos: Vector): TreeNode {
+    let node = this._nodes.get(hash(pos));
 
-    for (const p of this._roots) {
-      if (this.memory.get(p)) {
-        res.push(p);
-      }
+    if (!node) {
+      node = { pos, children: new Set() };
+
+      this._roots.insert(node);
+      this._nodes.set(hash(pos), node);
+      this._version$$.next();
     }
 
-    return res;
+    return node;
   }
 
-  async children(pos: Vector): Promise<IVector[]> {
-    const res: IVector[] = [];
-
-    for (const p of surroundings(pos)) {
-      const node = await this.memory.get(p);
-
-      if (node?.next && pos.equals(node.next)) {
-        res.push(p);
-      }
-    }
-
-    return res;
-  }
-
-  emit() {
-    this._version$$.next();
+  roots(): BST<TreeNode, Vector> {
+    return this._roots;
   }
 }

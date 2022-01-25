@@ -43,7 +43,7 @@ export const App: FC = () => {
 
   // Observables
   const $ant = useObservable(pluckFirst, [ant]);
-  useSubscription(interval(750).pipe(
+  useSubscription(interval(500).pipe(
     withLatestFrom($ant),
     exhaustMap(async ([,ant]) => ant?.step(target))
   ));
@@ -59,7 +59,7 @@ export const App: FC = () => {
             { ant && (
               <>
                 <FogLayer ant={ant} />
-                {/*<TreeLayer ant={ant} />*/}
+                <TreeLayer ant={ant} />
                 <HistoryLayer ant={ant} />
                 <ImgThingLayer
                   map={map}

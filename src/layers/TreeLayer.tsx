@@ -3,13 +3,13 @@ import { useObservableState } from 'observable-hooks';
 import { FC } from 'react';
 import { switchMap } from 'rxjs';
 
-import { AntTree, AntWithTree, TreeData } from '../ants';
+import { AntWithTree, TreeData, TreeNode } from '../ants';
 import { Map } from '../maps';
 import { IVector, Vector } from '../math2d';
 
 // Types
 export interface ImgTreeLayerProps {
-  ant: AntWithTree<TreeData>;
+  ant: AntWithTree;
 }
 
 interface LayerProps {
@@ -27,15 +27,15 @@ const Layer = styled('svg', { skipSx: true })<LayerProps>((props) => ({
 }));
 
 // Utils
-async function generatePath(map: Map, tree: AntTree<TreeData>, node: Vector): Promise<string> {
+function generatePath(map: Map, node: TreeNode): string {
   // Path
-  let path = `L ${node.x - map.bbox.l + 0.5} ${node.y - map.bbox.t + 0.5}`;
+  let path = `L ${node.pos.x - map.bbox.l + 0.5} ${node.pos.y - map.bbox.t + 0.5}`;
 
-  for (const n of await tree.children(node)) {
-    const p = await generatePath(map, tree, new Vector(n));
+  for (const n of node.children) {
+    const p = generatePath(map, n);
 
     if (p) {
-      path += `${p} M ${node.x - map.bbox.l + 0.5} ${node.y - map.bbox.t + 0.5}`;
+      path += `${p} M ${node.pos.x - map.bbox.l + 0.5} ${node.pos.y - map.bbox.t + 0.5}`;
     }
   }
 
@@ -53,13 +53,13 @@ export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
 
       for (const root of ant.tree.roots()) {
         // Compute path
-        let path = (await generatePath(ant.map, ant.tree, new Vector(root))).replace(/^L/, 'M');
+        let path = generatePath(ant.map, root).replace(/^L/, 'M');
 
         if (path.indexOf('L') === -1) {
           path += 'Z';
         }
 
-        paths.push([root, path]);
+        paths.push([root.pos, path]);
       }
 
       return paths;
