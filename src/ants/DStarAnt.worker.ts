@@ -8,6 +8,22 @@ import { AntMapMemory } from './memory/AntMapMemory';
 import { TreeData } from './AntTree';
 import { AntWorker } from './worker/AntWorker';
 
+// Constant
+const MIN_DIFF = 0.001;
+
+// Utils
+function neq(a: number, b: number): boolean {
+  return Math.abs(a - b) > MIN_DIFF;
+}
+
+function inf(a: number, b: number): boolean {
+  return (a - b) < MIN_DIFF;
+}
+
+function sup(a: number, b: number): boolean {
+  return (a - b) > MIN_DIFF;
+}
+
 // Types
 interface DStarData extends FogData, TreeData {
   // Attributes
@@ -41,13 +57,20 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
   }
 
   private _updateMapData(p: Vector, update: Partial<DStarData>) {
+    // Compute new value
     const old = this.getMapData(p);
+    const res = { ...old, ...update };
 
-    this.memory.put(p, {
-      ...old,
-      minCost: Math.min(update.cost ?? old.cost, old.minCost),
-      ...update
-    });
+    // Corrections
+    res.minCost = Math.min(res.cost, res.minCost);
+    if (res.cost === Infinity) res.next = undefined;
+
+    // Save
+    this.memory.put(p, res);
+
+    if (neq(old.minCost, res.minCost)) {
+      this._updates.resort();
+    }
   }
 
   // - algorithm
@@ -122,7 +145,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
         if (data.next) {
           const cost = this.heuristic(pos, data.next) + this._tileCost(data.next);
 
-          if (Math.abs(data.cost - cost) > 0.01) {
+          if (neq(data.cost, cost)) {
             this._updateMapData(pos, { cost });
             this.updateTile(pos);
           }
@@ -133,30 +156,33 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
 
   private _expand(): void {
     while (this._updates.length > 0) {
-      const pos = this._popNextUpdate();
+      const pos = this._updates.pop();
+
+      if (!pos) break;
       if (this.getMapData(pos).obstacle) continue;
 
       const isRaising = this._isRaising(pos);
+      const cost = this._tileCost(pos);
 
       for (const p of this.surroundings(pos)) {
         const d = this.getMapData(p);
-        const cost = this._tileCost(pos) + this.heuristic(p, pos);
+        const c = cost + this.heuristic(p, pos);
 
         if (isRaising) {
           if (d.next?.equals(pos)) {
-            this._updateMapData(p, { cost });
+            this._updateMapData(p, { cost: c });
             this.updateTile(p);
           } else {
-            if (cost < d.cost) {
-              this._updateMapData(pos, { minCost: this._tileCost(pos) });
+            if (inf(c, d.cost)) {
+              this._updateMapData(pos, { minCost: cost });
               this.updateTile(p);
             }
           }
         } else {
-          if (cost < d.cost) {
+          if (inf(c, d.cost)) {
             if (this._cycleCheck(p, pos)) continue;
 
-            this._updateMapData(p, { next: pos, cost });
+            this._updateMapData(p, { next: pos, cost: c });
             this.updateTile(p);
           }
         }
@@ -166,17 +192,20 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
 
   private _isRaising(pos: Vector): boolean {
     const min = this._tileMinCost(pos);
+    let cost = this._tileCost(pos);
 
-    if (this._tileCost(pos) > min) {
+    if (cost > min) {
       for (const p of this.surroundings(pos)) {
         if (this._cycleCheck(pos, p)) continue;
 
-        const cost = this._tileCost(p) + this.heuristic(pos, p);
+        const c = this._tileCost(p) + this.heuristic(pos, p);
 
-        if (cost < this._tileCost(pos)) {
+        if (inf(c, cost)) {
+          cost = c;
+
           this._updateMapData(pos, {
             next: p,
-            cost: cost,
+            cost: c,
           });
         }
       }
@@ -215,10 +244,6 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
         this._updates.insert(u);
       }
     }
-  }
-
-  private _popNextUpdate(): Vector {
-    return this._updates.pop()!;
   }
 
   protected surroundings(pos: Vector): Vector[] {

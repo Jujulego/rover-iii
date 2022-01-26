@@ -90,6 +90,10 @@ export class BST<T, K = T> {
   }
 
   // - modifying
+  resort(): void {
+    this._array.sort((a, b) => this._comparator(this._extractor(a), this._extractor(b)));
+  }
+
   insert(elem: T): T {
     if (this.length === 0) {
       this._array.push(elem);
