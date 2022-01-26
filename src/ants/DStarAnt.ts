@@ -2,7 +2,7 @@ import { BiomeName } from '../biomes';
 import { FogData } from '../layers/FogTile';
 import { Vector } from '../math2d';
 
-import { AntWithMemory } from './AntMemory';
+import { AntWithMemory } from './memory/AntMemory';
 import { AntTree, AntWithTree, TreeData } from './AntTree';
 import { ParallelAnt } from './ParallelAnt';
 import { AntWorkerMemory } from './worker/AntWorkerMemory';

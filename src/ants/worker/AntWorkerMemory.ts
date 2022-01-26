@@ -2,12 +2,12 @@ import { filter, firstValueFrom, map } from 'rxjs';
 
 import { IVector } from '../../math2d';
 
-import { AntMemory } from '../AntMemory';
+import { AntMemory } from '../memory/AntMemory';
 import { ParallelAnt } from '../ParallelAnt';
 import { AntWorkerMemoryUpdate } from './message';
 
 // Class
-export class AntWorkerMemory<T> implements AntMemory<T> {
+export class AntWorkerMemory<T> extends AntMemory<T> {
   // Attributes
   readonly updates$ = this.ant.results$.pipe(
     filter((msg): msg is AntWorkerMemoryUpdate => msg.type === 'memoryUpdate'),
@@ -17,7 +17,7 @@ export class AntWorkerMemory<T> implements AntMemory<T> {
   // Constructor
   constructor(
     readonly ant: ParallelAnt,
-  ) {}
+  ) { super(); }
 
   // Methods
   get(pos: IVector): Promise<T | undefined> {

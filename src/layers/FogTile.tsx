@@ -40,11 +40,10 @@ export const FogTile: FC<ImgFogTileProps> = (props) => {
   const pos$ = useObservable(pluckFirst, [props.pos]);
 
   // State
-  const [detected] = useObservableState(() => ant.memory.updates$.pipe(
-    withLatestFrom(pos$),
-    filter(([update, pos]) => new Vector(pos).equals(update[0])),
-    map(([update]) => update[1]?.detected)
-  ));
+  const [detected] = useObservableState(() => pos$.pipe(
+    switchMap((pos) => ant.memory.get$(new Vector(pos))),
+    map(([, data]) => data.detected)
+  ), false);
 
   // Render
   if (detected) return null;

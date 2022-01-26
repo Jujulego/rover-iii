@@ -4,7 +4,7 @@ import { IVector, Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { Ant } from './Ant';
-import { AntMemory } from './AntMemory';
+import { AntMemory } from './memory/AntMemory';
 
 // Interface
 export interface TreeNode {

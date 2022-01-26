@@ -4,7 +4,7 @@ import { Rect, Vector } from '../../math2d';
 import { Ant } from '../Ant';
 import { AntColorName } from '../colors';
 import { AntRequest, AntResult } from './message';
-import { AntMemory } from '../AntMemory';
+import { AntMemory } from '../memory/AntMemory';
 
 // Class
 export abstract class AntWorker extends Ant {

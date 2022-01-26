@@ -1,24 +1,8 @@
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { IVector } from '../math2d';
-import { Awaitable } from '../types';
+import { IVector } from '../../math2d';
 
-import { Ant } from './Ant';
-
-// Interfaces
-export interface AntMemory<T> {
-  // Attributes
-  readonly updates$: Observable<[IVector, T]>;
-
-  // Methods
-  get(pos: IVector): Awaitable<T | undefined>;
-  put(pos: IVector, data: T): Awaitable<void>;
-}
-
-export interface AntWithMemory<T> extends Ant {
-  // Properties
-  readonly memory: AntMemory<T>;
-}
+import { AntMemory } from './AntMemory';
 
 // Utils
 function hash(pos: IVector): string {
@@ -26,7 +10,7 @@ function hash(pos: IVector): string {
 }
 
 // Class
-export class AntMapMemory<T> implements AntMemory<T> {
+export class AntMapMemory<T> extends AntMemory<T> {
   // Attributes
   private _data = new Map<string, [IVector, T]>();
 

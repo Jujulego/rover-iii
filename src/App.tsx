@@ -19,7 +19,7 @@ export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
   const [ant, setAnt] = useState<SmartAnt>();
-  const [target,] = useState(new Vector({ x: 20, y: 15 }));
+  const [target,] = useState(new Vector({ x: 35, y: 5 }));
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {
@@ -29,13 +29,13 @@ export const App: FC = () => {
   // Effects
   useEffect(() => void (async () => {
     const map = await cellularMap(
-      'perceval',
+      'map',
       { w: 40, h: 20 },
       { water: 3, grass: 4, sand: 3 },
-      { seed: 'perceval', iterations: 5, outBiome: 'water' }
+      { seed: 'tata', iterations: 5, outBiome: 'water' }
     );
 
-    const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
+    const ant = new SmartAnt(map, 'blue', new Vector({ x: 2, y: 16 }));
 
     setMap(map);
     setAnt(ant);
