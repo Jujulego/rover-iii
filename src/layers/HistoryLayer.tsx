@@ -1,7 +1,7 @@
 import { keyframes, styled } from '@mui/material/styles';
 import { pluckFirst, useObservable, useObservableState } from 'observable-hooks';
 import { memo } from 'react';
-import { distinctUntilChanged, map, pairwise, scan, withLatestFrom } from 'rxjs';
+import { distinctUntilChanged, map, pairwise, scan, startWith, tap, withLatestFrom } from 'rxjs';
 
 import { Ant } from '../ants';
 
@@ -45,15 +45,19 @@ export const HistoryLayer = memo<HistoryLayerProps>(function HistoryLayer(props)
   const limit$ = useObservable(pluckFirst, [props.limit ?? 0]);
 
   // State
-  const [path] = useObservableState(() => ant.position$.pipe(
-    distinctUntilChanged((a, b) => a.equals(b)),
-    map((pos) => pos.sub(ant.map.bbox.tl).add(0.5, 0.5)),
-    pairwise(),
-    map(([prev, pos]) => `${prev.distance(pos) > 2 ? 'M' : 'L'} ${pos.x} ${pos.y}`),
-    withLatestFrom(limit$),
-    scan((old, [pos, limit]) => [...old.slice(-limit), pos], [] as string[]),
-    map((history) => history.join(' ').replace(/^L/, 'M'))
-  ), '');
+  const [path] = useObservableState(() => {
+    const ini = ant.position.sub(ant.map.bbox.tl).add(0.5, 0.5);
+
+    return ant.position$.pipe(
+      distinctUntilChanged((a, b) => a.equals(b)),
+      map((pos) => pos.sub(ant.map.bbox.tl).add(0.5, 0.5)),
+      pairwise(),
+      map(([prev, pos]) => `${prev.distance(pos) > 2 ? 'M' : 'L'} ${pos.x} ${pos.y}`),
+      withLatestFrom(limit$),
+      scan((old, [pos, limit]) => [...old.slice(-limit), pos], [`M ${ini.x} ${ini.y}`]),
+      map((history) => history.join(' '))
+    );
+  }, '');
 
   // Render
   return (

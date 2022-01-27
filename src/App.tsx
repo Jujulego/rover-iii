@@ -35,7 +35,9 @@ export const App: FC = () => {
       { seed: 'tata', iterations: 5, outBiome: 'water' }
     );
 
-    const ant = new SmartAnt(map, 'blue', new Vector({ x: 2, y: 16 }));
+    //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
+
+    const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
 
     setMap(map);
     setAnt(ant);
@@ -58,7 +60,7 @@ export const App: FC = () => {
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
             { ant && (
               <>
-                <FogLayer ant={ant} />
+                {/*<FogLayer ant={ant} />*/}
                 <TreeLayer ant={ant} />
                 <HistoryLayer ant={ant} />
                 <ImgThingLayer
