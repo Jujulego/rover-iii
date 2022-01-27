@@ -1,7 +1,14 @@
-import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { CSSObject, Theme } from '@mui/material/styles';
-import MailIcon from '@mui/icons-material/Mail';
+import LastPageIcon from '@mui/icons-material/LastPage';
 import { FC, useState } from 'react';
+
+import { Ant } from '../ants';
+
+// Types
+export interface LayerBarProps {
+  ants: Ant[];
+}
 
 // Style mixins
 const openMixin = ({ transitions }: Theme): CSSObject => ({
@@ -14,7 +21,6 @@ const openMixin = ({ transitions }: Theme): CSSObject => ({
 });
 
 const closedMixin = ({ spacing, transitions }: Theme): CSSObject => ({
-  overflowX: 'hidden',
   width: `calc(${spacing(7)} + 1px)`,
 
   transition: transitions.create('width', {
@@ -24,7 +30,7 @@ const closedMixin = ({ spacing, transitions }: Theme): CSSObject => ({
 });
 
 // Component
-export const LayerBar: FC = () => {
+export const LayerBar: FC<LayerBarProps> = ({ ants }) => {
   // State
   const [open, setOpen] = useState(false);
 
@@ -35,22 +41,45 @@ export const LayerBar: FC = () => {
       open={open}
       PaperProps={{ elevation: 3 }}
       sx={(theme) => ({
-        flexShrink: 0,
         boxSizing: 'border-box',
         whiteSpace: 'nowrap',
+        overflowX: 'hidden',
+
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'nowrap',
 
         ...(open ? openMixin(theme) : closedMixin(theme)),
-        '& .MuiDrawer-paper': open ? openMixin(theme) : closedMixin(theme),
+        '& .MuiDrawer-paper': {
+          overflowX: 'hidden',
+          ...(open ? openMixin(theme) : closedMixin(theme))
+        },
       })}
     >
-      <List onClick={() => setOpen(true)}>
-        <ListItem button>
-          <ListItemIcon>
-            <MailIcon />
-          </ListItemIcon>
-          <ListItemText primary="Toto" />
-        </ListItem>
+      <List sx={{ flexGrow: 1 }}>
+        { ants.map((ant) => (
+          <ListItem button key={ant.name}>
+            <ListItemIcon>
+              <Box component="img" height={24} width={24} src={ant.image.toString()} />
+            </ListItemIcon>
+            <ListItemText primary={ant.name} />
+          </ListItem>
+        )) }
       </List>
+      <Box display="flex" justifyContent="center" width="100%">
+        <IconButton onClick={() => setOpen((old) => !old)}>
+          <LastPageIcon
+            sx={({ transitions }) => ({
+              transform: open ? 'rotate(180deg)' : 'rotate(0)',
+
+              transition: transitions.create('transform', {
+                easing: transitions.easing.sharp,
+                duration: open ? transitions.duration.enteringScreen : transitions.duration.leavingScreen,
+              }),
+            })}
+          />
+        </IconButton>
+      </Box>
     </Drawer>
   );
 };

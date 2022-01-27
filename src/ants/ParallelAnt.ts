@@ -18,8 +18,8 @@ export abstract class ParallelAnt extends Ant {
   readonly results$ = this._results$$.asObservable();
 
   // Constructor
-  constructor(map: Map, color: AntColorName, position: Vector) {
-    super(map, color, position);
+  constructor(name: string, map: Map, color: AntColorName, position: Vector) {
+    super(name, map, color, position);
 
     setTimeout(() => this._initWorker(), 0);
   }
@@ -39,6 +39,7 @@ export abstract class ParallelAnt extends Ant {
     // Send setup message
     this.request({
       type: 'setup',
+      name: this.name,
       map: {
         name: this.map.name,
         bbox: this.map.bbox,

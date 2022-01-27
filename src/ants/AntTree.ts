@@ -24,6 +24,10 @@ export interface AntWithTree<T extends TreeData = TreeData> extends Ant {
 }
 
 // Utils
+export function hasTree(ant: Ant): ant is AntWithTree {
+  return 'tree' in ant;
+}
+
 function hash(pos: IVector): string {
   return pos.x + ':' + pos.y;
 }

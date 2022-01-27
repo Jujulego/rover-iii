@@ -82,15 +82,18 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
   protected updateTarget(target: Vector): void {
     if (this._target?.equals(target)) return;
 
+    // Reset previous costs
+    if (this._target) {
+      for (const [pos, data] of this.memory) {
+        if (data.obstacle) continue;
+
+        this.memory.put(pos, { ...data, next: undefined, cost: Infinity, minCost: Infinity });
+      }
+    }
+
     // Set new target cost to 0
     this._updateMapData(target, { next: undefined, cost: 0 });
     this.updateTile(target);
-
-    // Recompute old target cost
-    if (this._target) {
-      this._updateMapData(this._target, { cost: Infinity });
-      this.updateTile(this._target);
-    }
 
     // Update target
     this._target = target;
@@ -115,6 +118,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
 
         if (tile.biome === 'water') {
           upd.cost = Infinity;
+          upd.minCost = Infinity;
           this._updateMapData(pos, upd);
 
           for (const p of this.surroundings(pos)) {

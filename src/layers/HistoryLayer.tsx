@@ -1,7 +1,7 @@
 import { keyframes, styled } from '@mui/material/styles';
 import { pluckFirst, useObservable, useObservableState } from 'observable-hooks';
 import { memo } from 'react';
-import { distinctUntilChanged, map, pairwise, scan, startWith, tap, withLatestFrom } from 'rxjs';
+import { distinctUntilChanged, map, pairwise, scan, withLatestFrom } from 'rxjs';
 
 import { Ant } from '../ants';
 

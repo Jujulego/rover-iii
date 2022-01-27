@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useObservableState } from 'observable-hooks';
 import { memo } from 'react';
+import { debounceTime } from 'rxjs';
 
 import { AntWithKnowledge } from '../ants';
 
@@ -31,7 +32,9 @@ export const FogLayer = memo<FogLayerProps>(function FogLayer(props) {
 
   // State
   const tiles = useLiveQuery(() => ant.map.tiles().toArray(), [ant], []);
-  useObservableState(() => ant.knowledge.version$);
+  useObservableState(() => ant.knowledge.version$.pipe(
+    debounceTime(50)
+  ));
 
   // Render
   return (

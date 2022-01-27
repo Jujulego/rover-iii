@@ -13,6 +13,7 @@ export type AntResultOf<R extends AntRequest> = Extract<AntResult, { type: R['ty
 // - requests
 export interface AntWorkerSetup extends AntMessage<'setup'> {
   type: 'setup';
+  name: string;
   map: {
     name: string;
     bbox: IRect;

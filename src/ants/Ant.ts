@@ -12,6 +12,7 @@ export abstract class Ant extends Thing {
 
   // Constructor
   constructor(
+    readonly name: string,
     readonly map: Map,
     private readonly _color: AntColorName,
     position = map.bbox.tl

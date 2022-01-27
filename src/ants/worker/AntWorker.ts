@@ -12,7 +12,7 @@ export abstract class AntWorker extends Ant {
   readonly memory?: AntMemory<unknown>;
 
   // Statics
-  static setupWorker(cls: { new(map: Map, color: AntColorName, position: Vector): AntWorker }) {
+  static setupWorker(cls: { new(name: string, map: Map, color: AntColorName, position: Vector): AntWorker }) {
     let worker: AntWorker;
 
     // Listen to messages
@@ -22,7 +22,7 @@ export abstract class AntWorker extends Ant {
         const map = new Map(msg.data.map.name, new Rect(msg.data.map.bbox));
         const pos = new Vector(msg.data.position);
 
-        worker = new cls(map, msg.data.color, pos);
+        worker = new cls(msg.data.name, map, msg.data.color, pos);
       }
 
       if (worker) {

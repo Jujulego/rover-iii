@@ -16,6 +16,10 @@ export interface AntWithKnowledge<T extends KnownData = KnownData> extends Ant {
 }
 
 // Utils
+export function hasKnowledge(ant: Ant): ant is AntWithKnowledge {
+  return 'knowledge' in ant;
+}
+
 function hash(pos: IVector): string {
   return pos.x + ':' + pos.y;
 }
