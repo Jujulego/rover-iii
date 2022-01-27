@@ -1,8 +1,41 @@
 import { Vector } from '../math2d';
 
 import { DStarAntWorker } from './DStarAnt.worker';
-import { MOVES } from './utils';
 import { AntWorker } from './worker/AntWorker';
+
+// Constants
+export const LOOK_AT = [
+  // 0 step
+  new Vector(0, 0),
+
+  // 1 step
+  new Vector(1, 0),
+  new Vector(1, 1),
+  new Vector(0, 1),
+  new Vector(-1, 1),
+  new Vector(-1, 0),
+  new Vector(-1, -1),
+  new Vector(0, -1),
+  new Vector(1, -1),
+
+  // 2
+  new Vector(2, 0),
+  new Vector(2, 1),
+  new Vector(2, 2),
+  new Vector(1, 2),
+  new Vector(0, 2),
+  new Vector(-1, 2),
+  new Vector(-2, 2),
+  new Vector(-2, 1),
+  new Vector(-2, 0),
+  new Vector(-2, -1),
+  new Vector(-2, -2),
+  new Vector(-1, -2),
+  new Vector(0, -2),
+  new Vector(1, -2),
+  new Vector(2, -2),
+  new Vector(2, -1),
+];
 
 // Class
 export class SmartAntWorker extends DStarAntWorker {
@@ -28,12 +61,8 @@ export class SmartAntWorker extends DStarAntWorker {
   }
 
   protected look(next: Vector): Vector[] {
-    return [
-      this.position,
-      next,
-      ...MOVES.map(d => this.position.add(d))
-        .filter(p => next.distance(p, 'manhattan') === 1)
-    ];
+    return LOOK_AT.map(d => this.position.add(d))
+      .filter(p => next.distance(p) <= 2);
   }
 }
 

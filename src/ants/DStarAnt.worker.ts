@@ -68,10 +68,10 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
     this.updateTarget(target);
 
     do {
-      this._expand();
-
       const { next } = this.getMapData(this.position);
       await this.detect(next ?? this.position);
+
+      this._expand();
     } while (this._updates.length > 0);
 
     // Compute next move

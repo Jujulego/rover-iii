@@ -24,6 +24,6 @@ interface DStarData extends KnownData, TreeData {
 export abstract class DStarAnt extends ParallelAnt implements AntWithMemory<DStarData>, AntWithTree<DStarData>, AntWithKnowledge<DStarData> {
   // Attributes
   readonly memory = new AntWorkerMemory<DStarData>(this);
-  readonly tree = new AntTree(this.memory);
   readonly knowledge = new AntKnowledge(this.memory);
+  readonly tree = new AntTree(this.memory);
 }

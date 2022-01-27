@@ -53,13 +53,11 @@ export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
 
       for (const root of ant.tree.roots()) {
         // Compute path
-        let path = generatePath(ant.map, root).replace(/^L/, 'M');
+        const path = generatePath(ant.map, root).replace(/^L/, 'M');
 
-        if (path.indexOf('L') === -1) {
-          path += 'Z';
+        if (path.indexOf('L') !== -1) {
+          paths.push([root.pos, path]);
         }
-
-        paths.push([root.pos, path]);
       }
 
       return paths;
