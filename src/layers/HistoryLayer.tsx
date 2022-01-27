@@ -55,7 +55,7 @@ export const HistoryLayer = memo<HistoryLayerProps>(function HistoryLayer(props)
       map(([prev, pos]) => `${prev.distance(pos) > 2 ? 'M' : 'L'} ${pos.x} ${pos.y}`),
       withLatestFrom(limit$),
       scan((old, [pos, limit]) => [...old.slice(-limit), pos], [`M ${ini.x} ${ini.y}`]),
-      map((history) => history.join(' '))
+      map((history) => history.join(' ').replace(/^L/, 'M'))
     );
   }, '');
 
