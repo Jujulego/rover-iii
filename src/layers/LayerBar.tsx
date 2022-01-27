@@ -1,9 +1,10 @@
-import { Box, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { CSSObject, Theme } from '@mui/material/styles';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { FC, useState } from 'react';
 
 import { Ant } from '../ants';
+import { AntMenu } from './bar/AntMenu';
 
 // Types
 export interface LayerBarProps {
@@ -45,10 +46,6 @@ export const LayerBar: FC<LayerBarProps> = ({ ants }) => {
         whiteSpace: 'nowrap',
         overflowX: 'hidden',
 
-        display: 'flex',
-        flexDirection: 'column',
-        flexWrap: 'nowrap',
-
         ...(open ? openMixin(theme) : closedMixin(theme)),
         '& .MuiDrawer-paper': {
           overflowX: 'hidden',
@@ -56,30 +53,36 @@ export const LayerBar: FC<LayerBarProps> = ({ ants }) => {
         },
       })}
     >
-      <List sx={{ flexGrow: 1 }}>
-        { ants.map((ant) => (
-          <ListItem button key={ant.name}>
-            <ListItemIcon>
-              <Box component="img" height={24} width={24} src={ant.image.toString()} />
-            </ListItemIcon>
-            <ListItemText primary={ant.name} />
-          </ListItem>
-        )) }
-      </List>
-      <Box display="flex" justifyContent="center" width="100%">
-        <IconButton onClick={() => setOpen((old) => !old)}>
-          <LastPageIcon
-            sx={({ transitions }) => ({
-              transform: open ? 'rotate(180deg)' : 'rotate(0)',
+      <List
+        sx={{
+          minHeight: '100%',
 
-              transition: transitions.create('transform', {
-                easing: transitions.easing.sharp,
-                duration: open ? transitions.duration.enteringScreen : transitions.duration.leavingScreen,
-              }),
-            })}
-          />
-        </IconButton>
-      </Box>
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        onClick={() => setOpen(true)}
+      >
+        { ants.map((ant) => (
+          <AntMenu ant={ant} key={ant.name} isBarOpen={open} />
+        )) }
+
+        <Divider sx={{ mt: 'auto' }} />
+        <ListItem button onClick={(evt) => { evt.stopPropagation(); setOpen((old) => !old); }}>
+          <ListItemIcon>
+            <LastPageIcon
+              sx={({ transitions }) => ({
+                transform: open ? 'rotate(180deg)' : 'rotate(0)',
+
+                transition: transitions.create('transform', {
+                  easing: transitions.easing.sharp,
+                  duration: open ? transitions.duration.enteringScreen : transitions.duration.leavingScreen,
+                }),
+              })}
+            />
+          </ListItemIcon>
+          <ListItemText primary="Close" />
+        </ListItem>
+      </List>
     </Drawer>
   );
 };

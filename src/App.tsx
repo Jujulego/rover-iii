@@ -3,7 +3,7 @@ import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
-import { Ant, AntWithKnowledge, AntWithTree, hasKnowledge, hasTree, SmartAnt, StupidAnt, Thing } from './ants';
+import { Ant, hasKnowledge, hasTree, SmartAnt, StupidAnt, Thing } from './ants';
 import { cellularMap, Map, simpleMap } from './maps';
 import { IVector, Vector } from './math2d';
 
@@ -19,7 +19,7 @@ import { FogLayer } from './layers/FogLayer';
 export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
-  const [smart, setSmart] = useState<Ant & Partial<AntWithKnowledge> & Partial<AntWithTree>>();
+  const [smart, setSmart] = useState<Ant>();
   const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
 
   // Callback
