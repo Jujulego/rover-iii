@@ -8,22 +8,6 @@ import { AntMapMemory } from './memory/AntMapMemory';
 import { TreeData } from './AntTree';
 import { AntWorker } from './worker/AntWorker';
 
-// Constant
-const MIN_DIFF = 0.001;
-
-// Utils
-function neq(a: number, b: number): boolean {
-  return Math.abs(a - b) > MIN_DIFF;
-}
-
-function inf(a: number, b: number): boolean {
-  return (a - b) < MIN_DIFF;
-}
-
-function sup(a: number, b: number): boolean {
-  return (a - b) > MIN_DIFF;
-}
-
 // Types
 interface DStarData extends FogData, TreeData {
   // Attributes
@@ -42,7 +26,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
   private _target?: Vector;
-  private _updates = BST.empty<Vector>((a) => a, (a, b) => this._tileMinCost(b) - this._tileMinCost(a));
+  private _updates = BST.empty<Vector, number>((v) => this._tileMinCost(v), (a, b) => b - a);
 
   readonly memory = new AntMapMemory<DStarData>();
 
@@ -68,7 +52,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
     // Save
     this.memory.put(p, res);
 
-    if (neq(old.minCost, res.minCost)) {
+    if (old.minCost !== res.minCost) {
       this._updates.resort();
     }
   }
@@ -104,7 +88,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
 
     // Recompute old target cost
     if (this._target) {
-      this._updateMapData(this._target, { next: undefined, cost: Infinity });
+      this._updateMapData(this._target, { cost: Infinity });
       this.updateTile(this._target);
     }
 
@@ -114,41 +98,37 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
 
   protected async detect(next: Vector): Promise<void> {
     for (const pos of this.look(next)) {
-      const d = this.getMapData(pos);
+      const data = this.getMapData(pos);
 
-      if (d.detected) {
+      if (data.detected) {
         continue;
       }
 
       const tile = await this.map.tile(pos);
 
       if (tile) {
-        this._updateMapData(pos, {
+        const upd: Partial<DStarData> = {
           detected: true,
           obstacle: tile.biome === 'water',
           biome: tile.biome,
-        });
+        };
 
         if (tile.biome === 'water') {
-          this._updateMapData(pos, { next: undefined, cost: Infinity });
+          upd.cost = Infinity;
+          this._updateMapData(pos, upd);
 
           for (const p of this.surroundings(pos)) {
             if (this.getMapData(p).next?.equals(pos)) {
-              this._updateMapData(p, { next: undefined, cost: Infinity });
+              this._updateMapData(p, { cost: Infinity });
               this.updateTile(p);
             }
           }
-        }
+        } else {
+          this._updateMapData(pos, upd);
+          upd.cost = this._evaluate(pos, data.next);
 
-        const data = this.getMapData(pos);
-
-        if (data.next) {
-          const cost = this.heuristic(pos, data.next) + this._tileCost(data.next);
-
-          if (neq(data.cost, cost)) {
-            this._updateMapData(pos, { cost });
-            this.updateTile(pos);
-          }
+          this._updateMapData(pos, upd);
+          this.updateTile(pos);
         }
       }
     }
@@ -162,26 +142,23 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
       if (this.getMapData(pos).obstacle) continue;
 
       const isRaising = this._isRaising(pos);
-      const cost = this._tileCost(pos);
 
       for (const p of this.surroundings(pos)) {
         const d = this.getMapData(p);
-        const c = cost + this.heuristic(p, pos);
+        const c = this._evaluate(p, pos);
 
         if (isRaising) {
           if (d.next?.equals(pos)) {
             this._updateMapData(p, { cost: c });
             this.updateTile(p);
           } else {
-            if (inf(c, d.cost)) {
-              this._updateMapData(pos, { minCost: cost });
+            if (c < d.cost) {
+              this._updateMapData(pos, { minCost: this._tileCost(pos) });
               this.updateTile(p);
             }
           }
         } else {
-          if (inf(c, d.cost)) {
-            if (this._cycleCheck(p, pos)) continue;
-
+          if (c < d.cost) {
             this._updateMapData(p, { next: pos, cost: c });
             this.updateTile(p);
           }
@@ -191,41 +168,39 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
   }
 
   private _isRaising(pos: Vector): boolean {
-    const min = this._tileMinCost(pos);
-    let cost = this._tileCost(pos);
+    const data = this.getMapData(pos);
 
-    if (cost > min) {
+    if (data.cost > data.minCost) {
       for (const p of this.surroundings(pos)) {
-        if (this._cycleCheck(pos, p)) continue;
+        const c = this._evaluate(pos, p);
 
-        const c = this._tileCost(p) + this.heuristic(pos, p);
-
-        if (inf(c, cost)) {
-          cost = c;
-
-          this._updateMapData(pos, {
-            next: p,
-            cost: c,
-          });
+        if (c < data.cost) {
+          data.next = p;
+          data.cost = c;
         }
       }
     }
 
-    return this._tileCost(pos) > min;
+    this._updateMapData(pos, data);
+    return data.cost > data.minCost;
   }
 
-  private _cycleCheck(pos: Vector, next?: Vector): boolean {
+  private _evaluate(pos: Vector, by?: Vector): number {
+    // Check if path is possible
+    let next = by;
+
     while (next) {
       const d = this.getMapData(next);
 
-      if (d.next?.equals(pos)) {
-        return true;
+      if (d.cost === Infinity || next.equals(pos)) {
+        return Infinity;
       }
 
       next = d.next;
     }
 
-    return false;
+    // Compute it's cost
+    return by ? this._tileCost(by) + this.heuristic(pos, by) : Infinity;
   }
 
   private _tileCost(pos: Vector): number {
@@ -238,9 +213,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
 
   protected updateTile(...upd: Vector[]) {
     for (const u of upd) {
-      const idx = this._updates.shouldBeAt(u);
-
-      if (!this._updates.item(idx - 1)?.equals(u)) {
+      if (this._updates.search(this._tileMinCost(u)).every(v => !v.equals(u))) {
         this._updates.insert(u);
       }
     }

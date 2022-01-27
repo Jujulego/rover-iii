@@ -1,11 +1,11 @@
 import { styled } from '@mui/material/styles';
 import { useObservableState } from 'observable-hooks';
 import { FC } from 'react';
-import { switchMap } from 'rxjs';
+import { exhaustMap } from 'rxjs';
 
-import { AntWithTree, TreeData, TreeNode } from '../ants';
+import { AntWithTree, TreeNode } from '../ants';
 import { Map } from '../maps';
-import { IVector, Vector } from '../math2d';
+import { IVector } from '../math2d';
 
 // Types
 export interface ImgTreeLayerProps {
@@ -48,7 +48,7 @@ export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
 
   // State
   const [paths] = useObservableState(() => ant.tree.version$.pipe(
-    switchMap(async () => {
+    exhaustMap(async () => {
       const paths: [IVector, string][] = [];
 
       for (const root of ant.tree.roots()) {

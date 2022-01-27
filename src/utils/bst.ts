@@ -35,7 +35,7 @@ export class BST<T, K = T> {
   }
 
   // Methods
-  private search(elem: K): [number, T | null] {
+  private _search(elem: K): [number, T | null] {
     let si = 0;
     let ei = this.length;
 
@@ -67,16 +67,11 @@ export class BST<T, K = T> {
     return this._array[i];
   }
 
-  indexOf(key: K): number {
-    const [idx, obj] = this.search(key);
-    return obj === null ? -1 : idx;
-  }
-
   shouldBeAt(key: K): number {
     if (this.length === 0) return 0;
 
     // Search ordered index
-    const [idx,] = this.search(key);
+    const [idx,] = this._search(key);
     if (this._comparator(this._extractor(this._array[idx]), key) <= 0) {
       return idx + 1;
     }
@@ -84,9 +79,36 @@ export class BST<T, K = T> {
     return idx;
   }
 
-  find(key: K): T | null {
-    const [,obj] = this.search(key);
-    return obj;
+  search(key: K): T[] {
+    const [idx, obj] = this._search(key);
+
+    // obj null means not found
+    if (obj === null) {
+      return [];
+    }
+
+    // Gather all objects where comparator return 0
+    const res = [obj];
+
+    // - before
+    for (let i = idx; i >= 0; --i) {
+      if (this._comparator(this._extractor(this._array[i]), key) === 0) {
+        res.push(this._array[i]);
+      } else {
+        break;
+      }
+    }
+
+    // - after
+    for (let i = idx; i < this._array.length; ++i) {
+      if (this._comparator(this._extractor(this._array[i]), key) === 0) {
+        res.push(this._array[i]);
+      } else {
+        break;
+      }
+    }
+
+    return res;
   }
 
   // - modifying
@@ -108,7 +130,7 @@ export class BST<T, K = T> {
   }
 
   remove(elem: K) {
-    const [idx, obj] = this.search(elem);
+    const [idx, obj] = this._search(elem);
 
     if (obj !== null) {
       this._array.splice(idx, 1);
@@ -116,11 +138,7 @@ export class BST<T, K = T> {
   }
 
   pop(): T | null {
-    if (this.length === 0) {
-      return null;
-    }
-
-    return this._array.splice(this._array.length - 1, 1)[0];
+    return this._array.pop() ?? null;
   }
 
   // - iterate

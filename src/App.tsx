@@ -19,7 +19,7 @@ export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
   const [ant, setAnt] = useState<SmartAnt>();
-  const [target,] = useState(new Vector({ x: 35, y: 5 }));
+  const [target,] = useState(new Vector({ x: 35, y: 3 }));
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {
