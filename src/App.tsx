@@ -19,7 +19,7 @@ export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
   const [ant, setAnt] = useState<SmartAnt>();
-  const [target,] = useState(new Vector({ x: 35, y: 5 }));
+  const [target,] = useState(new Vector({ x: 35, y: 6 }));
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {
@@ -32,7 +32,7 @@ export const App: FC = () => {
       'map',
       { w: 40, h: 20 },
       { water: 3, grass: 4, sand: 3 },
-      { seed: 'tata', iterations: 5, outBiome: 'water' }
+      { seed: 'caradoc', iterations: 5, outBiome: 'water' }
     );
 
     //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
@@ -60,7 +60,7 @@ export const App: FC = () => {
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
             { ant && (
               <>
-                {/*<FogLayer ant={ant} />*/}
+                <FogLayer ant={ant} />
                 <TreeLayer ant={ant} />
                 <HistoryLayer ant={ant} />
                 <ImgThingLayer

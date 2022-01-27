@@ -1,15 +1,15 @@
 import { BiomeName } from '../biomes';
-import { FogData } from '../layers/FogTile';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { BST } from '../utils';
 
+import { KnownData } from './AntKnowledge';
+import { TreeData } from './AntTree';
 import { AntWithMemory } from './memory/AntMemory';
 import { AntMapMemory } from './memory/AntMapMemory';
-import { TreeData } from './AntTree';
 import { AntWorker } from './worker/AntWorker';
 
 // Types
-interface DStarData extends FogData, TreeData {
+interface DStarData extends KnownData, TreeData {
   // Attributes
   // - algorithm data
   next?: Vector;
