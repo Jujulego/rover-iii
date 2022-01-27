@@ -1,8 +1,10 @@
 import { Box } from '@mui/material';
+import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
 import { FC, useCallback, useEffect, useState } from 'react';
+import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
 import { SmartAnt, StupidAnt, Thing } from './ants';
-import { cellularMap, Map } from './maps';
+import { cellularMap, Map, simpleMap } from './maps';
 import { IVector, Vector } from './math2d';
 
 import { LayerGrid } from './layers/LayerGrid';
@@ -11,15 +13,13 @@ import { ImgThingLayer } from './layers/img/ImgThingLayer';
 import { HistoryLayer } from './layers/HistoryLayer';
 import { TreeLayer } from './layers/TreeLayer';
 import { FogLayer } from './layers/FogLayer';
-import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
-import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
 // Component
 export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
   const [ant, setAnt] = useState<SmartAnt>();
-  const [target,] = useState(new Vector({ x: 35, y: 3 }));
+  const [target,] = useState(new Vector({ x: 35, y: 5 }));
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {

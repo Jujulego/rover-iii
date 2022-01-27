@@ -112,7 +112,7 @@ export class BST<T, K = T> {
   }
 
   // - modifying
-  resort(): void {
+  updatedKey(): void {
     this._array.sort((a, b) => this._comparator(this._extractor(a), this._extractor(b)));
   }
 

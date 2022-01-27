@@ -13,6 +13,8 @@ export const MOVES = [
 ];
 
 // Utils
-export function surroundings(pos: Vector): Vector[] {
-  return MOVES.map(dir => pos.add(dir));
+export function* surroundings(pos: Vector): Generator<Vector> {
+  for (const mvt of MOVES) {
+    yield pos.add(mvt);
+  }
 }

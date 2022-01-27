@@ -19,10 +19,12 @@ export class SmartAntWorker extends DStarAntWorker {
         return 5;
       } else if (data.biome === 'rock') {
         return 0.5;
+      } else if (data.biome === 'grass') {
+        return 1;
       }
     }
 
-    return 1;
+    return 0.75;
   }
 
   protected look(next: Vector): Vector[] {

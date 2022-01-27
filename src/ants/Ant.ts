@@ -42,16 +42,12 @@ export abstract class Ant extends Thing {
   }
 
   // - utils
-  protected surroundings(pos: Vector): Vector[] {
-    const result: Vector[] = [];
-
+  protected* surroundings(pos: Vector): Generator<Vector> {
     for (const p of surroundings(pos)) {
       if (p.within(this.map.bbox)) {
-        result.push(p);
+        yield p;
       }
     }
-
-    return result;
   }
 
   // - interact

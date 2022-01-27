@@ -26,7 +26,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
   private _target?: Vector;
-  private _updates = BST.empty<Vector, number>((v) => this._tileMinCost(v), (a, b) => b - a);
+  private _updates = BST.empty<Vector, number>((v) => this.getMapData(v).minCost, (a, b) => b - a);
 
   readonly memory = new AntMapMemory<DStarData>();
 
@@ -53,7 +53,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
     this.memory.put(p, res);
 
     if (old.minCost !== res.minCost) {
-      this._updates.resort();
+      this._updates.updatedKey();
     }
   }
 
@@ -118,7 +118,9 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
           this._updateMapData(pos, upd);
 
           for (const p of this.surroundings(pos)) {
-            if (this.getMapData(p).next?.equals(pos)) {
+            const d = this.getMapData(p);
+
+            if (d.next?.equals(pos)) {
               this._updateMapData(p, { cost: Infinity });
               this.updateTile(p);
             }
@@ -127,8 +129,10 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
           this._updateMapData(pos, upd);
           upd.cost = this._evaluate(pos, data.next);
 
-          this._updateMapData(pos, upd);
-          this.updateTile(pos);
+          if (upd.cost !== data.cost) {
+            this._updateMapData(pos, upd);
+            this.updateTile(pos);
+          }
         }
       }
     }
@@ -151,11 +155,9 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
           if (d.next?.equals(pos)) {
             this._updateMapData(p, { cost: c });
             this.updateTile(p);
-          } else {
-            if (c < d.cost) {
-              this._updateMapData(pos, { minCost: this._tileCost(pos) });
-              this.updateTile(p);
-            }
+          } else if (c < d.cost) {
+            this._updateMapData(pos, { minCost: this.getMapData(pos).cost });
+            this.updateTile(p);
           }
         } else {
           if (c < d.cost) {
@@ -189,44 +191,38 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
     // Check if path is possible
     let next = by;
 
-    while (next) {
-      const d = this.getMapData(next);
+    if (!by) {
+      return this._target!.equals(pos) ? 0 : Infinity;
+    }
 
-      if (d.cost === Infinity || next.equals(pos)) {
+    while (next) {
+      const dn = this.getMapData(next);
+
+      if (dn.cost === Infinity || next.equals(pos)) {
         return Infinity;
       }
 
-      next = d.next;
+      next = dn.next;
     }
 
     // Compute it's cost
-    return by ? this._tileCost(by) + this.heuristic(pos, by) : Infinity;
-  }
-
-  private _tileCost(pos: Vector): number {
-    return this.getMapData(pos).cost;
-  }
-
-  private _tileMinCost(pos: Vector): number {
-    return this.getMapData(pos).minCost;
+    return this.getMapData(by).cost + this.heuristic(pos, by);
   }
 
   protected updateTile(...upd: Vector[]) {
     for (const u of upd) {
-      if (this._updates.search(this._tileMinCost(u)).every(v => !v.equals(u))) {
+      const data = this.getMapData(u);
+
+      if (this._updates.search(data.minCost).every(v => !v.equals(u))) {
         this._updates.insert(u);
       }
     }
   }
 
-  protected surroundings(pos: Vector): Vector[] {
-    const result: Vector[] = [];
-
+  protected* surroundings(pos: Vector): Generator<Vector> {
     for (const p of super.surroundings(pos)) {
       if (this.getMapData(p).obstacle) continue;
-      result.push(p);
+      yield p;
     }
-
-    return result;
   }
 }
