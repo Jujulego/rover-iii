@@ -27,8 +27,4 @@ export class AntWorkerMemory<T> extends AntMemory<T> {
       )
     );
   }
-
-  put() {
-    throw new Error('Not yet implemented !');
-  }
 }

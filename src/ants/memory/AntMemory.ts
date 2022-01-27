@@ -17,7 +17,6 @@ export abstract class AntMemory<T> {
 
   // Methods
   abstract get(pos: IVector): Awaitable<T | undefined>;
-  abstract put(pos: IVector, data: T): Awaitable<void>;
 
   get$(pos: Vector): Observable<[IVector, T]> {
     return concat(

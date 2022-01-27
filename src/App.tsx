@@ -18,13 +18,13 @@ import { FogLayer } from './layers/FogLayer';
 export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
-  const [ant, setAnt] = useState<SmartAnt>();
-  const [target,] = useState(new Vector({ x: 35, y: 5 }));
+  const [smart, setSmart] = useState<SmartAnt>();
+  const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {
-    if (ant) ant.position = new Vector(pos);
-  }, [ant]);
+    setTarget(new Vector(pos));
+  }, []);
 
   // Effects
   useEffect(() => void (async () => {
@@ -37,16 +37,15 @@ export const App: FC = () => {
 
     //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
 
-    const ant = new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 }));
-
     setMap(map);
-    setAnt(ant);
+    setSmart(new SmartAnt(map, 'blue', new Vector({ x: 5, y: 15 })));
   })(), []);
 
   // Observables
-  const $ant = useObservable(pluckFirst, [ant]);
+  const $smart = useObservable(pluckFirst, [smart]);
+
   useSubscription(interval(500).pipe(
-    withLatestFrom($ant),
+    withLatestFrom($smart),
     exhaustMap(async ([,ant]) => ant?.step(target))
   ));
 
@@ -58,20 +57,20 @@ export const App: FC = () => {
         { map && (
           <LayerGrid tileSize={32}>
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
-            { ant && (
+            { smart && (
               <>
-                <FogLayer ant={ant} />
-                <TreeLayer ant={ant} />
-                <HistoryLayer ant={ant} limit={100} />
-                <ImgThingLayer
-                  map={map}
-                  things={[
-                    Thing.createTarget(target),
-                    ant
-                  ]}
-                />
+                <FogLayer ant={smart} />
+                <TreeLayer ant={smart} />
+                <HistoryLayer ant={smart} limit={100} />
               </>
             ) }
+            <ImgThingLayer
+              map={map}
+              things={[
+                Thing.createTarget(target),
+                smart
+              ].filter((o): o is Thing => !!o)}
+            />
           </LayerGrid>
         ) }
       </Box>
