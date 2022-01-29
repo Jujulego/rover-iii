@@ -52,19 +52,21 @@ export class BFSAntWorker extends AntWorker implements AntWithMemory<BFSData> {
 
       while (!queue.isEmpty) {
         const pos = queue.pop();
-        if (!pos) break;
 
-        const nexts = Array.from(this.surroundings(pos))
+        if (!pos) break;
+        if (pos.equals(this.position)) break;
+
+        const next = Array.from(this.surroundings(pos))
           .filter(p => !marks.has(hash(p)) && p.within(this.map.bbox));
 
-        for (const tile of await this.map.bulk(...nexts)) {
+        for (const tile of await this.map.bulk(...next)) {
           if (tile && tile.biome !== 'water') {
             this.memory.put(tile?.pos, { next: pos });
             queue.add(new Vector(tile.pos));
           }
         }
 
-        for (const p of nexts) {
+        for (const p of next) {
           marks.add(hash(p));
         }
       }

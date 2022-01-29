@@ -43,7 +43,6 @@ export class DFSAntWorker extends AntWorker implements AntWithMemory<DFSData> {
     }
 
     // Recompute tree
-    const start = performance.now();
     await db.transaction('r', db.tiles, async () => {
       const stack = new Stack<Vector>();
       const marks = new Set<string>();
@@ -53,26 +52,27 @@ export class DFSAntWorker extends AntWorker implements AntWithMemory<DFSData> {
 
       while (!stack.isEmpty) {
         const pos = stack.pop();
-        if (!pos) break;
 
-        const nexts = Array.from(this.surroundings(pos))
+        if (!pos) break;
+        if (pos.equals(this.position)) break;
+
+        const next = Array.from(this.surroundings(pos))
           .filter(p => !marks.has(hash(p)) && p.within(this.map.bbox));
 
-        for (const tile of await this.map.bulk(...nexts)) {
+        for (const tile of await this.map.bulk(...next)) {
           if (tile && tile.biome !== 'water') {
             this.memory.put(tile?.pos, { next: pos });
             stack.add(new Vector(tile.pos));
           }
         }
 
-        for (const p of nexts) {
+        for (const p of next) {
           marks.add(hash(p));
         }
       }
 
       this._target = target;
     });
-    console.log(`dfs tree took ${performance.now() - start}ms`);
   }
 }
 

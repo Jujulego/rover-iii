@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
 import { Ant, BFSAnt, DFSAnt, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
@@ -20,7 +20,7 @@ import { TreeLayer } from './layers/TreeLayer';
 export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
-  const [smart, setSmart] = useState<Ant>();
+  const [ants, setAnts] = useState<Ant[]>([]);
   const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
   const [layers, setLayers] = useState<Record<string, LayersState>>({});
 
@@ -39,33 +39,37 @@ export const App: FC = () => {
     );
 
     //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
-    const ant = new BFSAnt('BFS', map, 'blue', new Vector({ x: 5, y: 15 }));
+    const ants = [
+      new DFSAnt('Depth', map, 'blue', new Vector({ x: 5, y: 15 })),
+      new BFSAnt('Breath', map, 'yellow', new Vector({ x: 5, y: 15 })),
+      new SmartAnt('Smart', map, 'green', new Vector({ x: 5, y: 15 })),
+    ];
 
     setMap(map);
-    setLayers((old) => ({
-      ...old,
+    setLayers((old) => ants.reduce((acc, ant) => ({
+      ...acc,
       [ant.name]: {
-        fog: true,
+        fog: false,
         history: true,
-        tree: true,
+        tree: false,
       }
-    }));
-    setSmart(ant);
+    }), old));
+    setAnts(ants);
   })(), []);
 
   // Observables
-  const $smart = useObservable(pluckFirst, [smart]);
+  const $ants = useObservable(pluckFirst, [ants]);
 
   useSubscription(interval(500).pipe(
-    withLatestFrom($smart),
-    exhaustMap(async ([,ant]) => ant?.step(target))
+    withLatestFrom($ants),
+    exhaustMap(([,ants]) => Promise.all(ants.map(ant => ant.step(target))))
   ));
 
   // Render
   return (
     <Box component="main" display="flex" height="100vh">
       <LayerBar
-        ants={[smart].filter((o): o is Ant => !!o)}
+        ants={ants}
         layers={layers}
         onAntLayerToggle={(ant, layer) => setLayers((old) => ({ ...old, [ant]: { ...old[ant], [layer]: !old[ant][layer] }}))}
       />
@@ -73,15 +77,19 @@ export const App: FC = () => {
         { map && (
           <LayerGrid tileSize={32}>
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
-            { (smart && layers[smart.name]?.fog && hasKnowledge(smart)) && <FogLayer ant={smart} /> }
-            { (smart && layers[smart.name]?.tree && hasTree(smart)) && <TreeLayer ant={smart} /> }
-            { smart  && layers[smart.name]?.history && <HistoryLayer ant={smart} limit={100} /> }
+            { ants.map(ant => (
+              <Fragment key={ant.name}>
+                { (layers[ant.name]?.fog && hasKnowledge(ant)) && <FogLayer ant={ant} /> }
+                { (layers[ant.name]?.tree && hasTree(ant)) && <TreeLayer ant={ant} /> }
+                {  layers[ant.name]?.history && <HistoryLayer ant={ant} limit={100} /> }
+              </Fragment>
+            ))}
             <ImgThingLayer
               map={map}
               things={[
                 Thing.createTarget(target),
-                smart
-              ].filter((o): o is Thing => !!o)}
+                ...ants
+              ]}
             />
           </LayerGrid>
         ) }
