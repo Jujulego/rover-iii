@@ -3,17 +3,18 @@ import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
-import { Ant, hasKnowledge, hasTree, SmartAnt, StupidAnt, Thing } from './ants';
-import { cellularMap, Map, simpleMap } from './maps';
+import { Ant, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
+import { cellularMap, Map } from './maps';
 import { IVector, Vector } from './math2d';
 
+import { FogLayer } from './layers/FogLayer';
+import { HistoryLayer } from './layers/HistoryLayer';
+import { LayersState } from './layers/layers';
 import { LayerBar } from './layers/LayerBar';
 import { LayerGrid } from './layers/LayerGrid';
 import { ImgMapLayer } from './layers/img/ImgMapLayer';
 import { ImgThingLayer } from './layers/img/ImgThingLayer';
-import { HistoryLayer } from './layers/HistoryLayer';
 import { TreeLayer } from './layers/TreeLayer';
-import { FogLayer } from './layers/FogLayer';
 
 // Component
 export const App: FC = () => {
@@ -21,6 +22,7 @@ export const App: FC = () => {
   const [map, setMap] = useState<Map>();
   const [smart, setSmart] = useState<Ant>();
   const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
+  const [layers, setLayers] = useState<Record<string, LayersState>>({});
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {
@@ -37,9 +39,18 @@ export const App: FC = () => {
     );
 
     //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
+    const ant = new SmartAnt('Smart', map, 'blue', new Vector({ x: 5, y: 15 }));
 
     setMap(map);
-    setSmart(new SmartAnt('Smart', map, 'blue', new Vector({ x: 5, y: 15 })));
+    setLayers((old) => ({
+      ...old,
+      [ant.name]: {
+        fog: true,
+        history: true,
+        tree: true,
+      }
+    }));
+    setSmart(ant);
   })(), []);
 
   // Observables
@@ -53,14 +64,18 @@ export const App: FC = () => {
   // Render
   return (
     <Box component="main" display="flex" height="100vh">
-      <LayerBar ants={[smart].filter((o): o is Ant => !!o)} />
+      <LayerBar
+        ants={[smart].filter((o): o is Ant => !!o)}
+        layers={layers}
+        onAntLayerToggle={(ant, layer) => setLayers((old) => ({ ...old, [ant]: { ...old[ant], [layer]: !old[ant][layer] }}))}
+      />
       <Box flex={1} overflow="auto">
         { map && (
           <LayerGrid tileSize={32}>
             <ImgMapLayer map={map} onTileClick={handleTileClick} />
-            { (smart && hasKnowledge(smart)) && <FogLayer ant={smart} /> }
-            { (smart && hasTree(smart)) && <TreeLayer ant={smart} /> }
-            { smart && <HistoryLayer ant={smart} limit={100} /> }
+            { (smart && layers[smart.name]?.fog && hasKnowledge(smart)) && <FogLayer ant={smart} /> }
+            { (smart && layers[smart.name]?.tree && hasTree(smart)) && <TreeLayer ant={smart} /> }
+            { smart  && layers[smart.name]?.history && <HistoryLayer ant={smart} limit={100} /> }
             <ImgThingLayer
               map={map}
               things={[

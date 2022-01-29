@@ -1,17 +1,21 @@
- import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+ import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { FC, useEffect, useState } from 'react';
 
 import { Ant, hasKnowledge, hasTree } from '../../ants';
+import { LayersState } from '../layers';
+import { LayerControl } from './LayerControl';
 
 // Types
 export interface AntMenuProps {
   ant: Ant;
+  layers: LayersState;
   isBarOpen: boolean;
+  onLayerToggle: (layer: keyof LayersState) => void;
 }
 
 // Component
-export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
+export const AntMenu: FC<AntMenuProps> = ({ ant, layers, isBarOpen, onLayerToggle }) => {
   // State
   const [open, setOpen] = useState(false);
 
@@ -25,9 +29,9 @@ export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
     <>
       <ListItem button onClick={() => setOpen((old) => !old)}>
         <ListItemIcon>
-          <Box component="img" height={24} width={24} src={ant.image.toString()}/>
+          <Box component="img" height={24} width={24} src={ant.image.toString()} />
         </ListItemIcon>
-        <ListItemText primary={ant.name}/>
+        <ListItemText primary={ant.name} />
         <ExpandLessIcon
           sx={({ transitions }) => ({
             transform: open ? 'rotate(180deg)' : 'rotate(0)',
@@ -38,20 +42,13 @@ export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
         />
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List disablePadding>
-          { hasKnowledge(ant) && (
-            <ListItem button sx={{ pl: 4 }}>
-              <ListItemText primary="Fog" />
-            </ListItem>
-          ) }
-          { hasTree(ant) && (
-            <ListItem button sx={{ pl: 4 }}>
-              <ListItemText primary="Tree" />
-            </ListItem>
-          ) }
-          <ListItem button sx={{ pl: 4 }}>
-            <ListItemText primary="History" />
-          </ListItem>
+        <List
+          disablePadding
+          subheader={<ListSubheader sx={{ pl: 4, bgcolor: 'unset' }}>Layers</ListSubheader>}
+        >
+          { hasKnowledge(ant) && <LayerControl layer="fog" state={layers.fog} onToggle={() => onLayerToggle('fog')} /> }
+          { hasTree(ant) && <LayerControl layer="tree" state={layers.tree} onToggle={() => onLayerToggle('tree')} /> }
+          <LayerControl layer="history" state={layers.history} onToggle={() => onLayerToggle('history')} />
         </List>
       </Collapse>
     </>
