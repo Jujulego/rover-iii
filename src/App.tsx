@@ -3,7 +3,7 @@ import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
-import { Ant, DFSAnt, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
+import { Ant, BFSAnt, DFSAnt, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
 import { cellularMap, Map } from './maps';
 import { IVector, Vector } from './math2d';
 
@@ -39,7 +39,7 @@ export const App: FC = () => {
     );
 
     //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
-    const ant = new DFSAnt('DFS', map, 'blue', new Vector({ x: 5, y: 15 }));
+    const ant = new BFSAnt('BFS', map, 'blue', new Vector({ x: 5, y: 15 }));
 
     setMap(map);
     setLayers((old) => ({
