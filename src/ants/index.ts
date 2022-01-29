@@ -1,6 +1,7 @@
 export * from './Ant';
 export * from './AntKnowledge';
 export * from './AntTree';
+export * from './DFSAnt';
 export * from './DStarAnt';
 export * from './memory/AntMemory';
 export * from './memory/AntMapMemory';

@@ -22,6 +22,10 @@ export class AntMapMemory<T> extends AntMemory<T> {
     return this._data.values();
   }
 
+  has(pos: IVector): boolean {
+    return this._data.has(hash(pos));
+  }
+
   get(pos: IVector): T | undefined {
     const res = this._data.get(hash(pos));
     return res?.[1];

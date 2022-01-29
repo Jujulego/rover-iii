@@ -79,10 +79,12 @@ export class Map {
       return null;
     }
 
-    return {
-      ...res,
-      pos: new Vector(res.pos)
-    };
+    return res;
+  }
+
+  async bulk(...positions: Vector[]): Promise<(Tile | null)[]> {
+    const res = await db.tiles.bulkGet(positions.map(pos => [this.name, pos.x, pos.y]));
+    return res.map(tile => tile ?? null);
   }
 
   // - utils

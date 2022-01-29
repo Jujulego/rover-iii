@@ -9,7 +9,7 @@ import { AntMapMemory } from './memory/AntMapMemory';
 import { AntWorker } from './worker/AntWorker';
 
 // Types
-interface DStarData extends KnownData, TreeData {
+export interface DStarData extends KnownData, TreeData {
   // Attributes
   // - algorithm data
   next?: Vector;

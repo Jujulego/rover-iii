@@ -1,5 +1,5 @@
 // Class
-class Queue<T> {
+export class Queue<T> {
   // Attributes
   private readonly _queue = new Array<T>();
 
@@ -13,13 +13,11 @@ class Queue<T> {
   }
 
   // Methods
-  enqueue(value: T) {
+  add(value: T) {
     this._queue.unshift(value);
   }
 
-  dequeue(): T | undefined {
+  pop(): T | undefined {
     return this._queue.pop();
   }
 }
-
-export default Queue;
