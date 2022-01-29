@@ -1,4 +1,4 @@
-import { map, sample, scan, Subject } from 'rxjs';
+import { map, sample, scan, startWith, Subject } from 'rxjs';
 
 import { IVector, Vector } from '../math2d';
 import { BST } from '../utils';
@@ -42,7 +42,8 @@ export class AntTree<T extends TreeData> {
   private readonly _version$$ = new Subject<void>();
   readonly version$ = this._version$$.asObservable().pipe(
     sample(this._complete$$.asObservable()),
-    scan((n) => n + 1, 0)
+    scan((n) => n + 1, 0),
+    startWith(0)
   );
 
   // Constructor

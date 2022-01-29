@@ -42,7 +42,7 @@ export const App: FC = () => {
     const ants = [
       new DFSAnt('Depth', map, 'blue', new Vector({ x: 5, y: 15 })),
       new BFSAnt('Breath', map, 'yellow', new Vector({ x: 5, y: 15 })),
-      new SmartAnt('Smart', map, 'green', new Vector({ x: 5, y: 15 })),
+      new SmartAnt('Smart', map, 'pink', new Vector({ x: 5, y: 15 })),
     ];
 
     setMap(map);

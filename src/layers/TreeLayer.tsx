@@ -79,7 +79,7 @@ export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth=".1"
-          opacity=".33"
+          opacity={ant.color.opacity}
         />
       ))}
     </Layer>
