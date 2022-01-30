@@ -23,6 +23,7 @@ const Layer = styled('svg', { skipSx: true })<LayerProps>((props) => ({
   height: '100%',
   gridColumn: `1 / ${props.w + 2}`,
   gridRow: `1 / ${props.h + 2}`,
+  zIndex: 10,
   pointerEvents: 'none',
 }));
 

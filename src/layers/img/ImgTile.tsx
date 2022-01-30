@@ -22,6 +22,7 @@ const Tile = styled('img', { skipSx: true })<TileProps>((props) => ({
   width: '100%',
   gridRow: props.y + 1,
   gridColumn: props.x + 1,
+  zIndex: 0
 }));
 
 // Component
