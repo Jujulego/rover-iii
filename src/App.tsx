@@ -4,7 +4,7 @@ import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
 import { Ant, BFSAnt, DFSAnt, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
-import { cellularMap, Map, simpleMap } from './maps';
+import { cellularMap, Map, SimpleGenerator } from './maps';
 import { IVector, Vector } from './math2d';
 
 import { FogLayer } from './layers/FogLayer';
@@ -38,7 +38,9 @@ export const App: FC = () => {
     //   { water: 3, grass: 4, sand: 3 },
     //   { seed: 'tata', iterations: 5, outBiome: 'water' }
     // );
-    const map = await simpleMap('map', { w: 40, h: 20 }, 'grass');
+    // await simpleMap('test', { w: 100, h: 100 }, 'grass');
+    const gen = new SimpleGenerator(80);
+    const map = await gen.generate('map', { w: 40, h: 20 }, { biome: 'grass' });
     console.log(`map generation took ${performance.now() - start}ms`);
 
     const ants = [

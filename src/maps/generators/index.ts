@@ -1,2 +1,4 @@
 export * from './cellular';
-export * from './simple';
+export * from './MapGenerator';
+export * from './MapIterator';
+export * from './SimpleGenerator';
