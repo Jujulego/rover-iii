@@ -31,12 +31,14 @@ export const App: FC = () => {
 
   // Effects
   useEffect(() => void (async () => {
+    const start = performance.now();
     const map = await cellularMap(
       'map',
       { w: 40, h: 20 },
       { water: 3, grass: 4, sand: 3 },
       { seed: 'tata', iterations: 5, outBiome: 'water' }
     );
+    console.log(`map generation took ${performance.now() - start}ms`);
 
     //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
     const ants = [

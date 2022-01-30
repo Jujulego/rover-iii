@@ -1,7 +1,7 @@
 import { Collection } from 'dexie';
 
 import { BiomeName } from '../biomes';
-import { db } from '../db';
+import { db, TileEntity } from '../db';
 import { Rect, Vector } from '../math2d';
 
 import { Tile } from './tile';
@@ -50,13 +50,10 @@ export class Map {
       for (let y = 0; y < matrix.length; ++y) {
         const line = matrix[y];
 
-        for (let x = 0; x < line.length; ++x) {
-          const biome = line[x];
-
-          if (biome) {
-            db.tiles.add({ map: name, pos: { x, y }, biome });
-          }
-        }
+        db.tiles.bulkAdd(line
+          .map((biome, x) => ({ map: name, pos: { x, y }, biome }))
+          .filter((tile): tile is TileEntity => tile.biome !== null)
+        );
       }
     });
 
