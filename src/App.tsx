@@ -4,7 +4,7 @@ import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
 import { Ant, BFSAnt, DFSAnt, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
-import { cellularMap, Map } from './maps';
+import { cellularMap, Map, simpleMap } from './maps';
 import { IVector, Vector } from './math2d';
 
 import { FogLayer } from './layers/FogLayer';
@@ -32,15 +32,15 @@ export const App: FC = () => {
   // Effects
   useEffect(() => void (async () => {
     const start = performance.now();
-    const map = await cellularMap(
-      'map',
-      { w: 40, h: 20 },
-      { water: 3, grass: 4, sand: 3 },
-      { seed: 'tata', iterations: 5, outBiome: 'water' }
-    );
+    // const map = await cellularMap(
+    //   'map',
+    //   { w: 40, h: 20 },
+    //   { water: 3, grass: 4, sand: 3 },
+    //   { seed: 'tata', iterations: 5, outBiome: 'water' }
+    // );
+    const map = await simpleMap('map', { w: 40, h: 20 }, 'grass');
     console.log(`map generation took ${performance.now() - start}ms`);
 
-    //const map = await simpleMap('map', { w: 5, h: 5 }, 'grass');
     const ants = [
       new DFSAnt('Depth', map, 'blue', new Vector({ x: 5, y: 15 })),
       new BFSAnt('Breath', map, 'yellow', new Vector({ x: 5, y: 15 })),

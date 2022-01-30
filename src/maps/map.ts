@@ -13,6 +13,7 @@ export class Map {
 
   // Statics
   static async fromArray(name: string, tiles: Tile[]): Promise<Map> {
+    // Compute bbox
     const bbox = {
       t: Infinity,
       r: -Infinity,
@@ -20,18 +21,16 @@ export class Map {
       l: Infinity
     };
 
-    // Insert all tiles into database
-    await db.transaction('rw', db.tiles, () => {
-      for (const tile of tiles) {
-        db.tiles.add({ map: name, ...tile });
+    for (const tile of tiles) {
+      // Compute bbox
+      bbox.t = Math.min(bbox.t, tile.pos.y);
+      bbox.l = Math.min(bbox.l, tile.pos.x);
+      bbox.b = Math.max(bbox.b, tile.pos.y);
+      bbox.r = Math.max(bbox.r, tile.pos.x);
+    }
 
-        // Compute bbox
-        bbox.t = Math.min(bbox.t, tile.pos.y);
-        bbox.l = Math.min(bbox.l, tile.pos.x);
-        bbox.b = Math.max(bbox.b, tile.pos.y);
-        bbox.r = Math.max(bbox.r, tile.pos.x);
-      }
-    });
+    // Insert all tiles into database
+    await db.tiles.bulkPut(tiles.map(tile => ({ map: name, ...tile })));
 
     return new Map(name, new Rect(bbox));
   }
@@ -50,7 +49,7 @@ export class Map {
       for (let y = 0; y < matrix.length; ++y) {
         const line = matrix[y];
 
-        db.tiles.bulkAdd(line
+        db.tiles.bulkPut(line
           .map((biome, x) => ({ map: name, pos: { x, y }, biome }))
           .filter((tile): tile is TileEntity => tile.biome !== null)
         );
