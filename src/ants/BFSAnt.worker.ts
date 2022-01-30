@@ -47,6 +47,9 @@ export class BFSAntWorker extends AntWorker implements AntWithMemory<BFSData> {
       const queue = new Queue<Vector>();
       const marks = new Set<string>();
 
+      const tile = await this.map.tile(target);
+      if (!tile || tile.biome === 'water') return;
+
       queue.add(target);
       marks.add(hash(target));
 

@@ -8,7 +8,7 @@ import type { DFSData } from './DFSAnt.worker';
 // Class
 export class DFSAnt extends ParallelAnt implements AntWithMemory<DFSData>, AntWithTree<DFSData> {
   // Attributes
-  readonly worker = new Worker(new URL('./DFSAnt.worker.ts', import.meta.url));
+  readonly worker = new Worker(new URL(/* webpackChunkName: "dfs.worker" */ './DFSAnt.worker.ts', import.meta.url));
   readonly memory = new AntWorkerMemory<DFSData>(this);
   readonly tree = new AntTree(this.memory);
 }

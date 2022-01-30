@@ -47,6 +47,9 @@ export class DFSAntWorker extends AntWorker implements AntWithMemory<DFSData> {
       const stack = new Stack<Vector>();
       const marks = new Set<string>();
 
+      const tile = await this.map.tile(target);
+      if (!tile || tile.biome === 'water') return;
+
       stack.add(target);
       marks.add(hash(target));
 
