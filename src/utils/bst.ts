@@ -2,6 +2,15 @@ import { Comparator } from '../types';
 
 // Types
 export type ExtractKey<T, K> = (elem: T) => K;
+export type NearestMode = 'lt' | 'lte' | 'gte' | 'gt';
+
+// Constants
+const NEAREST_VALIDATOR: Record<NearestMode, (cmp: number) => boolean> = {
+  lt:  cmp => cmp < 0,
+  lte: cmp => cmp <= 0,
+  gte: cmp => cmp >= 0,
+  gt:  cmp => cmp > 0,
+};
 
 // Class
 export class BST<T, K = T> {
@@ -35,15 +44,15 @@ export class BST<T, K = T> {
   }
 
   // Methods
-  private _search(elem: K): [number, T | null] {
+  private _searchOne(key: K): [number, T | null] {
     let si = 0;
-    let ei = this.length;
+    let ei = this._array.length;
 
     while (si !== ei) {
       const mi = Math.floor((ei + si) / 2);
       const obj = this.item(mi);
 
-      const cmp = this._comparator(this._extractor(obj), elem);
+      const cmp = this._comparator(this._extractor(obj), key);
       if (cmp === 0) {
         return [mi, obj];
       }
@@ -62,38 +71,19 @@ export class BST<T, K = T> {
     return [0, null];
   }
 
-  // - accessing
-  item(i: number): T {
-    return this._array[i];
-  }
-
-  shouldBeAt(key: K): number {
-    if (this.length === 0) return 0;
-
-    // Search ordered index
-    const [idx,] = this._search(key);
-    if (this._comparator(this._extractor(this._array[idx]), key) <= 0) {
-      return idx + 1;
-    }
-
-    return idx;
-  }
-
-  search(key: K): T[] {
-    const [idx, obj] = this._search(key);
+  private* _searchAll(key: K): Generator<[number, T]> {
+    const [idx, obj] = this._searchOne(key);
 
     // obj null means not found
-    if (obj === null) {
-      return [];
-    }
+    if (obj === null) return;
 
-    // Gather all objects where comparator return 0
-    const res = [obj];
+    // Yields all objects where comparator return 0
+    yield [idx, obj];
 
     // - before
     for (let i = idx - 1; i >= 0; --i) {
       if (this._comparator(this._extractor(this._array[i]), key) === 0) {
-        res.push(this._array[i]);
+        yield [i, this._array[i]];
       } else {
         break;
       }
@@ -102,20 +92,100 @@ export class BST<T, K = T> {
     // - after
     for (let i = idx + 1; i < this._array.length; ++i) {
       if (this._comparator(this._extractor(this._array[i]), key) === 0) {
-        res.push(this._array[i]);
+        yield [i, this._array[i]];
       } else {
         break;
       }
+    }
+  }
+
+  // - accessing
+  /**
+   * Access item by it's index
+   * @param i
+   */
+  item(i: number): T {
+    return this._array[i];
+  }
+
+  /**
+   * Return index where an object with given key should be inserted
+   * @param key
+   */
+  shouldBeAt(key: K): number {
+    if (this._array.length === 0) return 0;
+
+    // Search ordered index
+    const [idx,] = this._searchOne(key);
+    if (this._comparator(this._extractor(this._array[idx]), key) <= 0) {
+      return idx + 1;
+    }
+
+    return idx;
+  }
+
+  nearest(key: K, mode: 'lt' | 'lte' | 'gte' | 'gt'): T | null {
+    if (this._array.length === 0) return null;
+
+    // Search ordered index
+    const [idx,] = this._searchOne(key);
+
+    // - before
+    if (mode === 'lt' || mode === 'lte') {
+      const validate = NEAREST_VALIDATOR[mode];
+
+      for (let i = idx; i >= 0; --i) {
+        const obj = this._array[i];
+
+        if (validate(this._comparator(this._extractor(obj), key))) {
+          return obj;
+        }
+      }
+    }
+
+    if (mode === 'gt' || mode === 'gte') {
+      const validate = NEAREST_VALIDATOR[mode];
+
+      for (let i = idx; i < this._array.length; ++i) {
+        const obj = this._array[i];
+
+        if (validate(this._comparator(this._extractor(obj), key))) {
+          return obj;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Return all objects matching the given key
+   * @param key
+   */
+  search(key: K): T[] {
+    // Gather all results
+    const res: T[] = [];
+
+    for (const [,obj] of this._searchAll(key)) {
+      res.push(obj);
     }
 
     return res;
   }
 
   // - modifying
-  updatedKey(): void {
+  /**
+   * Indicates that keys have changed.
+   * It will resorts the whole tree.
+   */
+  updatedKeys(): void {
     this._array.sort((a, b) => this._comparator(this._extractor(a), this._extractor(b)));
   }
 
+  /**
+   * Adds a new element to the tree
+   * @param elem
+   */
   insert(elem: T): T {
     if (this.length === 0) {
       this._array.push(elem);
@@ -129,14 +199,26 @@ export class BST<T, K = T> {
     return elem;
   }
 
-  remove(elem: K) {
-    const [idx, obj] = this._search(elem);
+  /**
+   * Removes all elements matching the key.
+   *
+   * @param key
+   * @returns removed elements
+   */
+  remove(key: K): T[] {
+    const removed: T[] = [];
 
-    if (obj !== null) {
+    for (const [idx, obj] of this._searchAll(key)) {
       this._array.splice(idx, 1);
+      removed.push(obj);
     }
+
+    return removed;
   }
 
+  /**
+   * Removes and return last object
+   */
   pop(): T | null {
     return this._array.pop() ?? null;
   }

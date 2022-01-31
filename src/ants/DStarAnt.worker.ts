@@ -53,7 +53,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
     this.memory.put(p, res);
 
     if (old.minCost !== res.minCost) {
-      this._updates.updatedKey();
+      this._updates.updatedKeys();
     }
   }
 
