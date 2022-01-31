@@ -2,7 +2,7 @@ import { Collection } from 'dexie';
 
 import { BiomeName } from '../biomes';
 import { db, TileEntity } from '../db';
-import { Rect, Vector } from '../math2d';
+import { IVector, Rect, Vector } from '../math2d';
 
 import { Tile } from './tile';
 
@@ -62,14 +62,14 @@ export class Map {
   // Methods
   tiles(): Collection<TileEntity> {
     return db.tiles
-      .where('[map+pos.x+pos.y]').between(
-      [this.name, this.bbox.l, this.bbox.t],
-      [this.name, this.bbox.r + 1, this.bbox.b + 1],
+      .where('[map+pos.y+pos.x]').between(
+      [this.name, this.bbox.t, this.bbox.l],
+      [this.name, this.bbox.b + 1, this.bbox.r + 1],
       );
   }
 
   async tile(pos: Vector): Promise<Tile | null> {
-    const res = await db.tiles.get([this.name, pos.x, pos.y]);
+    const res = await db.tiles.get([this.name, pos.y, pos.x]);
 
     if (!res) {
       return null;
@@ -78,8 +78,8 @@ export class Map {
     return res;
   }
 
-  async bulk(...positions: Vector[]): Promise<(Tile | null)[]> {
-    const res = await db.tiles.bulkGet(positions.map(pos => [this.name, pos.x, pos.y]));
+  async bulk(...positions: IVector[]): Promise<(Tile | null)[]> {
+    const res = await db.tiles.bulkGet(positions.map(pos => [this.name, pos.y, pos.x]));
     return res.map(tile => tile ?? null);
   }
 

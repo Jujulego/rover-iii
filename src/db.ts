@@ -4,7 +4,7 @@ import { IVector } from './math2d';
 import { BiomeName } from './biomes';
 
 // Constants
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 // Entities
 export interface TileEntity {
@@ -23,7 +23,7 @@ export class AntsDatabase extends Dexie {
     super('ants');
 
     this.version(DB_VERSION).stores({
-      tiles: '&[map+pos.x+pos.y]'
+      tiles: '&[map+pos.y+pos.x]'
     });
 
     if (self.document) {

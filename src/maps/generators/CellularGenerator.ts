@@ -1,5 +1,5 @@
 import { BiomeName, BIOME_NAMES } from '../../biomes';
-import { ISize, Vector } from '../../math2d';
+import { ISize, IVector, Vector } from '../../math2d';
 
 import { Map } from '../map';
 import { RandomGenerator, RandomGeneratorOptions } from './RandomGenerator';
@@ -36,17 +36,17 @@ export class CellularGenerator extends RandomGenerator<CellularOptions> {
     return frqs;
   }
 
-  private async _evaluateTile(tile: TileEntity, outBiome: BiomeName) {
+  private async _evaluateTile(tile: TileEntity, map: Map, outBiome: BiomeName) {
     // Read tiles and count biomes
     const counts = this._biomeMap(0);
-    const keys: [string, number, number][] = [];
+    const neighbors: IVector[] = [];
 
     for (const dir of DIRECTIONS) {
       const p = dir.add(tile.pos);
-      keys.push([tile.map, p.x, p.y]);
+      neighbors.push(p);
     }
 
-    for (const tile of await db.tiles.bulkGet(keys)) {
+    for (const tile of await map.bulk(...neighbors)) {
       if (tile) {
         counts[tile.biome]++;
       } else {
@@ -76,7 +76,7 @@ export class CellularGenerator extends RandomGenerator<CellularOptions> {
 
       for (let i = 0; i < iterations; ++i) {
         for (const tile of await map.tiles().toArray()) {
-          await this._evaluateTile(tile, outBiome);
+          await this._evaluateTile(tile, map, outBiome);
         }
       }
 
