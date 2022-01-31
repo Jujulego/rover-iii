@@ -60,7 +60,7 @@ export class Map {
   }
 
   // Methods
-  tiles(): Collection<Tile> {
+  tiles(): Collection<TileEntity> {
     return db.tiles
       .where('[map+pos.x+pos.y]').between(
       [this.name, this.bbox.l, this.bbox.t],

@@ -27,7 +27,7 @@ export const ImgThing = memo<ImgThingProps>(function ImgThing(props) {
       width="100%"
       gridRow={position.y - map.bbox.t + 1}
       gridColumn={position.x - map.bbox.l + 1}
-      zIndex={100}
+      zIndex={50}
       src={thing.image.toString()}
     />
   );

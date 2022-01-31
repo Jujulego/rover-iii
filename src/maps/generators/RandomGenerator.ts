@@ -18,7 +18,7 @@ export interface RandomGeneratorOptions extends MapOptions {
 }
 
 // Class
-export class RandomGenerator extends MapIterator<RandomGeneratorOptions> {
+export class RandomGenerator<O extends RandomGeneratorOptions> extends MapIterator<O> {
   // Attributes
   private _generator = seedrandom();
   private _cumulated = BST.empty<[BiomeName, number], number>(([,k]) => k, (a, b) => a - b);
@@ -66,7 +66,7 @@ export class RandomGenerator extends MapIterator<RandomGeneratorOptions> {
     }
   }
 
-  protected async run(name: string, size: ISize, opts: RandomGeneratorOptions): Promise<Map> {
+  protected async run(name: string, size: ISize, opts: O): Promise<Map> {
     this._cumulate(opts.biomes);
     this._generator = seedrandom(opts.seed);
 

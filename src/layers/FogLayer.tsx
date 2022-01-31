@@ -20,7 +20,7 @@ interface TileProps {
 const FogTile = styled('div', { skipSx: true })<TileProps>((props) => ({
   gridRow: props.y + 1,
   gridColumn: props.x + 1,
-  zIndex: 15,
+  zIndex: 60,
 
   background: 'white',
   opacity: 0.5,
