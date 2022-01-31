@@ -5,10 +5,10 @@ import { Rect, ISize, Vector } from '../../math2d';
 
 import { Map } from '../map';
 import { MapGenerator, MapOptions } from './MapGenerator';
+import { BiomesFrequencies } from './RandomGenerator';
 
 // Types
 export type BiomeMatrix = BiomeName[][];
-export type BiomesFrequencies = Record<BiomeName, number>;
 
 export interface CellularOptions extends MapOptions {
   biomes: Partial<BiomesFrequencies>;
@@ -42,7 +42,7 @@ export class CellularGenerator extends MapGenerator<CellularOptions> {
     return freqs;
   }
 
-  private _prepareFrequencies(biomes: Partial<BiomesFrequencies>): BiomesFrequencies {
+  private _cumulate(biomes: Partial<BiomesFrequencies>): BiomesFrequencies {
     // Compute cumulated frequencies
     const cumulated = this._biomesFrequencies();
     let sum = 0;
@@ -62,7 +62,7 @@ export class CellularGenerator extends MapGenerator<CellularOptions> {
 
   private _initiate(size: ISize, biomes: Partial<BiomesFrequencies>, seed: string | undefined): BiomeMatrix {
     // Initiate
-    const frequencies = this._prepareFrequencies(biomes);
+    const frequencies = this._cumulate(biomes);
     const matrix: BiomeMatrix = [];
     const prng = seedrandom(seed);
 
