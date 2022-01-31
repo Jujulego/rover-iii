@@ -91,7 +91,7 @@ export class BST<T, K = T> {
     const res = [obj];
 
     // - before
-    for (let i = idx; i >= 0; --i) {
+    for (let i = idx - 1; i >= 0; --i) {
       if (this._comparator(this._extractor(this._array[i]), key) === 0) {
         res.push(this._array[i]);
       } else {
@@ -100,7 +100,7 @@ export class BST<T, K = T> {
     }
 
     // - after
-    for (let i = idx; i < this._array.length; ++i) {
+    for (let i = idx + 1; i < this._array.length; ++i) {
       if (this._comparator(this._extractor(this._array[i]), key) === 0) {
         res.push(this._array[i]);
       } else {

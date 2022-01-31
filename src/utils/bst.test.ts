@@ -8,22 +8,22 @@ beforeEach(() => {
   bst = BST.fromArray(numbers, n => n, (a, b) => a - b);
 });
 
-// Tests
-// describe('BST.find', () => {
-//   test('on all existing elements', () => {
-//     for (const n of numbers) {
-//       expect(bst.find(n)).toBe(n);
-//     }
-//   });
-//
-//   test('on unknown elements', () => {
-//     expect(bst.find(3))
-//       .toBeNull();
-//
-//     expect(bst.find(10))
-//       .toBeNull();
-//   });
-// });
+// Tests suites
+describe('BST.search', () => {
+  test('on all existing elements', () => {
+    for (const n of numbers) {
+      expect(bst.search(n)).toEqual([n]);
+    }
+  });
+
+  test('on unknown elements', () => {
+    expect(bst.search(3))
+      .toEqual([]);
+
+    expect(bst.search(10))
+      .toEqual([]);
+  });
+});
 
 describe('BST.insert', () => {
   test('a new element in the middle', () => {
