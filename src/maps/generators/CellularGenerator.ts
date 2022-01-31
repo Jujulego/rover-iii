@@ -103,7 +103,7 @@ export class CellularGenerator extends MapGenerator<CellularOptions> {
     return biomes;
   }
 
-  async generate(name: string, size: ISize, opts: CellularOptions): Promise<Map> {
+  async run(name: string, size: ISize, opts: CellularOptions): Promise<Map> {
     const {
       seed, biomes,
       iterations = 5,

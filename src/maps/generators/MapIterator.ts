@@ -15,21 +15,19 @@ export abstract class MapIterator<O extends MapOptions> extends MapGenerator<O> 
   protected abstract bbox(size: ISize): Rect;
   protected abstract iterate(name: string, size: ISize, opts: O): Generator<TileEntity>;
 
-  async generate(name: string, size: ISize, opts: O): Promise<Map> {
+  protected async run(name: string, size: ISize, opts: O): Promise<Map> {
     let chunk: TileEntity[] = [];
 
-    await db.transaction('r', db.tiles, async () => {
-      for await (const tile of this.iterate(name, size, opts)) {
-        chunk.push(tile);
+    for await (const tile of this.iterate(name, size, opts)) {
+      chunk.push(tile);
 
-        if (chunk.length > this.chunkSize) {
-          db.tiles.bulkPut(chunk);
-          chunk = [];
-        }
+      if (chunk.length > this.chunkSize) {
+        db.tiles.bulkPut(chunk);
+        chunk = [];
       }
+    }
 
-      db.tiles.bulkPut(chunk);
-    });
+    db.tiles.bulkPut(chunk);
 
     return new Map(name, this.bbox(size));
   }

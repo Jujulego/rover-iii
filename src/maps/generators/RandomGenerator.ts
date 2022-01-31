@@ -1,8 +1,9 @@
 import seedrandom from 'seedrandom';
 
 import { BIOME_NAMES, BiomeName } from '../../biomes';
-import { db, TileEntity } from '../../db';
+import { TileEntity } from '../../db';
 import { ISize, Rect, Vector } from '../../math2d';
+import { BST } from '../../utils';
 
 import { Map } from '../map';
 import { MapOptions } from './MapGenerator';
@@ -20,66 +21,55 @@ export interface RandomGeneratorOptions extends MapOptions {
 export class RandomGenerator extends MapIterator<RandomGeneratorOptions> {
   // Attributes
   private _generator = seedrandom();
-  private _cumulated?: BiomesFrequencies;
+  private _cumulated = BST.empty<[BiomeName, number], number>(([,k]) => k, (a, b) => a - b);
 
   // Methods
-  protected biomesFrequencies(): BiomesFrequencies {
-    const freqs = {} as BiomesFrequencies;
-
-    for (const name of BIOME_NAMES) {
-      freqs[name] = 0;
-    }
-
-    return freqs;
-  }
-
-  private _cumulate(biomes: Partial<BiomesFrequencies>): BiomesFrequencies {
+  private _cumulate(frequencies: Partial<BiomesFrequencies>) {
     // Compute cumulated frequencies
-    const cumulated = this.biomesFrequencies();
+    const cumulated: [BiomeName, number][] = [];
     let sum = 0;
 
-    for (const name of BIOME_NAMES) {
-      sum += biomes[name] ?? 0;
-      cumulated[name] = sum;
+    for (const biome of BIOME_NAMES) {
+      const frq = frequencies[biome];
+
+      if (frq) {
+        sum += frq;
+        cumulated.push([biome, sum]);
+      }
     }
 
     // Regulate frequencies
-    for (const name of BIOME_NAMES) {
-      cumulated[name] /= sum;
+    for (let i = 0; i < cumulated.length; ++i) {
+      cumulated[i][1] /= sum;
     }
 
-    return cumulated;
+    this._cumulated = BST.fromArray<[BiomeName, number], number>(cumulated, ([,k]) => k, (a, b) => b - a);
   }
 
   protected bbox(size: ISize): Rect {
     return new Rect(0, 0, size.h - 1, size.w - 1);
   }
 
-  protected *iterate(name: string, size: ISize, opts: RandomGeneratorOptions): Generator<TileEntity> {
+  protected *iterate(name: string, size: ISize,): Generator<TileEntity> {
     for (let y = 0; y < size.h; ++y) {
       for (let x = 0; x < size.w; ++x) {
-        const random = this._generator.quick();
+        const res = this._cumulated.nearest(this._generator(), 'lte');
 
-        for (const biome of BIOME_NAMES) {
-          if (random < this._cumulated![biome]) {
-            yield {
-              map: name,
-              pos: new Vector(x, y),
-              biome: biome
-            };
-
-            break;
-          }
+        if (res) {
+          yield {
+            map: name,
+            pos: new Vector(x, y),
+            biome: res[0]
+          };
         }
       }
     }
   }
 
-
-  async generate(name: string, size: ISize, opts: RandomGeneratorOptions): Promise<Map> {
+  protected async run(name: string, size: ISize, opts: RandomGeneratorOptions): Promise<Map> {
+    this._cumulate(opts.biomes);
     this._generator = seedrandom(opts.seed);
-    this._cumulated = this._cumulate(opts.biomes);
 
-    return super.generate(name, size, opts);
+    return super.run(name, size, opts);
   }
 }
