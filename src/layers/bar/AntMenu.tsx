@@ -1,4 +1,4 @@
- import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
+import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { FC, useEffect, useState } from 'react';
 
@@ -46,9 +46,25 @@ export const AntMenu: FC<AntMenuProps> = ({ ant, layers, isBarOpen, onLayerToggl
           disablePadding
           subheader={<ListSubheader sx={{ pl: 4, bgcolor: 'unset' }}>Layers</ListSubheader>}
         >
-          { hasKnowledge(ant) && <LayerControl layer="fog" state={layers.fog} onToggle={() => onLayerToggle('fog')} /> }
-          { hasTree(ant) && <LayerControl layer="tree" state={layers.tree} onToggle={() => onLayerToggle('tree')} /> }
-          <LayerControl layer="history" state={layers.history} onToggle={() => onLayerToggle('history')} />
+          { hasKnowledge(ant) && (
+            <LayerControl
+              layer="fog"
+              state={layers.fog}
+              onToggle={() => onLayerToggle('fog')}
+            />
+          ) }
+          { hasTree(ant) && (
+            <LayerControl
+              layer="tree"
+              state={layers.tree}
+              onToggle={() => onLayerToggle('tree')}
+            />
+          ) }
+          <LayerControl
+            layer="history"
+            state={layers.history}
+            onToggle={() => onLayerToggle('history')}
+          />
         </List>
       </Collapse>
     </>
