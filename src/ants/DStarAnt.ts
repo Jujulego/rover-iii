@@ -9,7 +9,7 @@ import type { DStarData } from './DStarAnt.worker';
 // Class
 export abstract class DStarAnt extends ParallelAnt implements AntWithMemory<DStarData>, AntWithTree<DStarData>, AntWithKnowledge<DStarData> {
   // Attributes
-  readonly memory = new AntWorkerMemory<DStarData>(this);
+  readonly memory = new AntWorkerMemory<DStarData>(this.requests);
   readonly knowledge = new AntKnowledge(this.memory);
   readonly tree = new AntTree(this.memory);
 }

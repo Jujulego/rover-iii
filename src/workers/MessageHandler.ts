@@ -7,8 +7,8 @@ import { WorkerMessage } from './messages';
 // Class
 export abstract class MessageHandler<Req extends WorkerMessage<string>, Res extends WorkerMessage<string>> {
   // Constructor
-  constructor(private readonly worker: Window) {
-    worker.addEventListener('message', (evt: MessageEvent<Req>) => this._receive(evt));
+  constructor(private readonly _emitter: Window) {
+    _emitter.addEventListener('message', (evt: MessageEvent<Req>) => this._receive(evt));
   }
 
   // Methods
@@ -20,7 +20,7 @@ export abstract class MessageHandler<Req extends WorkerMessage<string>, Res exte
 
     if (res) {
       res.id = req.id;
-      this.worker.postMessage(res);
+      this._emitter.postMessage(res);
     }
   }
 
@@ -29,6 +29,6 @@ export abstract class MessageHandler<Req extends WorkerMessage<string>, Res exte
       msg.id = nanoid();
     }
 
-    this.worker.postMessage(msg);
+    this._emitter.postMessage(msg);
   }
 }

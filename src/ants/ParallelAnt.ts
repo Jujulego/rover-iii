@@ -1,43 +1,39 @@
-import { filter, firstValueFrom, map, Observable, Subject } from 'rxjs';
+import { filter, firstValueFrom, map } from 'rxjs';
 
 import { Map } from '../maps';
 import { Vector } from '../math2d';
 
 import { Ant } from './Ant';
 import { AntColorName } from './colors';
-import { AntRequest, AntResult, AntResultOf } from './worker/message';
+import { AntRequest, AntResult } from './worker/message';
+import { RequestSender } from '../workers/RequestSender';
 
 // Class
 export abstract class ParallelAnt extends Ant {
   // Attributes
-  private _messageId = 0;
-
-  abstract readonly worker: Worker;
-
-  private readonly _results$$ = new Subject<AntResult>();
-  readonly results$ = this._results$$.asObservable();
+  readonly requests = new RequestSender<AntRequest, AntResult>(this.worker());
 
   // Constructor
   constructor(name: string, map: Map, color: AntColorName, position: Vector) {
     super(name, map, color, position);
 
-    setTimeout(() => this._initWorker(), 0);
+    this._setup();
   }
 
   // Methods
-  private _initWorker() {
-    // Setup results obs
-    this.worker.addEventListener('message', (msg: MessageEvent<AntResult>) => {
-      this._results$$.next(msg.data);
+  protected abstract worker(): Worker;
+
+  private _setup() {
+    // Send position events
+    this.position$.subscribe((pos) => {
+      this.requests.request({
+        type: 'move',
+        position: pos
+      });
     });
 
-    // Send move events
-    this.position$.subscribe((position) => {
-      this.request({ type: 'move', position });
-    });
-
-    // Send setup message
-    this.request({
+    // Initiate worker
+    this.requests.request({
       type: 'setup',
       name: this.name,
       map: {
@@ -49,19 +45,8 @@ export abstract class ParallelAnt extends Ant {
     });
   }
 
-  request<R extends AntRequest>(req: R): Observable<AntResultOf<R>> {
-    // Send message
-    const msg = { id: ++this._messageId, ...req };
-    this.worker.postMessage(msg);
-
-    // Observe results
-    return this.results$.pipe(
-      filter((res): res is AntResultOf<R> => res.id === msg.id),
-    );
-  }
-
   protected async compute(target: Vector): Promise<Vector> {
-    return await firstValueFrom(this.request({ type: 'compute', target }).pipe(
+    return await firstValueFrom(this.requests.request({ type: 'compute', target }).pipe(
       filter((msg) => msg.type === 'compute'),
       map((msg) => new Vector(msg.move))
     ));
