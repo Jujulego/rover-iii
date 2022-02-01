@@ -2,10 +2,10 @@ import { db, TileEntity } from '../db';
 import { Map } from '../maps';
 import { ISize, Rect } from '../math2d';
 
-import { MapGenerator, MapOptions } from './MapGenerator';
+import { MapGenerator, MapGenOptions } from './MapGenerator';
 
 // Class
-export abstract class MapIterator<O extends MapOptions> extends MapGenerator<O> {
+export abstract class MapIterator<O extends MapGenOptions> extends MapGenerator<O> {
   // Constructor
   constructor(readonly chunkSize = 500) {
     super();

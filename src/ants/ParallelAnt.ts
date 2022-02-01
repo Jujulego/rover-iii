@@ -1,4 +1,4 @@
-import { filter, firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 
 import { Map } from '../maps';
 import { Vector } from '../math2d';
@@ -47,7 +47,6 @@ export abstract class ParallelAnt extends Ant {
 
   protected async compute(target: Vector): Promise<Vector> {
     return await firstValueFrom(this.requests.request({ type: 'compute', target }).pipe(
-      filter((msg) => msg.type === 'compute'),
       map((msg) => new Vector(msg.move))
     ));
   }

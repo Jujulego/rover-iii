@@ -2,6 +2,7 @@ import { db } from '../db';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { Stack } from '../utils/stack';
 
+import { Ant } from './Ant';
 import { TreeData } from './AntTree';
 import { AntWithMemory } from './memory/AntMemory';
 import { AntMapMemory } from './memory/AntMapMemory';
@@ -21,7 +22,7 @@ function hash(pos: IVector): string {
 
 // Class
 @RegisterAntWorker
-export class DFSAntWorker extends AntWorker implements AntWithMemory<DFSData> {
+export class DFSAntWorker extends Ant implements AntWorker, AntWithMemory<DFSData> {
   // Attributes
   private _target?: Vector;
 

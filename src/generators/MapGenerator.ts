@@ -2,10 +2,10 @@ import { Map } from '../maps';
 import { ISize } from '../math2d';
 
 // Type
-export type MapOptions = Record<string, unknown>;
+export type MapGenOptions = Record<string, unknown>;
 
 // Class
-export abstract class MapGenerator<O extends MapOptions> {
+export abstract class MapGenerator<O extends MapGenOptions = MapGenOptions> {
   // Methods
   protected abstract run(name: string, size: ISize, opts: O): Promise<Map>;
 

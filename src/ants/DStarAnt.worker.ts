@@ -2,6 +2,7 @@ import { BiomeName } from '../biomes';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { BST } from '../utils';
 
+import { Ant } from './Ant';
 import { KnownData } from './AntKnowledge';
 import { TreeData } from './AntTree';
 import { AntWithMemory } from './memory/AntMemory';
@@ -22,7 +23,7 @@ export interface DStarData extends KnownData, TreeData {
 }
 
 // Class
-export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<DStarData> {
+export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMemory<DStarData> {
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
   private _target?: Vector;

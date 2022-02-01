@@ -3,6 +3,7 @@ import { WorkerMessage } from '../../workers/messages';
 
 import type { AntColorName } from '../colors';
 
+// Types
 // - requests
 export interface AntWorkerSetup extends WorkerMessage<'setup'> {
   type: 'setup';
@@ -50,5 +51,3 @@ export interface AntWorkerMemoryUpdate extends WorkerMessage<'memoryUpdate'> {
 }
 
 export type AntResult = AntWorkerComputeResult | AntWorkerGetMemoryResult | AntWorkerMemoryUpdate;
-
-export type AntResultOf<R extends AntRequest> = Extract<AntResult, { type: R['type'] }>;

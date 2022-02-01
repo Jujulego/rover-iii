@@ -2,11 +2,12 @@ import { db } from '../db';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { Queue } from '../utils/queue';
 
+import { Ant } from './Ant';
 import { TreeData } from './AntTree';
 import { AntWithMemory } from './memory/AntMemory';
 import { AntMapMemory } from './memory/AntMapMemory';
-import { AntWorker } from './worker/AntWorker';
 import { RegisterAntWorker } from './worker/AntMessageHandler';
+import { AntWorker } from './worker/AntWorker';
 
 // Interface
 export interface BFSData extends TreeData {
@@ -21,7 +22,7 @@ function hash(pos: IVector): string {
 
 // Class
 @RegisterAntWorker
-export class BFSAntWorker extends AntWorker implements AntWithMemory<BFSData> {
+export class BFSAntWorker extends Ant implements AntWorker, AntWithMemory<BFSData> {
   // Attributes
   private _target?: Vector;
 

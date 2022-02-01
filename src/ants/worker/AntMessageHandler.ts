@@ -2,13 +2,14 @@ import { Map } from '../../maps';
 import { Rect, Vector } from '../../math2d';
 import { MessageHandler } from '../../workers/MessageHandler';
 
+import { Ant } from '../Ant';
 import { AntWorker, AntWorkerType } from './AntWorker';
 import { AntRequest, AntResult } from './message';
 
 // Class
 export class AntMessageHandler extends MessageHandler<AntRequest, AntResult> {
   // Attributes
-  private _worker?: AntWorker;
+  private _worker?: AntWorker & Ant;
 
   // Constructor
   constructor(readonly cls: AntWorkerType) {

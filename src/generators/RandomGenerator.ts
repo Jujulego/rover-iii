@@ -6,13 +6,13 @@ import { Map } from '../maps';
 import { ISize, Rect, Vector } from '../math2d';
 import { BST } from '../utils';
 
-import { MapOptions } from './MapGenerator';
+import { MapGenOptions } from './MapGenerator';
 import { MapIterator } from './MapIterator';
 
 // Types
 export type BiomesFrequencies = Record<BiomeName, number>;
 
-export interface RandomGeneratorOptions extends MapOptions {
+export interface RandomGeneratorOptions extends MapGenOptions {
   biomes: Partial<BiomesFrequencies>;
   seed?: string;
 }

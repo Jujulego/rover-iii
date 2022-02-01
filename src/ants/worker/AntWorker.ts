@@ -8,25 +8,14 @@ import { AntMessageHandler } from './AntMessageHandler';
 
 // Types
 export interface AntWorkerType {
-  new(name: string, map: Map, color: AntColorName, position: Vector, messages: AntMessageHandler): AntWorker;
+  new(name: string, map: Map, color: AntColorName, position: Vector, messages: AntMessageHandler): Ant & AntWorker;
 }
 
 // Class
-export abstract class AntWorker extends Ant {
+export interface AntWorker {
   // Attributes
   readonly memory?: AntMemory<unknown>;
 
-  // Constructor
-  constructor(
-    name: string,
-    map: Map,
-    color: AntColorName,
-    position: Vector,
-    protected readonly messages: AntMessageHandler
-  ) {
-    super(name, map, color, position);
-  }
-
   // Methods
-  abstract compute(target: Vector): Promise<Vector>;
+  compute(target: Vector): Promise<Vector>;
 }

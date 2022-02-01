@@ -49,7 +49,7 @@ export const App: FC = () => {
 
   useEffect(() => void (async () => {
     const start = performance.now();
-    const gen = new CellularGenerator(80);
+    const gen = new CellularGenerator();
     const map = await gen.generate('map', { w: 40, h: 20 }, {
       biomes: {
         water: 3,

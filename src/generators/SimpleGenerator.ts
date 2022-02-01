@@ -2,11 +2,11 @@ import { BiomeName } from '../biomes';
 import { TileEntity } from '../db';
 import { ISize, Rect, Vector } from '../math2d';
 
-import { MapOptions } from './MapGenerator';
+import { MapGenOptions } from './MapGenerator';
 import { MapIterator } from './MapIterator';
 
 // Types
-export interface SimpleGeneratorOptions extends MapOptions {
+export interface SimpleGeneratorOptions extends MapGenOptions {
   biome: BiomeName;
 }
 
