@@ -6,6 +6,7 @@ import { TreeData } from './AntTree';
 import { AntWithMemory } from './memory/AntMemory';
 import { AntMapMemory } from './memory/AntMapMemory';
 import { AntWorker } from './worker/AntWorker';
+import { RegisterAntWorker } from './worker/AntMessageHandler';
 
 // Interface
 export interface BFSData extends TreeData {
@@ -19,6 +20,7 @@ function hash(pos: IVector): string {
 }
 
 // Class
+@RegisterAntWorker
 export class BFSAntWorker extends AntWorker implements AntWithMemory<BFSData> {
   // Attributes
   private _target?: Vector;
@@ -26,7 +28,7 @@ export class BFSAntWorker extends AntWorker implements AntWithMemory<BFSData> {
   readonly memory = new AntMapMemory<BFSData>();
 
   // Methods
-  protected async compute(target: Vector): Promise<Vector> {
+  async compute(target: Vector): Promise<Vector> {
     await this._updateTarget(target);
 
     const data = this.memory.get(this.position);
@@ -78,5 +80,3 @@ export class BFSAntWorker extends AntWorker implements AntWithMemory<BFSData> {
     });
   }
 }
-
-AntWorker.setupWorker(BFSAntWorker);

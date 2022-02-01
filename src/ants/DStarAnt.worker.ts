@@ -58,7 +58,7 @@ export abstract class DStarAntWorker extends AntWorker implements AntWithMemory<
   }
 
   // - algorithm
-  protected async compute(target: Vector): Promise<Vector> {
+  async compute(target: Vector): Promise<Vector> {
     // Arrived !
     if (this.position.equals(target)) {
       return NULL_VECTOR;

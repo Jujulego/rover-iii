@@ -6,6 +6,7 @@ import { TreeData } from './AntTree';
 import { AntWithMemory } from './memory/AntMemory';
 import { AntMapMemory } from './memory/AntMapMemory';
 import { AntWorker } from './worker/AntWorker';
+import { RegisterAntWorker } from './worker/AntMessageHandler';
 
 // Interface
 export interface DFSData extends TreeData {
@@ -19,6 +20,7 @@ function hash(pos: IVector): string {
 }
 
 // Class
+@RegisterAntWorker
 export class DFSAntWorker extends AntWorker implements AntWithMemory<DFSData> {
   // Attributes
   private _target?: Vector;
@@ -26,7 +28,7 @@ export class DFSAntWorker extends AntWorker implements AntWithMemory<DFSData> {
   readonly memory = new AntMapMemory<DFSData>();
 
   // Methods
-  protected async compute(target: Vector): Promise<Vector> {
+  async compute(target: Vector): Promise<Vector> {
     await this._updateTarget(target);
 
     const data = this.memory.get(this.position);
@@ -78,5 +80,3 @@ export class DFSAntWorker extends AntWorker implements AntWithMemory<DFSData> {
     });
   }
 }
-
-AntWorker.setupWorker(DFSAntWorker);

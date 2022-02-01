@@ -1,7 +1,7 @@
 import { Vector } from '../math2d';
 
 import { DStarAntWorker } from './DStarAnt.worker';
-import { AntWorker } from './worker/AntWorker';
+import { RegisterAntWorker } from './worker/AntMessageHandler';
 
 // Constants
 export const LOOK_AT = [
@@ -38,6 +38,7 @@ export const LOOK_AT = [
 ];
 
 // Class
+@RegisterAntWorker
 export class SmartAntWorker extends DStarAntWorker {
   // Methods
   protected heuristic(from: Vector, to: Vector): number {
@@ -65,5 +66,3 @@ export class SmartAntWorker extends DStarAntWorker {
       .filter(p => next.distance(p) <= 2);
   }
 }
-
-AntWorker.setupWorker(SmartAntWorker);

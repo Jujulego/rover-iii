@@ -1,17 +1,10 @@
 import { IRect, IVector } from '../../math2d';
+import { WorkerMessage } from '../../workers/messages';
 
-import { AntColorName } from '../colors';
-
-// Types
-export interface AntMessage<T extends string = string> {
-  id?: number;
-  type: T;
-}
-
-export type AntResultOf<R extends AntRequest> = Extract<AntResult, { type: R['type'] }>;
+import type { AntColorName } from '../colors';
 
 // - requests
-export interface AntWorkerSetup extends AntMessage<'setup'> {
+export interface AntWorkerSetup extends WorkerMessage<'setup'> {
   type: 'setup';
   name: string;
   map: {
@@ -22,17 +15,17 @@ export interface AntWorkerSetup extends AntMessage<'setup'> {
   position: IVector;
 }
 
-export interface AntWorkerCompute extends AntMessage<'compute'> {
+export interface AntWorkerCompute extends WorkerMessage<'compute'> {
   type: 'compute';
   target: IVector;
 }
 
-export interface AntWorkerMove extends AntMessage<'move'> {
+export interface AntWorkerMove extends WorkerMessage<'move'> {
   type: 'move';
   position: IVector;
 }
 
-export interface AntWorkerGetMemory extends AntMessage<'getMemory'> {
+export interface AntWorkerGetMemory extends WorkerMessage<'getMemory'> {
   type: 'getMemory';
   position: IVector;
 }
@@ -40,20 +33,22 @@ export interface AntWorkerGetMemory extends AntMessage<'getMemory'> {
 export type AntRequest = AntWorkerSetup | AntWorkerCompute | AntWorkerMove | AntWorkerGetMemory;
 
 // - results
-export interface AntWorkerComputeResult extends AntMessage<'compute'> {
+export interface AntWorkerComputeResult extends WorkerMessage<'compute'> {
   type: 'compute';
   move: IVector;
 }
 
-export interface AntWorkerGetMemoryResult extends AntMessage<'getMemory'> {
+export interface AntWorkerGetMemoryResult extends WorkerMessage<'getMemory'> {
   type: 'getMemory';
   data: unknown;
 }
 
-export interface AntWorkerMemoryUpdate extends AntMessage<'memoryUpdate'> {
+export interface AntWorkerMemoryUpdate extends WorkerMessage<'memoryUpdate'> {
   type: 'memoryUpdate';
   position: IVector;
   data: unknown;
 }
 
 export type AntResult = AntWorkerComputeResult | AntWorkerGetMemoryResult | AntWorkerMemoryUpdate;
+
+export type AntResultOf<R extends AntRequest> = Extract<AntResult, { type: R['type'] }>;
