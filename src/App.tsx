@@ -6,7 +6,7 @@ import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 import { Ant, BFSAnt, DFSAnt, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
 import { CellularGenerator } from './generators';
 import { Map } from './maps';
-import { IVector, Vector } from './math2d';
+import { IVector, Rect, Vector } from './math2d';
 
 import { FogLayer } from './layers/FogLayer';
 import { HistoryLayer } from './layers/HistoryLayer';
@@ -20,7 +20,7 @@ import { TreeLayer } from './layers/TreeLayer';
 // Component
 export const App: FC = () => {
   // State
-  const [map, setMap] = useState<Map>();
+  const [map, setMap] = useState<Map>(new Map('map', new Rect(0, 0, 19, 39)));
   const [ants, setAnts] = useState<Ant[]>([]);
   const [target, setTarget] = useState(new Vector({ x: 36, y: 4 }));
   const [layers, setLayers] = useState<Record<string, LayersState>>({});
@@ -50,15 +50,14 @@ export const App: FC = () => {
   useEffect(() => void (async () => {
     const start = performance.now();
     const gen = new CellularGenerator();
-    const map = await gen.generate('map', { w: 40, h: 20 }, {
+    await gen.generate(map, {
       biomes: {
         water: 3,
-        grass: 3,
-        rock: 2,
-        sand: 2,
+        grass: 4,
+        sand: 3,
       },
-      seed: 'toto',
-      iterations: 5,
+      seed: 'tata',
+      iterations: 4,
       outBiome: 'water'
     });
     console.log(`map generation took ${performance.now() - start}ms`);
@@ -79,7 +78,7 @@ export const App: FC = () => {
       }
     }), old));
     setAnts(ants);
-  })(), []);
+  })(), [map]);
 
   // Observables
   const $ants = useObservable(pluckFirst, [ants]);

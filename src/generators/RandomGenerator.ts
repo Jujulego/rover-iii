@@ -3,7 +3,7 @@ import seedrandom from 'seedrandom';
 import { BIOME_NAMES, BiomeName } from '../biomes';
 import { TileEntity } from '../db';
 import { Map } from '../maps';
-import { ISize, Rect, Vector } from '../math2d';
+import { Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { MapGenOptions } from './MapGenerator';
@@ -46,18 +46,14 @@ export class RandomGenerator<O extends RandomGeneratorOptions> extends MapIterat
     this._cumulated = BST.fromArray<[BiomeName, number], number>(cumulated, ([,k]) => k, (a, b) => b - a);
   }
 
-  protected bbox(size: ISize): Rect {
-    return new Rect(0, 0, size.h - 1, size.w - 1);
-  }
-
-  protected *iterate(name: string, size: ISize,): Generator<TileEntity> {
-    for (let y = 0; y < size.h; ++y) {
-      for (let x = 0; x < size.w; ++x) {
+  protected *iterate(map: Map,): Generator<TileEntity> {
+    for (let y = 0; y <= map.bbox.h; ++y) {
+      for (let x = 0; x <= map.bbox.w; ++x) {
         const res = this._cumulated.nearest(this._generator(), 'lte');
 
         if (res) {
           yield {
-            map: name,
+            map: map.name,
             pos: new Vector(x, y),
             biome: res[0]
           };
@@ -66,10 +62,10 @@ export class RandomGenerator<O extends RandomGeneratorOptions> extends MapIterat
     }
   }
 
-  protected async run(name: string, size: ISize, opts: O): Promise<Map> {
+  protected async run(map: Map, opts: O): Promise<void> {
     this._cumulate(opts.biomes);
     this._generator = seedrandom(opts.seed);
 
-    return super.run(name, size, opts);
+    await super.run(map, opts);
   }
 }

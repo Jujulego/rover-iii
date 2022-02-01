@@ -1,5 +1,4 @@
 import { Map } from '../maps';
-import { ISize } from '../math2d';
 
 // Type
 export type MapGenOptions = Record<string, unknown>;
@@ -7,9 +6,9 @@ export type MapGenOptions = Record<string, unknown>;
 // Class
 export abstract class MapGenerator<O extends MapGenOptions = MapGenOptions> {
   // Methods
-  protected abstract run(name: string, size: ISize, opts: O): Promise<Map>;
+  protected abstract run(map: Map, opts: O): Promise<void>;
 
-  generate(name: string, size: ISize, opts: O): Promise<Map> {
-    return this.run(name, size, opts);
+  generate(map: Map, opts: O): Promise<void> {
+    return this.run(map, opts);
   }
 }

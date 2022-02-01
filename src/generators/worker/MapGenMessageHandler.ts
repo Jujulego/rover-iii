@@ -1,7 +1,9 @@
+import { Map } from '../../maps';
 import { MessageHandler } from '../../workers/MessageHandler';
 
 import { MapGenRequest, MapGenResult } from './message';
 import { MapGenerator } from '../MapGenerator';
+import { Rect } from '../../math2d';
 
 // Types
 export interface MapGeneratorType {
@@ -28,11 +30,10 @@ export class MapGenMessageHandler extends MessageHandler<MapGenRequest, MapGenRe
     if (this._generator) {
       switch (req.type) {
         case 'generate': {
-          const map = await this._generator.generate(req.name, req.size, req.opts);
+          await this._generator.generate(new Map(req.map.name, new Rect(req.map.bbox)), req.opts);
 
           return {
             type: 'generate',
-            bbox: await map.bbox,
           };
         }
       }

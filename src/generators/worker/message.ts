@@ -11,8 +11,10 @@ export interface MapGenWorkerSetup extends WorkerMessage<'setup'> {
 
 export interface MapGenWorkerGenerate extends WorkerMessage<'generate'> {
   type: 'generate';
-  name: string;
-  size: ISize;
+  map: {
+    name: string;
+    bbox: IRect;
+  }
   opts: MapGenOptions;
 }
 
@@ -21,7 +23,6 @@ export type MapGenRequest = MapGenWorkerSetup | MapGenWorkerGenerate;
 // - results
 export interface MapGenWorkerGenerateResult extends WorkerMessage<'generate'> {
   type: 'generate';
-  bbox: IRect;
 }
 
 export type MapGenResult = MapGenWorkerGenerateResult;

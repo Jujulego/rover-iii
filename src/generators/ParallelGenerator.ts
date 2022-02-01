@@ -1,7 +1,6 @@
-import { firstValueFrom, map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { Map } from '../maps';
-import { ISize, Rect } from '../math2d';
 import { RequestSender } from '../workers/RequestSender';
 
 import { MapGenerator, MapGenOptions } from './MapGenerator';
@@ -29,9 +28,14 @@ export abstract class ParallelGenerator<O extends MapGenOptions = MapGenOptions>
     });
   }
 
-  protected async run(name: string, size: ISize, opts: O): Promise<Map> {
-    return firstValueFrom(this.requests.request({ type: 'generate', name, size, opts }).pipe(
-      map((msg) => new Map(name, new Rect(msg.bbox)))
-    ));
+  protected async run(map: Map, opts: O): Promise<void> {
+    await firstValueFrom(this.requests.request({
+      type: 'generate',
+      map: {
+        name: map.name,
+        bbox: map.bbox
+      },
+      opts
+    }));
   }
 }

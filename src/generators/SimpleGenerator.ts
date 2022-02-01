@@ -1,6 +1,7 @@
 import { BiomeName } from '../biomes';
 import { TileEntity } from '../db';
-import { ISize, Rect, Vector } from '../math2d';
+import { Map } from '../maps';
+import { Vector } from '../math2d';
 
 import { MapGenOptions } from './MapGenerator';
 import { MapIterator } from './MapIterator';
@@ -13,15 +14,11 @@ export interface SimpleGeneratorOptions extends MapGenOptions {
 // Class
 export class SimpleGenerator extends MapIterator<SimpleGeneratorOptions> {
   // Methods
-  protected bbox(size: ISize): Rect {
-    return new Rect(0, 0, size.h - 1, size.w - 1);
-  }
-
-  protected *iterate(name: string, size: ISize, opts: SimpleGeneratorOptions): Generator<TileEntity> {
-    for (let y = 0; y < size.h; ++y) {
-      for (let x = 0; x < size.w; ++x) {
+  protected *iterate(map: Map, opts: SimpleGeneratorOptions): Generator<TileEntity> {
+    for (let y = 0; y < map.bbox.h; ++y) {
+      for (let x = 0; x < map.bbox.w; ++x) {
         yield {
-          map: name,
+          map: map.name,
           pos: new Vector(x, y),
           biome: opts.biome
         };

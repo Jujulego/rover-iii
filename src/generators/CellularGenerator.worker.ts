@@ -1,6 +1,6 @@
 import { BiomeName, BIOME_NAMES } from '../biomes';
 import { db, TileEntity } from '../db';
-import { ISize, IVector, Vector } from '../math2d';
+import { IVector, Vector } from '../math2d';
 import { Map, Tile } from '../maps';
 import { BST } from '../utils';
 
@@ -104,29 +104,29 @@ export class CellularGeneratorWorker extends RandomGenerator<CellularOptions> {
 
     // Set tile to new biome
     for (const biome of BIOME_NAMES) {
-      if (counts[biome] >= 4) {
+      if (counts[biome] > 4) {
         return { ...tile, biome };
       }
     }
   }
 
-  run(name: string, size: ISize, opts: CellularOptions): Promise<Map> {
-    this._cacheSize = size.w * 2 + 2;
+  async run(map: Map, opts: CellularOptions): Promise<void> {
+    this._cacheSize = map.bbox.w * 2 + 2;
 
-    return db.transaction('rw', db.tiles, async () => {
-      // Initiate with random data
-      const map = await super.run(name, size, opts);
+    // Initiate with random data
+    await super.run(map, opts);
 
-      // Cellular algorithm
-      const {
-        iterations = 5,
-        outBiome = 'water'
-      } = opts;
+    // Cellular algorithm
+    const {
+      iterations = 5,
+      outBiome = 'water'
+    } = opts;
 
-      for (let i = 0; i < iterations; ++i) {
-        const updates: TileEntity[] = [];
+    for (let i = 0; i < iterations; ++i) {
+      const updates: TileEntity[] = [];
+      this._cache.clear();
 
-        this._cache.clear();
+      await db.transaction('r', db.tiles, async () => {
         for (const tile of await map.tiles().toArray()) {
           this._addToCache(tile);
           const res = await this._evaluateTile(tile, map, outBiome);
@@ -135,11 +135,9 @@ export class CellularGeneratorWorker extends RandomGenerator<CellularOptions> {
             updates.push(res);
           }
         }
+      });
 
-        await db.tiles.bulkPut(updates);
-      }
-
-      return map;
-    });
+      await db.tiles.bulkPut(updates);
+    }
   }
 }

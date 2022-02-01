@@ -1,6 +1,5 @@
 import { db, TileEntity } from '../db';
 import { Map } from '../maps';
-import { ISize, Rect } from '../math2d';
 
 import { MapGenerator, MapGenOptions } from './MapGenerator';
 
@@ -12,14 +11,13 @@ export abstract class MapIterator<O extends MapGenOptions> extends MapGenerator<
   }
 
   // Methods
-  protected abstract bbox(size: ISize): Rect;
-  protected abstract iterate(name: string, size: ISize, opts: O): Generator<TileEntity>;
+  protected abstract iterate(map: Map, opts: O): Generator<TileEntity>;
 
-  protected async run(name: string, size: ISize, opts: O): Promise<Map> {
+  protected async run(map: Map, opts: O): Promise<void> {
     let chunk: TileEntity[] = [];
 
     await db.transaction('rw', db.tiles, async () => {
-      for (const tile of this.iterate(name, size, opts)) {
+      for (const tile of this.iterate(map, opts)) {
         chunk.push(tile);
 
         if (chunk.length > this.chunkSize) {
@@ -30,7 +28,5 @@ export abstract class MapIterator<O extends MapGenOptions> extends MapGenerator<
 
       await db.tiles.bulkPut(chunk);
     });
-
-    return new Map(name, this.bbox(size));
   }
 }
