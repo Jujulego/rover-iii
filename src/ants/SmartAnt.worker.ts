@@ -58,7 +58,7 @@ export class SmartAntWorker extends DStarAntWorker {
       }
     }
 
-    return 2.7142857142857144; // mean of cellular biome proportions
+    return 1.4; // mean of cellular biome proportions
   }
 
   protected look(next: Vector): Vector[] {

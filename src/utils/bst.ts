@@ -15,7 +15,7 @@ const NEAREST_VALIDATOR: Record<NearestMode, (cmp: number) => boolean> = {
 // Class
 export class BST<T, K = T> {
   // Attributes
-  private readonly _array: T[];
+  private _array: T[];
   private readonly _extractor: ExtractKey<T, K>;
   private readonly _comparator: Comparator<K>;
 
@@ -197,6 +197,13 @@ export class BST<T, K = T> {
     }
 
     return elem;
+  }
+
+  /**
+   * Removes all elements
+   */
+  clear(): void {
+    this._array = [];
   }
 
   /**

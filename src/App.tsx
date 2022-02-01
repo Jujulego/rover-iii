@@ -22,7 +22,7 @@ export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>();
   const [ants, setAnts] = useState<Ant[]>([]);
-  const [target, setTarget] = useState(new Vector({ x: 35, y: 5 }));
+  const [target, setTarget] = useState(new Vector({ x: 36, y: 4 }));
   const [layers, setLayers] = useState<Record<string, LayersState>>({});
 
   // Callback
@@ -53,10 +53,11 @@ export const App: FC = () => {
     const map = await gen.generate('map', { w: 40, h: 20 }, {
       biomes: {
         water: 3,
-        grass: 4,
-        sand: 3
+        grass: 3,
+        rock: 2,
+        sand: 2,
       },
-      seed: 'tata',
+      seed: 'toto',
       iterations: 5,
       outBiome: 'water'
     });
