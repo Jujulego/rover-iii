@@ -1,9 +1,9 @@
-import { BiomeName, BIOME_NAMES } from '../../biomes';
-import { ISize, IVector, Vector } from '../../math2d';
+import { BiomeName, BIOME_NAMES } from '../biomes';
+import { db, TileEntity } from '../db';
+import { ISize, IVector, Vector } from '../math2d';
+import { Map } from '../maps';
 
-import { Map } from '../map';
 import { RandomGenerator, RandomGeneratorOptions } from './RandomGenerator';
-import { db, TileEntity } from '../../db';
 
 // Types
 export interface CellularOptions extends RandomGeneratorOptions {

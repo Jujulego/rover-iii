@@ -1,7 +1,7 @@
 import { BST } from './bst';
 
 // Prepare data
-const numbers = [1, 2, 4, 5];
+const numbers = [1, 2, 2, 2, 4, 5];
 let bst: BST<number>;
 
 beforeEach(() => {
@@ -36,10 +36,8 @@ describe('BST.nearest', () => {
 });
 
 describe('BST.search', () => {
-  test('on all existing elements', () => {
-    for (const n of numbers) {
-      expect(bst.search(n)).toEqual([n]);
-    }
+  test('on existing element', () => {
+    expect(bst.search(2)).toEqual([2, 2, 2]);
   });
 
   test('on unknown elements', () => {
@@ -52,25 +50,32 @@ describe('BST.search', () => {
 });
 
 describe('BST.insert', () => {
-  test('a new element in the middle', () => {
-    bst.insert(3);
+  test('a new element after same key group', () => {
+    bst.insert(4);
 
     expect(bst.array)
-      .toEqual([1, 2, 3, 4, 5]);
+      .toEqual([1, 2, 2, 2, 4, 4, 5]);
+  });
+
+  test('a new element before same key group', () => {
+    bst.insert(1);
+
+    expect(bst.array)
+      .toEqual([1, 1, 2, 2, 2, 4, 5]);
   });
 
   test('a new element before first', () => {
     bst.insert(0);
 
     expect(bst.array)
-      .toEqual([0, 1, 2, 4, 5]);
+      .toEqual([0, 1, 2, 2, 2, 4, 5]);
   });
 
   test('a new element after last', () => {
     bst.insert(6);
 
     expect(bst.array)
-      .toEqual([1, 2, 4, 5, 6]);
+      .toEqual([1, 2, 2, 2, 4, 5, 6]);
   });
 
   test('in an empty bst', () => {
@@ -85,7 +90,7 @@ describe('BST.insert', () => {
 describe('BST.remove', () => {
   test('an existing element', () => {
     expect(bst.remove(2))
-      .toEqual([2]);
+      .toEqual([2, 2, 2]);
 
     expect(bst.array)
       .toEqual([1, 4, 5]);
@@ -96,6 +101,6 @@ describe('BST.remove', () => {
       .toEqual([]);
 
     expect(bst.array)
-      .toEqual([1, 2, 4, 5]);
+      .toEqual([1, 2, 2, 2, 4, 5]);
   });
 });

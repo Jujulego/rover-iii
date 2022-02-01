@@ -1,7 +1,7 @@
-import { db, TileEntity } from '../../db';
-import { ISize, Rect } from '../../math2d';
+import { db, TileEntity } from '../db';
+import { Map } from '../maps';
+import { ISize, Rect } from '../math2d';
 
-import { Map } from '../map';
 import { MapGenerator, MapOptions } from './MapGenerator';
 
 // Class

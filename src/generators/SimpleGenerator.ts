@@ -1,8 +1,8 @@
-import { BiomeName } from '../../biomes';
-import { ISize, Rect, Vector } from '../../math2d';
+import { BiomeName } from '../biomes';
+import { TileEntity } from '../db';
+import { ISize, Rect, Vector } from '../math2d';
 
 import { MapOptions } from './MapGenerator';
-import { TileEntity } from '../../db';
 import { MapIterator } from './MapIterator';
 
 // Types

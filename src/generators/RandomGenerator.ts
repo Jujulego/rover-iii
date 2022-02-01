@@ -1,11 +1,11 @@
 import seedrandom from 'seedrandom';
 
-import { BIOME_NAMES, BiomeName } from '../../biomes';
-import { TileEntity } from '../../db';
-import { ISize, Rect, Vector } from '../../math2d';
-import { BST } from '../../utils';
+import { BIOME_NAMES, BiomeName } from '../biomes';
+import { TileEntity } from '../db';
+import { Map } from '../maps';
+import { ISize, Rect, Vector } from '../math2d';
+import { BST } from '../utils';
 
-import { Map } from '../map';
 import { MapOptions } from './MapGenerator';
 import { MapIterator } from './MapIterator';
 

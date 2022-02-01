@@ -1,6 +1,5 @@
-import { ISize } from '../../math2d';
-
-import { Map } from '../map';
+import { Map } from '../maps';
+import { ISize } from '../math2d';
 
 // Type
 export type MapOptions = Record<string, unknown>;

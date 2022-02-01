@@ -4,7 +4,8 @@ import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, interval, withLatestFrom } from 'rxjs';
 
 import { Ant, BFSAnt, DFSAnt, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
-import { CellularGenerator, Map } from './maps';
+import { CellularGenerator } from './generators';
+import { Map } from './maps';
 import { IVector, Vector } from './math2d';
 
 import { FogLayer } from './layers/FogLayer';
