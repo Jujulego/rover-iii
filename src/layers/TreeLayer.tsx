@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { useObservableState } from 'observable-hooks';
 import { FC } from 'react';
-import { exhaustMap } from 'rxjs';
+import { debounceTime, map } from 'rxjs';
 
 import { AntWithTree, TreeNode } from '../ants';
 import { Map } from '../maps';
@@ -49,7 +49,8 @@ export const TreeLayer: FC<ImgTreeLayerProps> = (props) => {
 
   // State
   const [paths] = useObservableState(() => ant.tree.version$.pipe(
-    exhaustMap(async () => {
+    debounceTime(50),
+    map(() => {
       const paths: [IVector, string][] = [];
 
       for (const root of ant.tree.roots()) {
