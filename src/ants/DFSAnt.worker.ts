@@ -1,6 +1,6 @@
 import { db } from '../db';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
-import { Stack } from '../utils/stack';
+import { Stack } from '../utils/Stack';
 
 import { Ant } from './Ant';
 import { TreeData } from './AntTree';
