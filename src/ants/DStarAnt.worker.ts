@@ -1,6 +1,6 @@
 import { BiomeName } from '../biomes';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
-import { BST } from '../utils';
+import { PriorityQueue } from '../utils';
 
 import { Ant } from './Ant';
 import { KnownData } from './AntKnowledge';
@@ -27,7 +27,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
   private _target?: Vector;
-  private _updates = BST.empty<Vector, number>((v) => this.getMapData(v).minCost, (a, b) => b - a);
+  private _updates = new PriorityQueue<Vector>();
 
   readonly memory = new AntMapMemory<DStarData>();
 
@@ -54,7 +54,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
     this.memory.put(p, res);
 
     if (old.minCost !== res.minCost) {
-      this._updates.updatedKeys();
+      this._updates.updateCosts((p) => this.getMapData(p).minCost);
     }
   }
 
@@ -73,7 +73,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
       await this.detect(next ?? this.position);
 
       this._expand();
-    } while (this._updates.length > 0);
+    } while (this._updates.size > 0);
 
     // Compute next move
     const { next } = this.getMapData(this.position);
@@ -144,7 +144,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
   }
 
   private _expand(): void {
-    while (this._updates.length > 0) {
+    while (this._updates.size > 0) {
       const pos = this._updates.pop();
 
       if (!pos) break;
@@ -219,7 +219,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
       const data = this.getMapData(u);
 
       if (this._updates.search(data.minCost).every(v => !v.equals(u))) {
-        this._updates.insert(u);
+        this._updates.add(u, data.minCost);
       }
     }
   }
