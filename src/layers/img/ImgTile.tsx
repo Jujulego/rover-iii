@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { FC, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 import { BiomeName, BIOMES } from '../../biomes';
 import { Vector } from '../../math2d';
@@ -26,7 +26,7 @@ const Tile = styled('img', { skipSx: true })<TileProps>((props) => ({
 }));
 
 // Component
-export const ImgTile: FC<ImgTileProps> = (props) => {
+export const ImgTile = memo<ImgTileProps>(function ImgTile(props) {
   // Render
   const biome = useMemo(() => BIOMES.find(biome => biome.name === props.biome), [props.biome]);
 
@@ -39,4 +39,4 @@ export const ImgTile: FC<ImgTileProps> = (props) => {
       onClick={props.onClick}
     />
   );
-};
+});
