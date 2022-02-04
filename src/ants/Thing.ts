@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { BehaviorSubject } from 'rxjs';
 
 import { Vector } from '../math2d';
@@ -5,6 +6,8 @@ import { Vector } from '../math2d';
 // Class
 export class Thing {
   // Attributes
+  readonly id = nanoid();
+
   private readonly _position$$ = new BehaviorSubject<Vector>(this._position);
   readonly position$ = this._position$$.asObservable();
 

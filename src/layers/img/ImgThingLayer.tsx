@@ -14,8 +14,8 @@ export interface ImgThingLayerProps {
 // Component
 export const ImgThingLayer = memo<ImgThingLayerProps>(function ImgThingLayer({ map, things }) {
   return <>
-    { things.map((thg, i) => (
-      <ImgThing key={i} map={map} thing={thg} />
+    { things.map((thg) => (
+      <ImgThing key={thg.id} map={map} thing={thg} />
     )) }
   </>;
 });
