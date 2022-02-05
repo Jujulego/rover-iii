@@ -46,8 +46,10 @@ export class SmartAntWorker extends DStarAntWorker {
   }
 
   protected shallExpand(pos: Vector): boolean {
+    const data = this.getMapData(this.position);
+
     const target = this.target || pos;
-    return this.position.distance(pos) + target.distance(pos) < this.position.distance(target) + 20;
+    return this.position.distance(pos) + target.distance(pos) < data.cost + 20;
   }
 
   protected look(next: Vector): Vector[] {
