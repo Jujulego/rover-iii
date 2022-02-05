@@ -45,6 +45,16 @@ export class SmartAntWorker extends DStarAntWorker {
     return from.distance(to) * (this._tile(from) + this._tile(to)) / 2;
   }
 
+  protected shallExpand(pos: Vector): boolean {
+    const target = this.target || pos;
+    return this.position.distance(pos) + target.distance(pos) < this.position.distance(target) + 20;
+  }
+
+  protected look(next: Vector): Vector[] {
+    return LOOK_AT.map(d => this.position.add(d))
+      .filter(p => next.distance(p) <= 2);
+  }
+
   private _tile(pos: Vector): number {
     const data = this.getMapData(pos);
 
@@ -59,10 +69,5 @@ export class SmartAntWorker extends DStarAntWorker {
     }
 
     return 2;
-  }
-
-  protected look(next: Vector): Vector[] {
-    return LOOK_AT.map(d => this.position.add(d))
-      .filter(p => next.distance(p) <= 2);
   }
 }

@@ -48,6 +48,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
 
   // Abstract methods
   protected abstract heuristic(from: Vector, to: Vector): number;
+  protected abstract shallExpand(pos: Vector): boolean;
   protected abstract look(next: Vector): Vector[];
 
   // Methods
@@ -169,6 +170,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
 
       if (!pos) break;
       if (this.getMapData(pos).obstacle) continue;
+      if (!this.shallExpand(pos)) continue;
 
       const isRaising = this._isRaising(pos);
 
@@ -249,5 +251,10 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
       if (this.getMapData(p).obstacle) continue;
       yield p;
     }
+  }
+
+  // Properties
+  get target(): Vector | undefined {
+    return this._target;
   }
 }
