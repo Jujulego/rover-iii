@@ -1,13 +1,16 @@
 import { BiomeName } from '../biomes';
 import { IVector, NULL_VECTOR, Vector } from '../math2d';
+import { Map } from '../maps';
 import { PriorityQueue } from '../utils';
 
 import { Ant } from './Ant';
 import { KnownData } from './AntKnowledge';
 import { TreeData } from './AntTree';
+import type { AntColorName } from './colors';
 import { AntWithMemory } from './memory/AntMemory';
 import { AntMapMemory } from './memory/AntMapMemory';
 import { AntWorker } from './worker/AntWorker';
+import { AntNetwork, AntWithNetwork } from './network/AntNetwork';
 
 // Types
 export interface DStarData extends KnownData, TreeData {
@@ -23,13 +26,25 @@ export interface DStarData extends KnownData, TreeData {
 }
 
 // Class
-export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMemory<DStarData> {
+export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMemory<DStarData>, AntWithNetwork {
   // Inspired by https://fr.wikipedia.org/wiki/Algorithme_D*
   // Attributes
   private _target?: Vector;
   private _updates = new PriorityQueue<Vector>();
 
   readonly memory = new AntMapMemory<DStarData>();
+  readonly network = new AntNetwork(this);
+
+  // Constructor
+  constructor(name: string, map: Map, color: AntColorName, position: Vector) {
+    super(name, map, color, position);
+
+    // Setup map updates pipeline
+    this.network.mapUpdates$.subscribe(({ pos, biome }) => {
+      const data = this.getMapData(pos);
+      this._detected(new Vector(pos), data, biome);
+    });
+  }
 
   // Abstract methods
   protected abstract heuristic(from: Vector, to: Vector): number;
@@ -111,34 +126,39 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
       const tile = await this.map.tile(pos);
 
       if (tile) {
-        const upd: Partial<DStarData> = {
-          detected: true,
-          obstacle: tile.biome === 'water',
-          biome: tile.biome,
-        };
+        this._detected(pos, data, tile.biome);
+        this.network.sendMapUpdate(pos, tile.biome);
+      }
+    }
+  }
 
-        if (tile.biome === 'water') {
-          upd.cost = Infinity;
-          upd.minCost = Infinity;
-          this._updateMapData(pos, upd);
+  private _detected(pos: Vector, data: DStarData, biome: BiomeName): void {
+    const upd: Partial<DStarData> = {
+      detected: true,
+      obstacle: biome === 'water',
+      biome,
+    };
 
-          for (const p of this.surroundings(pos)) {
-            const d = this.getMapData(p);
+    if (biome === 'water') {
+      upd.cost = Infinity;
+      upd.minCost = Infinity;
+      this._updateMapData(pos, upd);
 
-            if (d.next?.equals(pos)) {
-              this._updateMapData(p, { cost: Infinity });
-              this.updateTile(p);
-            }
-          }
-        } else {
-          this._updateMapData(pos, upd);
-          upd.cost = this._evaluate(pos, data.next);
+      for (const p of this.surroundings(pos)) {
+        const d = this.getMapData(p);
 
-          if (upd.cost !== data.cost) {
-            this._updateMapData(pos, upd);
-            this.updateTile(pos);
-          }
+        if (d.next?.equals(pos)) {
+          this._updateMapData(p, { cost: Infinity });
+          this.updateTile(p);
         }
+      }
+    } else {
+      this._updateMapData(pos, upd);
+      upd.cost = this._evaluate(pos, data.next);
+
+      if (upd.cost !== data.cost) {
+        this._updateMapData(pos, upd);
+        this.updateTile(pos);
       }
     }
   }

@@ -1,5 +1,4 @@
 import { Collection } from 'dexie';
-import { nanoid } from 'nanoid';
 
 import { BiomeName } from '../biomes';
 import { db, TileEntity } from '../db';
@@ -9,9 +8,6 @@ import { Tile } from './tile';
 
 // Class
 export class Map {
-  // Attributes
-  readonly id = nanoid();
-
   // Constructor
   constructor(readonly name: string, readonly bbox: Rect) {}
 
