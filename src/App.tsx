@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
 import { FC, Fragment, useCallback, useEffect, useState } from 'react';
-import { exhaustMap, interval, withLatestFrom } from 'rxjs';
+import { exhaustMap, filter, interval, mergeMap, of, pairwise, startWith, withLatestFrom } from 'rxjs';
 
 import { Ant, hasKnowledge, hasTree, SmartAnt, Thing } from './ants';
 import { CellularGenerator } from './generators';
@@ -40,7 +40,7 @@ export const App: FC = () => {
         grass: 4,
         sand: 3,
       },
-      seed: 'tata',
+      seed: 'paio',
       iterations: 4,
       outBiome: 'water'
     });
@@ -68,7 +68,12 @@ export const App: FC = () => {
 
   useSubscription(interval(500).pipe(
     withLatestFrom($ants),
-    exhaustMap(([,ants]) => Promise.all(ants.map(ant => ant.step(target))))
+    exhaustMap(([,ants]) => of(...ants).pipe(
+      startWith(null),
+      pairwise(),
+      filter(([prev, ant]) => !!ant && (!prev || prev.position.equals(target) || prev.position.distance(ant.position) > 2)),
+      mergeMap(([, ant]) => ant!.step(target))
+    )),
   ));
 
   // Render

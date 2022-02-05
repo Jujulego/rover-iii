@@ -43,6 +43,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
     this.network.mapUpdates$.subscribe(({ pos, biome }) => {
       const data = this.getMapData(pos);
       this._detected(new Vector(pos), data, biome);
+      this._expand();
     });
   }
 
@@ -110,7 +111,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
 
     // Set new target cost to 0
     this._updateMapData(target, { next: undefined, cost: 0 });
-    this.updateTile(target);
+    this._updateTile(target);
 
     // Update target
     this._target = target;
@@ -150,7 +151,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
 
         if (d.next?.equals(pos)) {
           this._updateMapData(p, { cost: Infinity });
-          this.updateTile(p);
+          this._updateTile(p);
         }
       }
     } else {
@@ -159,7 +160,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
 
       if (upd.cost !== data.cost) {
         this._updateMapData(pos, upd);
-        this.updateTile(pos);
+        this._updateTile(pos);
       }
     }
   }
@@ -181,15 +182,15 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
         if (isRaising) {
           if (d.next?.equals(pos)) {
             this._updateMapData(p, { cost: c });
-            this.updateTile(p);
+            this._updateTile(p);
           } else if (c < d.cost) {
             this._updateMapData(pos, { minCost: this.getMapData(pos).cost });
-            this.updateTile(p);
+            this._updateTile(p);
           }
         } else {
           if (c < d.cost) {
             this._updateMapData(p, { next: pos, cost: c });
-            this.updateTile(p);
+            this._updateTile(p);
           }
         }
       }
@@ -236,7 +237,7 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
     return this.getMapData(by).cost + this.heuristic(pos, by);
   }
 
-  protected updateTile(...upd: Vector[]) {
+  private _updateTile(...upd: Vector[]) {
     for (const u of upd) {
       const data = this.getMapData(u);
 
