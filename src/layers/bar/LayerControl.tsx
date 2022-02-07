@@ -7,7 +7,7 @@ import { LAYERS_METADATA } from '../layers';
 export interface LayerControlProps {
   layer: keyof typeof LAYERS_METADATA;
   state: boolean;
-  onToggle: () => void;
+  onToggle: (value: boolean) => void;
 }
 
 // Component
@@ -21,7 +21,7 @@ export const LayerControl: FC<LayerControlProps> = ({ layer, state, onToggle }) 
         <Icon />
       </ListItemIcon>
       <ListItemText primary={label} />
-      <Switch edge="end" checked={state} onChange={onToggle} />
+      <Switch edge="end" checked={state} onChange={(evt) => onToggle(evt.target.checked)} />
     </ListItem>
   );
 };

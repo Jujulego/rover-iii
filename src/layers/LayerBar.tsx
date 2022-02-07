@@ -5,13 +5,10 @@ import { FC, useState } from 'react';
 
 import { Ant } from '../ants';
 import { AntMenu } from './bar/AntMenu';
-import { LayersState } from './layers';
 
 // Types
 export interface LayerBarProps {
   ants: Ant[];
-  layers: Record<string, LayersState>;
-  onAntLayerToggle: (ant: string, layer: keyof LayersState) => void;
 }
 
 // Style mixins
@@ -34,7 +31,7 @@ const closedMixin = ({ spacing, transitions }: Theme): CSSObject => ({
 });
 
 // Component
-export const LayerBar: FC<LayerBarProps> = ({ ants, layers, onAntLayerToggle }) => {
+export const LayerBar: FC<LayerBarProps> = ({ ants }) => {
   // State
   const [open, setOpen] = useState(false);
 
@@ -69,9 +66,7 @@ export const LayerBar: FC<LayerBarProps> = ({ ants, layers, onAntLayerToggle }) 
           <AntMenu
             key={ant.name}
             ant={ant}
-            layers={layers[ant.name]}
             isBarOpen={open}
-            onLayerToggle={(layer) => onAntLayerToggle(ant.name, layer)}
           />
         )) }
 
