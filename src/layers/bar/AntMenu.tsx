@@ -1,21 +1,23 @@
 import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 
 import { Ant, hasKnowledge, hasTree } from '../../ants';
-import { LayersState } from '../layers';
+
+import { useAntLayers } from '../AntLayersCtx';
 import { LayerControl } from './LayerControl';
 
 // Types
 export interface AntMenuProps {
   ant: Ant;
-  layers: LayersState;
   isBarOpen: boolean;
-  onLayerToggle: (layer: keyof LayersState) => void;
 }
 
 // Component
-export const AntMenu: FC<AntMenuProps> = ({ ant, layers, isBarOpen, onLayerToggle }) => {
+export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
+  // Context
+  const [layers, setLayer] = useAntLayers(ant);
+
   // State
   const [open, setOpen] = useState(false);
 
@@ -50,20 +52,20 @@ export const AntMenu: FC<AntMenuProps> = ({ ant, layers, isBarOpen, onLayerToggl
             <LayerControl
               layer="fog"
               state={layers.fog}
-              onToggle={() => onLayerToggle('fog')}
+              onToggle={(val) => setLayer('fog', val)}
             />
           ) }
           { hasTree(ant) && (
             <LayerControl
               layer="tree"
               state={layers.tree}
-              onToggle={() => onLayerToggle('tree')}
+              onToggle={(val) => setLayer('tree', val)}
             />
           ) }
           <LayerControl
             layer="history"
             state={layers.history}
-            onToggle={() => onLayerToggle('history')}
+            onToggle={(val) => setLayer('history', val)}
           />
         </List>
       </Collapse>
