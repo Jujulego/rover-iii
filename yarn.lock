@@ -1351,15 +1351,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.9.2":
-  version: 7.17.0
-  resolution: "@babel/runtime@npm:7.17.0"
-  dependencies:
-    regenerator-runtime: ^0.13.4
-  checksum: 1864ac3c6aa061798c706ce858af311f06f6ad6efafc20cca7029fdaa9786c58ccaf5bdb8bd133cb505f27bed7659b65f1503b8da58adbd1eb88f7333644e6ed
-  languageName: node
-  linkType: hard
-
 "@babel/template@npm:^7.16.7, @babel/template@npm:^7.3.3":
   version: 7.16.7
   resolution: "@babel/template@npm:7.16.7"
@@ -2072,26 +2063,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^1.7.2":
-  version: 1.7.2
-  resolution: "@reduxjs/toolkit@npm:1.7.2"
-  dependencies:
-    immer: ^9.0.7
-    redux: ^4.1.2
-    redux-thunk: ^2.4.1
-    reselect: ^4.1.5
-  peerDependencies:
-    react: ^16.9.0 || ^17.0.0 || 18.0.0-beta
-    react-redux: ^7.2.1 || ^8.0.0-beta
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-redux:
-      optional: true
-  checksum: 41c17c660f7c95d776658b9a101f9803c37589b2c08861e90283abe5fab70f99c37af064fae0c5b7501f67308946fa072504f6a801e272f157b9f7427a5e571e
-  languageName: node
-  linkType: hard
-
 "@sinonjs/commons@npm:^1.7.0":
   version: 1.8.3
   resolution: "@sinonjs/commons@npm:1.8.3"
@@ -2294,16 +2265,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hoist-non-react-statics@npm:^3.3.0":
-  version: 3.3.1
-  resolution: "@types/hoist-non-react-statics@npm:3.3.1"
-  dependencies:
-    "@types/react": "*"
-    hoist-non-react-statics: ^3.3.0
-  checksum: 2c0778570d9a01d05afabc781b32163f28409bb98f7245c38d5eaf082416fdb73034003f5825eb5e21313044e8d2d9e1f3fe2831e345d3d1b1d20bcd12270719
-  languageName: node
-  linkType: hard
-
 "@types/html-minifier-terser@npm:^6.0.0":
   version: 6.1.0
   resolution: "@types/html-minifier-terser@npm:6.1.0"
@@ -2433,18 +2394,6 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 6abb7c47d54f012272650df8a962a28bd82f219291e5ef8b4dfa7fe0bb98ae243b060bf9fbe8ceff6213141794855a006db194b490b00ffd15842ae19d0ce1f0
-  languageName: node
-  linkType: hard
-
-"@types/react-redux@npm:^7, @types/react-redux@npm:^7.1.20":
-  version: 7.1.22
-  resolution: "@types/react-redux@npm:7.1.22"
-  dependencies:
-    "@types/hoist-non-react-statics": ^3.3.0
-    "@types/react": "*"
-    hoist-non-react-statics: ^3.3.0
-    redux: ^4.0.0
-  checksum: eef458c0cda27eabd8d458b7fc40553aab8d2f218145b896b9059b86d88680ae479079aee13683f2a0f35774f20346b732e91182252402bd8777455e004561c9
   languageName: node
   linkType: hard
 
@@ -5475,7 +5424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -5699,13 +5648,6 @@ __metadata:
   version: 5.2.0
   resolution: "ignore@npm:5.2.0"
   checksum: 6b1f926792d614f64c6c83da3a1f9c83f6196c2839aa41e1e32dd7b8d174cef2e329d75caabb62cb61ce9dc432f75e67d07d122a037312db7caa73166a1bdb77
-  languageName: node
-  linkType: hard
-
-"immer@npm:^9.0.7":
-  version: 9.0.12
-  resolution: "immer@npm:9.0.12"
-  checksum: bcbec6d76dac65e49068eb67ece4d407116e62b8cde3126aa89c801e408f5047763ba0aeb62f1938c1aa704bb6612f1d8302bb2a86fa1fc60fcc12d8b25dc895
   languageName: node
   linkType: hard
 
@@ -7918,27 +7860,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:^7.2.6":
-  version: 7.2.6
-  resolution: "react-redux@npm:7.2.6"
-  dependencies:
-    "@babel/runtime": ^7.15.4
-    "@types/react-redux": ^7.1.20
-    hoist-non-react-statics: ^3.3.2
-    loose-envify: ^1.4.0
-    prop-types: ^15.7.2
-    react-is: ^17.0.2
-  peerDependencies:
-    react: ^16.8.3 || ^17
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-  checksum: 0bf142ce0d0b80aef955650fd5e9489fca32d94f19ee23893b332f1b01ceee7bd3623337c942cbda642667d1dc9de5ac869c3c1946afa6cf2046407b57d24741
-  languageName: node
-  linkType: hard
-
 "react-transition-group@npm:^4.4.2":
   version: 4.4.2
   resolution: "react-transition-group@npm:4.4.2"
@@ -8005,24 +7926,6 @@ __metadata:
   dependencies:
     resolve: ^1.9.0
   checksum: 2a04aab4e28c05fcd6ee6768446bc8b859d8f108e71fc7f5bcbc5ef25e53330ce2c11d10f82a24591a2df4c49c4f61feabe1fd11f844c66feedd4cd7bb61146a
-  languageName: node
-  linkType: hard
-
-"redux-thunk@npm:^2.4.1":
-  version: 2.4.1
-  resolution: "redux-thunk@npm:2.4.1"
-  peerDependencies:
-    redux: ^4
-  checksum: af5abb425fb9dccda02e5f387d6f3003997f62d906542a3d35fc9420088f550dc1a018bdc246c7d23ee852b4d4ab8b5c64c5be426e45a328d791c4586a3c6b6e
-  languageName: node
-  linkType: hard
-
-"redux@npm:^4.0.0, redux@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "redux@npm:4.1.2"
-  dependencies:
-    "@babel/runtime": ^7.9.2
-  checksum: 6a839cee5bd580c5298d968e9e2302150e961318253819bcd97f9d945a5a409559eacddf6026f4118bb68b681c593d90e8a2c5bbf278f014aff9bf0d2d8fa084
   languageName: node
   linkType: hard
 
@@ -8145,13 +8048,6 @@ __metadata:
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
   checksum: eee0e303adffb69be55d1a214e415cf42b7441ae858c76dfc5353148644f6fd6e698926fc4643f510d5c126d12a705e7c8ed7e38061113bdf37547ab356797ff
-  languageName: node
-  linkType: hard
-
-"reselect@npm:^4.1.5":
-  version: 4.1.5
-  resolution: "reselect@npm:4.1.5"
-  checksum: 54c13c1e795b2ea70cba8384138aebe78adda00cbea303cc94b64da0a70d74c896cc9a03115ae38b8bff990e7a60dcd6452ab68cbec01b0b38c1afda70714cf0
   languageName: node
   linkType: hard
 
@@ -8299,13 +8195,11 @@ __metadata:
     "@jujulego/alma-utils": ^1.0.11
     "@mui/icons-material": ^5.2.5
     "@mui/material": ^5.2.7
-    "@reduxjs/toolkit": ^1.7.2
     "@types/copy-webpack-plugin": 8.0.1
     "@types/jest": 27.4.0
     "@types/node": 14.18.4
     "@types/react": 17.0.2
     "@types/react-dom": 17.0.2
-    "@types/react-redux": ^7
     "@types/seedrandom": 3.0.1
     "@types/webpack": 5.28.0
     "@types/webpack-bundle-analyzer": 4.4.1
@@ -8328,7 +8222,6 @@ __metadata:
     observable-hooks: ^4.2.0
     react: ^17.0.2
     react-dom: ^17.0.2
-    react-redux: ^7.2.6
     regenerator-runtime: ^0.13.9
     rxjs: ^7.5.2
     seedrandom: ^3.0.5

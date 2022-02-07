@@ -1,25 +1,21 @@
 import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Ant, hasKnowledge, hasTree } from '../../ants';
-
+import { LayersState } from '../layers';
 import { LayerControl } from './LayerControl';
-import { useAppDispatch, useAppSelector } from '../../store';
-import { LayersKind, setLayerForAnt } from '../../store/layers.slice';
 
 // Types
 export interface AntMenuProps {
   ant: Ant;
+  layers: LayersState;
   isBarOpen: boolean;
+  onLayerToggle: (layer: keyof LayersState) => void;
 }
 
 // Component
-export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
-  // Global state
-  const { [ant.id]: layers } = useAppSelector((state) => state.layers);
-  const dispatch = useAppDispatch();
-
+export const AntMenu: FC<AntMenuProps> = ({ ant, layers, isBarOpen, onLayerToggle }) => {
   // State
   const [open, setOpen] = useState(false);
 
@@ -27,11 +23,6 @@ export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
   useEffect(() => {
     if (!isBarOpen) setOpen(false);
   }, [isBarOpen]);
-
-  // Callbacks
-  const handleToggle = useCallback((kind: LayersKind, value: boolean) => {
-    dispatch(setLayerForAnt({ ant: ant.id, kind, value }));
-  }, [dispatch, ant]);
 
   // Render
   return (
@@ -58,21 +49,21 @@ export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
           { hasKnowledge(ant) && (
             <LayerControl
               layer="fog"
-              state={layers?.fog ?? false}
-              onToggle={(value) => handleToggle('fog', value)}
+              state={layers.fog}
+              onToggle={() => onLayerToggle('fog')}
             />
           ) }
           { hasTree(ant) && (
             <LayerControl
               layer="tree"
-              state={layers?.tree ?? false}
-              onToggle={(value) => handleToggle('tree', value)}
+              state={layers.tree}
+              onToggle={() => onLayerToggle('tree')}
             />
           ) }
           <LayerControl
             layer="history"
-            state={layers?.history ?? false}
-            onToggle={(value) => handleToggle('history', value)}
+            state={layers.history}
+            onToggle={() => onLayerToggle('history')}
           />
         </List>
       </Collapse>
