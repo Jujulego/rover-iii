@@ -37,7 +37,7 @@ export const App: FC = () => {
         grass: 4,
         sand: 3,
       },
-      seed: 'paio',
+      seed: 'tata',
       iterations: 4,
       outBiome: 'water'
     });

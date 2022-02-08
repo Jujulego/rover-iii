@@ -1,7 +1,7 @@
 import BlurOnIcon from '@mui/icons-material/BlurOn';
 import HistoryIcon from '@mui/icons-material/History';
 import ParkIcon from '@mui/icons-material/Park';
-import { ComponentType, createContext } from 'react';
+import { ComponentType } from 'react';
 
 // Types
 export type LayerKind = 'fog' | 'history' | 'tree';

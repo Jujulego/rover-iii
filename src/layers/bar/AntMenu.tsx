@@ -1,6 +1,6 @@
 import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Ant, hasKnowledge, hasTree } from '../../ants';
 

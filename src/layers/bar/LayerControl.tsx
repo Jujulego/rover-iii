@@ -1,11 +1,11 @@
 import { ListItem, ListItemIcon, ListItemText, Switch } from '@mui/material';
 import { ChangeEvent, memo } from 'react';
 
-import { LAYERS_METADATA } from '../../commons/layers';
+import { LayerKind, LAYERS_METADATA } from '../../commons/layers';
 
 // Types
 export interface LayerControlProps {
-  layer: keyof typeof LAYERS_METADATA;
+  layer: LayerKind;
   state: boolean;
   onToggle: (value: boolean) => void;
 }
