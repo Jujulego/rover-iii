@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';
@@ -25,6 +24,10 @@ interface TileProps {
   y: number;
 }
 
+interface LayerProps {
+  s: number;
+}
+
 // Styles
 const Tile = styled('img', { skipSx: true })<TileProps>((props) => ({
   height: '100%',
@@ -32,6 +35,16 @@ const Tile = styled('img', { skipSx: true })<TileProps>((props) => ({
   gridRow: props.y + 1,
   gridColumn: props.x + 1,
   zIndex: 0
+}));
+
+const Layer = styled('div', { skipSx: true })<LayerProps>((props) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+
+  display: 'grid',
+  gridAutoRows: props.s,
+  gridAutoColumns: props.s,
 }));
 
 // Components
@@ -59,10 +72,7 @@ export const BiomeLayer = needMap<BiomeLayerProps>(function BiomeLayer({ map, on
 
   // Render
   return (
-    <Box
-      position="absolute" top={0} left={0}
-      display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}
-    >
+    <Layer s={tileSize}>
       { tiles.map(({ pos, biome }) => (
         <BiomeTile
           key={pos.x + ':' + pos.y}
@@ -71,6 +81,6 @@ export const BiomeLayer = needMap<BiomeLayerProps>(function BiomeLayer({ map, on
           onClick={() => onTileClick && onTileClick(pos)}
         />
       )) }
-    </Box>
+    </Layer>
   );
 });

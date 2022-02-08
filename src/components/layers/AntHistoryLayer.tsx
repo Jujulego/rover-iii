@@ -15,7 +15,7 @@ export interface AntHistoryLayerProps {
 interface LayerProps {
   h: number;
   w: number;
-  tileSize: number;
+  s: number;
 }
 
 // Animations
@@ -34,8 +34,8 @@ const Layer = styled('svg', { skipSx: true })<LayerProps>((props) => ({
   position: 'absolute',
   top: 0,
   left: 0,
-  width: props.w * props.tileSize,
-  height: props.h * props.tileSize,
+  width: props.w * props.s,
+  height: props.h * props.s,
   zIndex: 20,
   pointerEvents: 'none',
   animation: `${movingDash} 750ms infinite ease`
@@ -69,7 +69,7 @@ export const AntHistoryLayer = memo<AntHistoryLayerProps>(function AntHistoryLay
   // Render
   return (
     <Layer
-      w={ant.map.bbox.w + 1} h={ant.map.bbox.h + 1} tileSize={tileSize}
+      w={ant.map.bbox.w + 1} h={ant.map.bbox.h + 1} s={tileSize}
       viewBox={`0 0 ${ant.map.bbox.w + 1} ${ant.map.bbox.h + 1}`}
     >
       <path

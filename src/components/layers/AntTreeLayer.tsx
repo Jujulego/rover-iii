@@ -16,7 +16,7 @@ export interface AntTreeLayerProps {
 interface LayerProps {
   h: number;
   w: number;
-  tileSize: number;
+  s: number;
 }
 
 // Styles
@@ -24,8 +24,8 @@ const Layer = styled('svg', { skipSx: true })<LayerProps>((props) => ({
   position: 'absolute',
   top: 0,
   left: 0,
-  width: props.w * props.tileSize,
-  height: props.h * props.tileSize,
+  width: props.w * props.s,
+  height: props.h * props.s,
   zIndex: 10,
   pointerEvents: 'none',
 }));
@@ -75,7 +75,7 @@ export const AntTreeLayer: FC<AntTreeLayerProps> = (props) => {
   // Render
   return (
     <Layer
-      w={ant.map.bbox.w + 1} h={ant.map.bbox.h + 1} tileSize={tileSize}
+      w={ant.map.bbox.w + 1} h={ant.map.bbox.h + 1} s={tileSize}
       viewBox={`0 0 ${ant.map.bbox.w + 1} ${ant.map.bbox.h + 1}`}
     >
       { paths.map(([root, path]) => (

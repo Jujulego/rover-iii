@@ -22,6 +22,10 @@ interface TileProps {
   y: number;
 }
 
+interface LayerProps {
+  s: number;
+}
+
 // Styles
 const Tile = styled('img', { skipSx: true })<TileProps>((props) => ({
   height: '100%',
@@ -29,6 +33,17 @@ const Tile = styled('img', { skipSx: true })<TileProps>((props) => ({
   gridRow: props.y + 1,
   gridColumn: props.x + 1,
   zIndex: 50
+}));
+
+const Layer = styled('div', { skipSx: true })<LayerProps>((props) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+
+  display: 'grid',
+  gridAutoRows: props.s,
+  gridAutoColumns: props.s,
+  pointerEvents: 'none',
 }));
 
 // Components
@@ -56,13 +71,10 @@ export const ThingLayer: FC<ThingLayerProps> = (props) => {
 
   // Render
   return (
-    <Box
-      position="absolute" top={0} left={0}
-      display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}
-    >
+    <Layer s={tileSize}>
       { things.map((thing) => (
         <ThingTile key={thing.id} thing={thing} />
       )) }
-    </Box>
+    </Layer>
   );
 };

@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useObservableState } from 'observable-hooks';
@@ -19,8 +18,12 @@ interface TileProps {
   y: number;
 }
 
+interface LayerProps {
+  s: number;
+}
+
 // Styles
-const FogTile = styled('div', { skipSx: true })<TileProps>((props) => ({
+const Tile = styled('div', { skipSx: true })<TileProps>((props) => ({
   gridRow: props.y + 1,
   gridColumn: props.x + 1,
   zIndex: 60,
@@ -28,6 +31,17 @@ const FogTile = styled('div', { skipSx: true })<TileProps>((props) => ({
   background: 'white',
   opacity: 0.5,
   pointerEvents: 'none'
+}));
+
+const Layer = styled('div', { skipSx: true })<LayerProps>((props) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+
+  display: 'grid',
+  gridAutoRows: props.s,
+  gridAutoColumns: props.s,
+  pointerEvents: 'none',
 }));
 
 // Component
@@ -45,13 +59,10 @@ export const AntFogLayer = memo<AntFogLayerProps>(function AntFogLayer(props) {
 
   // Render
   return (
-    <Box
-      position="absolute" top={0} left={0}
-      display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}
-    >
+    <Layer s={tileSize}>
       { tiles.filter(t => !ant.knowledge.contains(t.pos)).map(({ pos }) => (
-        <FogTile key={pos.x + ':' + pos.y} x={pos.x} y={pos.y} />
+        <Tile key={pos.x + ':' + pos.y} x={pos.x} y={pos.y} />
       )) }
-    </Box>
+    </Layer>
   );
 });
