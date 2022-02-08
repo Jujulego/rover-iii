@@ -3,14 +3,8 @@ import { CSSObject, Theme } from '@mui/material/styles';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { FC, useState } from 'react';
 
-import { Ant } from '../ants';
-
 import { AntMenu } from './bar/AntMenu';
-
-// Types
-export interface LayerBarProps {
-  ants: Ant[];
-}
+import { useAnts } from './MapLayers';
 
 // Style mixins
 const openMixin = ({ transitions }: Theme): CSSObject => ({
@@ -32,7 +26,10 @@ const closedMixin = ({ spacing, transitions }: Theme): CSSObject => ({
 });
 
 // Component
-export const LayerBar: FC<LayerBarProps> = ({ ants }) => {
+export const LayerBar: FC = () => {
+  // Context
+  const ants = useAnts();
+
   // State
   const [open, setOpen] = useState(false);
 
@@ -65,7 +62,7 @@ export const LayerBar: FC<LayerBarProps> = ({ ants }) => {
       >
         { ants.map((ant) => (
           <AntMenu
-            key={ant.name}
+            key={ant.id}
             ant={ant}
             isBarOpen={open}
           />

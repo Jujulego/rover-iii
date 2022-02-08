@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { Ant, hasKnowledge, hasTree } from '../../ants';
 
-import { useAntLayers } from '../AntLayersCtx';
+import { useAntLayers } from '../AntLayersStore';
 import { LayerControl } from './LayerControl';
 
 // Types
@@ -16,7 +16,7 @@ export interface AntMenuProps {
 // Component
 export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
   // Context
-  const [layers, setLayer] = useAntLayers(ant);
+  const [layers, updateLayer] = useAntLayers(ant);
 
   // State
   const [open, setOpen] = useState(false);
@@ -52,20 +52,20 @@ export const AntMenu: FC<AntMenuProps> = ({ ant, isBarOpen }) => {
             <LayerControl
               layer="fog"
               state={layers.fog}
-              onToggle={(val) => setLayer('fog', val)}
+              onToggle={(val) => updateLayer('fog', val)}
             />
           ) }
           { hasTree(ant) && (
             <LayerControl
               layer="tree"
               state={layers.tree}
-              onToggle={(val) => setLayer('tree', val)}
+              onToggle={(val) => updateLayer('tree', val)}
             />
           ) }
           <LayerControl
             layer="history"
             state={layers.history}
-            onToggle={(val) => setLayer('history', val)}
+            onToggle={(val) => updateLayer('history', val)}
           />
         </List>
       </Collapse>

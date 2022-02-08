@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 import { createContext, FC, useContext } from 'react';
 
-import { Ant } from 'src/ants';
-import { Map } from 'src/maps';
+import { Ant } from '../ants';
+import { Map } from '../maps';
 
 // Types
 export interface MapLayersCtxState {

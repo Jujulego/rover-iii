@@ -1,5 +1,4 @@
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
 import { useObservableState } from 'observable-hooks';
 import { FC, memo, useMemo } from 'react';
 

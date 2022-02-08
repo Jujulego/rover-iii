@@ -9,10 +9,11 @@ import { IVector, Rect, Vector } from './math2d';
 
 import { AntLayers } from './components/AntLayers';
 import { AntLayersStore } from './components/AntLayersStore';
-import { MapLayers } from './components/MapLayers';
 import { BiomeLayer } from './components/layers/BiomeLayer';
 import { ThingLayer } from './components/layers/ThingsLayer';
+import { LayerBar } from './components/LayerBar';
 import { LayerStack } from './components/LayerStack';
+import { MapLayers } from './components/MapLayers';
 
 // Constants
 const target = Thing.createTarget(new Vector({ x: 1, y: 8 }));
@@ -68,13 +69,9 @@ export const App: FC = () => {
 
   // Render
   return (
-    // <Box component="main" display="flex" height="100vh">
-    //   <AntLayersCtx ants={ants}>
-    //     <LayerBar ants={ants} />
-    //   </AntLayersCtx>
-    // </Box>
     <MapLayers ants={ants} map={map} tileSize={32}>
       <AntLayersStore>
+        <LayerBar />
         <LayerStack>
           <BiomeLayer onTileClick={handleTileClick} />
           <AntLayers />
