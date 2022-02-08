@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, filter, interval, mergeMap, of, pairwise, startWith, withLatestFrom } from 'rxjs';
 
-import { Ant, SmartAnt, Thing } from './ants';
+import { Ant, hasTree, SmartAnt, Thing } from './ants';
 import { CellularGenerator } from './generators';
 import { Map } from './maps';
 import { IVector, Rect, Vector } from './math2d';
@@ -15,6 +15,8 @@ import { LayerGrid } from './layers/LayerGrid';
 import { ImgMapLayer } from './layers/img/ImgMapLayer';
 import { ImgThingLayer } from './layers/img/ImgThingLayer';
 import { MapLayers } from './components/MapLayers';
+import { AntHistoryLayer } from './components/layers/AntHistoryLayer';
+import { AntTreeLayer } from './components/layers/AntTreeLayer';
 import { BiomeLayer } from './components/layers/BiomeLayer';
 import { ThingLayer } from './components/layers/ThingsLayer';
 import { LayerStack } from './components/LayerStack';
@@ -98,6 +100,12 @@ export const App: FC = () => {
     <MapLayers ants={ants} map={map} tileSize={32}>
       <LayerStack>
         <BiomeLayer onTileClick={handleTileClick} />
+        { ants.map(ant => (
+          <Fragment key={ant.id} >
+            { hasTree(ant) && <AntTreeLayer ant={ant} /> }
+            <AntHistoryLayer ant={ant} />
+          </Fragment>
+        )) }
         <ThingLayer things={[target]} />
       </LayerStack>
     </MapLayers>

@@ -57,7 +57,7 @@ export const ThingLayer: FC<ThingLayerProps> = (props) => {
   // Render
   return (
     <Box
-      position="absolute" top={0} height={0}
+      position="absolute" top={0} left={0}
       display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}
     >
       { things.map((thing) => (

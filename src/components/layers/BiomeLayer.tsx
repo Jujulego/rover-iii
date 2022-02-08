@@ -60,7 +60,7 @@ export const BiomeLayer = needMap<BiomeLayerProps>(function BiomeLayer({ map, on
   // Render
   return (
     <Box
-      position="absolute" top={0} height={0}
+      position="absolute" top={0} left={0}
       display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}
     >
       { tiles.map(({ pos, biome }) => (
