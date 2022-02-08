@@ -1,12 +1,12 @@
+import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';
 
 import { BiomeName, BIOMES } from '../../biomes';
 import { IVector, Vector } from '../../math2d';
+
 import { useMapParameters } from '../MapLayers';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { Box } from '@mui/material';
-import { ImgTile } from '../../layers/img/ImgTile';
 import { needMap } from '../needMap';
 
 // Types
@@ -59,9 +59,12 @@ export const BiomeLayer = needMap<BiomeLayerProps>(function BiomeLayer({ map, on
 
   // Render
   return (
-    <Box display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}>
+    <Box
+      position="absolute" top={0} height={0}
+      display="grid" gridAutoRows={tileSize} gridAutoColumns={tileSize}
+    >
       { tiles.map(({ pos, biome }) => (
-        <ImgTile
+        <BiomeTile
           key={pos.x + ':' + pos.y}
           pos={map.bbox.tl.mul(-1).add(pos)}
           biome={biome}

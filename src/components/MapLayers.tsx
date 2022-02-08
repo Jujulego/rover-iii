@@ -2,6 +2,7 @@ import { createContext, FC, useContext } from 'react';
 
 import { Ant } from '../ants';
 import { Map } from '../maps';
+import { Box } from '@mui/material';
 
 // Types
 export interface MapLayersCtxState {
@@ -46,9 +47,14 @@ export const MapLayers: FC<MapLayersProps> = (props) => {
   const { ants, map, tileSize, children } = { ...MAP_LAYERS_DEFAULTS, ...props };
 
   // Render
+  const width = map ? map.bbox.w : 0;
+  const height = map ? map.bbox.h : 0;
+
   return (
-    <MapLayersCtx.Provider value={{ ants, map, tileSize }}>
-      { children }
-    </MapLayersCtx.Provider>
+    <Box position="relative" width={width * tileSize} height={height * tileSize}>
+      <MapLayersCtx.Provider value={{ ants, map, tileSize }}>
+        { children }
+      </MapLayersCtx.Provider>
+    </Box>
   );
 };

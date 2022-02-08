@@ -16,17 +16,20 @@ import { ImgMapLayer } from './layers/img/ImgMapLayer';
 import { ImgThingLayer } from './layers/img/ImgThingLayer';
 import { MapLayers } from './components/MapLayers';
 import { BiomeLayer } from './components/layers/BiomeLayer';
+import { ThingLayer } from './components/layers/ThingsLayer';
+
+// Constants
+const target = Thing.createTarget(new Vector({ x: 1, y: 8 }));
 
 // Component
 export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>(new Map('map', new Rect(0, 0, 19, 39)));
   const [ants, setAnts] = useState<Ant[]>([]);
-  const [target, setTarget] = useState(new Vector({ x: 1, y: 8 }));
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {
-    setTarget(new Vector(pos));
+    target.position = new Vector(pos);
   }, []);
 
   // Effects
@@ -62,8 +65,8 @@ export const App: FC = () => {
     exhaustMap(([,ants]) => of(...ants).pipe(
       startWith(null),
       pairwise(),
-      filter(([prev, ant]) => !!ant && (!prev || prev.position.equals(target) || prev.position.distance(ant.position) > 2)),
-      mergeMap(([, ant]) => ant!.step(target))
+      filter(([prev, ant]) => !!ant && (!prev || prev.position.equals(target.position) || prev.position.distance(ant.position) > 2)),
+      mergeMap(([, ant]) => ant!.step(target.position))
     )),
   ));
 
@@ -92,6 +95,7 @@ export const App: FC = () => {
       {/*</AntLayersCtx>*/}
       <MapLayers ants={ants} map={map} tileSize={32}>
         <BiomeLayer onTileClick={handleTileClick} />
+        <ThingLayer things={[target]} />
       </MapLayers>
     </Box>
   );
