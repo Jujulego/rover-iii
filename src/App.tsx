@@ -14,6 +14,8 @@ import { LayerBar } from './layers/LayerBar';
 import { LayerGrid } from './layers/LayerGrid';
 import { ImgMapLayer } from './layers/img/ImgMapLayer';
 import { ImgThingLayer } from './layers/img/ImgThingLayer';
+import { MapLayers } from './components/MapLayers';
+import { BiomeLayer } from './components/layers/BiomeLayer';
 
 // Component
 export const App: FC = () => {
@@ -68,26 +70,29 @@ export const App: FC = () => {
   // Render
   return (
     <Box component="main" display="flex" height="100vh">
-      <AntLayersCtx ants={ants}>
-        <LayerBar ants={ants} />
-        <Box flex={1} overflow="auto">
-          { map && (
-            <LayerGrid tileSize={32}>
-              <ImgMapLayer map={map} onTileClick={handleTileClick} />
-              { ants.map(ant => (
-                <AntLayers key={ant.id} ant={ant} />
-              ))}
-              <ImgThingLayer
-                map={map}
-                things={[
-                  Thing.createTarget(target),
-                  ...ants
-                ]}
-              />
-            </LayerGrid>
-          ) }
-        </Box>
-      </AntLayersCtx>
+      {/*<AntLayersCtx ants={ants}>*/}
+      {/*  <LayerBar ants={ants} />*/}
+      {/*  <Box flex={1} overflow="auto">*/}
+      {/*    { map && (*/}
+      {/*      <LayerGrid tileSize={32}>*/}
+      {/*        <ImgMapLayer map={map} onTileClick={handleTileClick} />*/}
+      {/*        { ants.map(ant => (*/}
+      {/*          <AntLayers key={ant.id} ant={ant} />*/}
+      {/*        ))}*/}
+      {/*        <ImgThingLayer*/}
+      {/*          map={map}*/}
+      {/*          things={[*/}
+      {/*            Thing.createTarget(target),*/}
+      {/*            ...ants*/}
+      {/*          ]}*/}
+      {/*        />*/}
+      {/*      </LayerGrid>*/}
+      {/*    ) }*/}
+      {/*  </Box>*/}
+      {/*</AntLayersCtx>*/}
+      <MapLayers ants={ants} map={map} tileSize={32}>
+        <BiomeLayer onTileClick={handleTileClick} />
+      </MapLayers>
     </Box>
   );
 };

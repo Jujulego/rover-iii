@@ -3153,6 +3153,63 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ants@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "ants@workspace:."
+  dependencies:
+    "@babel/core": 7.16.7
+    "@babel/plugin-proposal-class-properties": 7.16.7
+    "@babel/plugin-proposal-decorators": 7.16.7
+    "@babel/preset-env": 7.16.7
+    "@babel/preset-react": 7.16.7
+    "@babel/preset-typescript": 7.16.7
+    "@babel/runtime": 7.16.7
+    "@emotion/react": ^11.7.1
+    "@emotion/styled": ^11.6.0
+    "@jujulego/alma-utils": ^1.0.11
+    "@mui/icons-material": ^5.2.5
+    "@mui/material": ^5.2.7
+    "@types/copy-webpack-plugin": 8.0.1
+    "@types/jest": 27.4.0
+    "@types/node": 14.18.4
+    "@types/react": 17.0.2
+    "@types/react-dom": 17.0.2
+    "@types/seedrandom": 3.0.1
+    "@types/webpack": 5.28.0
+    "@types/webpack-bundle-analyzer": 4.4.1
+    "@types/webpack-dev-server": 4.5.1
+    "@typescript-eslint/eslint-plugin": 5.8.1
+    "@typescript-eslint/parser": 5.8.1
+    babel-loader: 8.2.3
+    babel-plugin-import: 1.13.3
+    copy-webpack-plugin: 9.1.0
+    dexie: ^3.2.0
+    dexie-react-hooks: ^1.1.1
+    eslint: 8.6.0
+    eslint-plugin-jest: 25.3.4
+    eslint-plugin-react: 7.28.0
+    eslint-plugin-react-hooks: 4.3.0
+    fork-ts-checker-webpack-plugin: 6.5.0
+    html-webpack-plugin: 5.5.0
+    jest: 27.4.5
+    nanoid: ^3.2.0
+    observable-hooks: ^4.2.0
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    regenerator-runtime: ^0.13.9
+    rxjs: ^7.5.2
+    seedrandom: ^3.0.5
+    ts-jest: 27.1.2
+    ts-node: 10.4.0
+    typescript: 4.5.4
+    webpack: 5.65.0
+    webpack-bundle-analyzer: 4.5.0
+    webpack-cli: 4.9.1
+    webpack-dev-server: 4.7.2
+    webpack-merge: 5.8.0
+  languageName: unknown
+  linkType: soft
+
 "anymatch@npm:^3.0.3, anymatch@npm:~3.1.2":
   version: 3.1.2
   resolution: "anymatch@npm:3.1.2"
@@ -8178,63 +8235,6 @@ __metadata:
   checksum: 87f4164e396f0171b0a3386cc1877a817f572148ee13a7e113b238e48e8a9f2f31d009a92ec38a591ff1567d9662c6b67fd8818a2dbbaed74bc26a87a2a4a9a0
   languageName: node
   linkType: hard
-
-"rover-iii@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "rover-iii@workspace:."
-  dependencies:
-    "@babel/core": 7.16.7
-    "@babel/plugin-proposal-class-properties": 7.16.7
-    "@babel/plugin-proposal-decorators": 7.16.7
-    "@babel/preset-env": 7.16.7
-    "@babel/preset-react": 7.16.7
-    "@babel/preset-typescript": 7.16.7
-    "@babel/runtime": 7.16.7
-    "@emotion/react": ^11.7.1
-    "@emotion/styled": ^11.6.0
-    "@jujulego/alma-utils": ^1.0.11
-    "@mui/icons-material": ^5.2.5
-    "@mui/material": ^5.2.7
-    "@types/copy-webpack-plugin": 8.0.1
-    "@types/jest": 27.4.0
-    "@types/node": 14.18.4
-    "@types/react": 17.0.2
-    "@types/react-dom": 17.0.2
-    "@types/seedrandom": 3.0.1
-    "@types/webpack": 5.28.0
-    "@types/webpack-bundle-analyzer": 4.4.1
-    "@types/webpack-dev-server": 4.5.1
-    "@typescript-eslint/eslint-plugin": 5.8.1
-    "@typescript-eslint/parser": 5.8.1
-    babel-loader: 8.2.3
-    babel-plugin-import: 1.13.3
-    copy-webpack-plugin: 9.1.0
-    dexie: ^3.2.0
-    dexie-react-hooks: ^1.1.1
-    eslint: 8.6.0
-    eslint-plugin-jest: 25.3.4
-    eslint-plugin-react: 7.28.0
-    eslint-plugin-react-hooks: 4.3.0
-    fork-ts-checker-webpack-plugin: 6.5.0
-    html-webpack-plugin: 5.5.0
-    jest: 27.4.5
-    nanoid: ^3.2.0
-    observable-hooks: ^4.2.0
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    regenerator-runtime: ^0.13.9
-    rxjs: ^7.5.2
-    seedrandom: ^3.0.5
-    ts-jest: 27.1.2
-    ts-node: 10.4.0
-    typescript: 4.5.4
-    webpack: 5.65.0
-    webpack-bundle-analyzer: 4.5.0
-    webpack-cli: 4.9.1
-    webpack-dev-server: 4.7.2
-    webpack-merge: 5.8.0
-  languageName: unknown
-  linkType: soft
 
 "run-parallel@npm:^1.1.9":
   version: 1.2.0
