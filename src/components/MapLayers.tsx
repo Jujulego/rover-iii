@@ -1,8 +1,8 @@
+import { Box } from '@mui/material';
 import { createContext, FC, useContext } from 'react';
 
 import { Ant } from '../ants';
 import { Map } from '../maps';
-import { Box } from '@mui/material';
 
 // Types
 export interface MapLayersCtxState {
@@ -47,11 +47,8 @@ export const MapLayers: FC<MapLayersProps> = (props) => {
   const { ants, map, tileSize, children } = { ...MAP_LAYERS_DEFAULTS, ...props };
 
   // Render
-  const width = map ? map.bbox.w : 0;
-  const height = map ? map.bbox.h : 0;
-
   return (
-    <Box position="relative" width={width * tileSize} height={height * tileSize}>
+    <Box component="div" display="flex" minHeight="100vh" overflow="auto">
       <MapLayersCtx.Provider value={{ ants, map, tileSize }}>
         { children }
       </MapLayersCtx.Provider>
