@@ -14,7 +14,7 @@ export const LayerStack: FC = ({ children }) => {
   const h = map ? map.bbox.h : 0;
 
   return (
-    <Box flex={1}>
+    <Box component="main" flex={1}>
       <Box position="relative" width={w * tileSize} height={h * tileSize}>
         { children }
       </Box>

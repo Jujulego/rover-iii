@@ -26,7 +26,7 @@ export function needMap<P>(Component: FC<P & NeedMapProps>) {
 
   // Name
   const name = Component.displayName || Component.name;
-  NeedMap.displayName = `needMap(${name})`;
+  NeedMap.displayName = `NeedMap(${name})`;
 
   return NeedMap;
 }

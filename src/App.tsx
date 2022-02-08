@@ -1,22 +1,15 @@
-import { Box } from '@mui/material';
 import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
-import { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { exhaustMap, filter, interval, mergeMap, of, pairwise, startWith, withLatestFrom } from 'rxjs';
 
-import { Ant, hasTree, SmartAnt, Thing } from './ants';
+import { Ant, SmartAnt, Thing } from './ants';
 import { CellularGenerator } from './generators';
 import { Map } from './maps';
 import { IVector, Rect, Vector } from './math2d';
 
-import { AntLayersCtx } from './layers/AntLayersCtx';
-import { AntLayers } from './layers/AntLayers';
-import { LayerBar } from './layers/LayerBar';
-import { LayerGrid } from './layers/LayerGrid';
-import { ImgMapLayer } from './layers/img/ImgMapLayer';
-import { ImgThingLayer } from './layers/img/ImgThingLayer';
+import { AntLayers } from './components/AntLayers';
+import { AntLayersStore } from './components/AntLayersStore';
 import { MapLayers } from './components/MapLayers';
-import { AntHistoryLayer } from './components/layers/AntHistoryLayer';
-import { AntTreeLayer } from './components/layers/AntTreeLayer';
 import { BiomeLayer } from './components/layers/BiomeLayer';
 import { ThingLayer } from './components/layers/ThingsLayer';
 import { LayerStack } from './components/LayerStack';
@@ -78,36 +71,16 @@ export const App: FC = () => {
     // <Box component="main" display="flex" height="100vh">
     //   <AntLayersCtx ants={ants}>
     //     <LayerBar ants={ants} />
-    //     <Box flex={1} overflow="auto">
-    //       { map && (
-    //         <LayerGrid tileSize={32}>
-    //           <ImgMapLayer map={map} onTileClick={handleTileClick} />
-    //           { ants.map(ant => (
-    //             <AntLayers key={ant.id} ant={ant} />
-    //           ))}
-    //           <ImgThingLayer
-    //             map={map}
-    //             things={[
-    //               Thing.createTarget(target),
-    //               ...ants
-    //             ]}
-    //           />
-    //         </LayerGrid>
-    //       ) }
-    //     </Box>
     //   </AntLayersCtx>
     // </Box>
     <MapLayers ants={ants} map={map} tileSize={32}>
-      <LayerStack>
-        <BiomeLayer onTileClick={handleTileClick} />
-        { ants.map(ant => (
-          <Fragment key={ant.id} >
-            { hasTree(ant) && <AntTreeLayer ant={ant} /> }
-            <AntHistoryLayer ant={ant} />
-          </Fragment>
-        )) }
-        <ThingLayer things={[target]} />
-      </LayerStack>
+      <AntLayersStore>
+        <LayerStack>
+          <BiomeLayer onTileClick={handleTileClick} />
+          <AntLayers />
+          <ThingLayer things={[target]} />
+        </LayerStack>
+      </AntLayersStore>
     </MapLayers>
   );
 };
