@@ -3,8 +3,8 @@ import { CSSObject, Theme } from '@mui/material/styles';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { FC, useState } from 'react';
 
-import { AntMenu } from './bar/AntMenu';
-import { useAnts } from './MapLayers';
+import { AntMenu } from './AntMenu';
+import { useAnts } from '../MapLayers';
 
 // Style mixins
 const openMixin = ({ transitions }: Theme): CSSObject => ({

@@ -9,11 +9,12 @@ import { IVector, Rect, Vector } from './math2d';
 
 import { AntLayers } from './components/AntLayers';
 import { AntLayersStore } from './components/AntLayersStore';
-import { BiomeLayer } from './components/layers/BiomeLayer';
-import { ThingLayer } from './components/layers/ThingsLayer';
-import { LayerBar } from './components/LayerBar';
+import { LayerBar } from './components/bar/LayerBar';
 import { LayerStack } from './components/LayerStack';
 import { MapLayers } from './components/MapLayers';
+import { BiomeLayer } from './components/layers/BiomeLayer';
+import { ThingLayer } from './components/layers/ThingsLayer';
+import { CreateAntDialog } from './components/bar/CreateAntDialog';
 
 // Constants
 const target = Thing.createTarget(new Vector({ x: 1, y: 8 }));
@@ -78,6 +79,7 @@ export const App: FC = () => {
           <ThingLayer things={[target]} />
         </LayerStack>
       </AntLayersStore>
+      <CreateAntDialog open onClose={() => null} />
     </MapLayers>
   );
 };
