@@ -18,6 +18,7 @@ import { ANT_COLORS, AntColorName } from '../../ants/colors';
 import { IVector } from '../../math2d';
 
 import { useMap } from '../MapLayers';
+import { ControlledTextField } from '../utils/ControlledTextField';
 
 // Types
 export interface CreateAntDialogProps {
@@ -70,18 +71,9 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
       <DialogContent>
         <Grid container direction="column" spacing={2} mt={0}>
           <Grid item>
-            <Controller
-              name="name"
-              control={control}
-              rules={{ required: true }}
-              render={({ field, fieldState }) => (
-                <TextField
-                  label="Name" autoFocus fullWidth required value={field.value}
-                  error={!!fieldState.error} helperText={fieldState.error?.message}
-                  inputRef={field.ref}
-                  onBlur={field.onBlur} onChange={field.onChange}
-                />
-              )}
+            <ControlledTextField
+              name="name" control={control} rules={{ required: true }}
+              label="Name" autoFocus fullWidth
             />
           </Grid>
           <Grid item>
@@ -109,43 +101,25 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs>
-              <Controller
-                name="position.x"
-                control={control}
-                defaultValue={map?.bbox?.l}
+              <ControlledTextField
+                label="Position x" fullWidth type="number"
+                name="position.x" control={control} defaultValue={0}
                 rules={{
                   required: true,
-                  min: { value: map?.bbox?.l ?? 0, message: 'Out of the map' },
-                  max: { value: map?.bbox?.r ?? 0, message: 'Out of the map' },
+                  min: map && { value: map.bbox.l, message: 'Out of the map' },
+                  max: map && { value: map.bbox.r, message: 'Out of the map' },
                 }}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="Position x" fullWidth type="number" required value={field.value}
-                    error={!!fieldState.error} helperText={fieldState.error?.message}
-                    inputRef={field.ref} inputProps={{ min: map?.bbox?.l, max: map?.bbox?.r }}
-                    onBlur={field.onBlur} onChange={field.onChange}
-                  />
-                )}
               />
             </Grid>
             <Grid item xs>
-              <Controller
-                name="position.y"
-                control={control}
-                defaultValue={map?.bbox?.t}
+              <ControlledTextField
+                label="Position y" fullWidth type="number"
+                name="position.y" control={control} defaultValue={0}
                 rules={{
                   required: true,
-                  min: { value: map?.bbox?.t ?? 0, message: 'Out of the map' },
-                  max: { value: map?.bbox?.b ?? 0, message: 'Out of the map' },
+                  min: map && { value: map.bbox.t, message: 'Out of the map' },
+                  max: map && { value: map.bbox.b, message: 'Out of the map' },
                 }}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="Position y" fullWidth type="number" required value={field.value}
-                    error={!!fieldState.error} helperText={fieldState.error?.message}
-                    inputRef={field.ref} inputProps={{ min: map?.bbox?.t, max: map?.bbox?.b }}
-                    onBlur={field.onBlur} onChange={field.onChange}
-                  />
-                )}
               />
             </Grid>
           </Grid>
