@@ -69,7 +69,7 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
     if (!map) return;
 
     // Create ant
-    const ant = new ALGORITHMS[algorithm](name, map, color, new Vector(parseInt(position.x as unknown as string), parseInt(position.y as unknown as string)));
+    const ant = new ALGORITHMS[algorithm](name, map, color, new Vector(position.x, position.y));
     setAnts((old) => [...old, ant]);
     onClose();
   }, [map, setAnts, onClose]);
@@ -133,6 +133,10 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
             min: map && { value: map.bbox.l, message: 'Out of the map' },
             max: map && { value: map.bbox.r, message: 'Out of the map' },
           }}
+          transform={{
+            fromInput: (val: string) => parseInt(val),
+            toInput: (val: number) => val.toString()
+          }}
         />
 
         <ControlledTextField
@@ -142,6 +146,10 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
             required: true,
             min: map && { value: map.bbox.t, message: 'Out of the map' },
             max: map && { value: map.bbox.b, message: 'Out of the map' },
+          }}
+          transform={{
+            fromInput: (val: string) => parseInt(val),
+            toInput: (val: number) => val.toString()
           }}
         />
 
