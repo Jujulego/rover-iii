@@ -38,7 +38,7 @@ export function useAntLayers(ant: Ant): [LayersState, LayerUpdator] {
 // Component
 export const AntLayersStore: FC = ({ children }) => {
   // Context
-  const ants = useAnts();
+  const [ants,] = useAnts();
 
   // State
   const [layers, setLayers] = useState<AntLayersCtxState['layers']>({});

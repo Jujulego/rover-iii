@@ -62,7 +62,7 @@ export const ThingTile = memo<ThingTileProps>(function BiomeTile({ thing }) {
 
 export const ThingLayer: FC<ThingLayerProps> = (props) => {
   // Context
-  const ants = useAnts();
+  const [ants,] = useAnts();
   const { tileSize } = useMapParameters();
 
   // Memo

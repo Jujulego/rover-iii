@@ -1,10 +1,12 @@
 import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { CSSObject, Theme } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { FC, useState } from 'react';
 
 import { AntMenu } from './AntMenu';
 import { useAnts } from '../MapLayers';
+import { CreateAntDialog } from './CreateAntDialog';
 
 // Style mixins
 const openMixin = ({ transitions }: Theme): CSSObject => ({
@@ -28,10 +30,11 @@ const closedMixin = ({ spacing, transitions }: Theme): CSSObject => ({
 // Component
 export const LayerBar: FC = () => {
   // Context
-  const ants = useAnts();
+  const [ants,] = useAnts();
 
   // State
   const [open, setOpen] = useState(false);
+  const [creatingAnt, setCreatingAnt] = useState(false);
 
   // Render
   return (
@@ -68,6 +71,13 @@ export const LayerBar: FC = () => {
           />
         )) }
 
+        <ListItem button onClick={(evt) => { evt.stopPropagation(); setCreatingAnt(true); }}>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          <ListItemText primary="New ant" />
+        </ListItem>
+
         <Divider sx={{ mt: 'auto' }} />
         <ListItem button onClick={(evt) => { evt.stopPropagation(); setOpen((old) => !old); }}>
           <ListItemIcon>
@@ -85,6 +95,8 @@ export const LayerBar: FC = () => {
           <ListItemText primary="Close" />
         </ListItem>
       </List>
+
+      <CreateAntDialog open={creatingAnt} onClose={() => setCreatingAnt(false)} />
     </Drawer>
   );
 };

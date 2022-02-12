@@ -1,35 +1,40 @@
 import { Box } from '@mui/material';
-import { createContext, FC, useContext } from 'react';
+import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
+import { createContext, Dispatch, FC, SetStateAction, useContext, useState } from 'react';
+import { exhaustMap, filter, interval, mergeMap, of, pairwise, startWith, withLatestFrom } from 'rxjs';
 
-import { Ant } from '../ants';
+import { Ant, Thing } from '../ants';
 import { Map } from '../maps';
 
 // Types
 export interface MapLayersCtxState {
-  ants: Ant[];
   map?: Map;
   tileSize: number;
+
+  ants: Ant[];
+  setAnts: Dispatch<SetStateAction<Ant[]>>
 }
 
 export interface MapLayersProps {
-  ants?: Ant[];
+  target: Thing;
   map?: Map;
   tileSize?: number;
 }
 
 // Constants
 const MAP_LAYERS_DEFAULTS: MapLayersCtxState = {
-  ants: [],
   tileSize: 64,
+  ants: [],
+  setAnts: () => null,
 };
 
 // Context
 export const MapLayersCtx = createContext(MAP_LAYERS_DEFAULTS);
 
 // Hooks
-export function useAnts(): Ant[] {
-  const { ants } = useContext(MapLayersCtx);
-  return ants;
+export function useAnts(): [Ant[], Dispatch<SetStateAction<Ant[]>>] {
+  const { ants, setAnts } = useContext(MapLayersCtx);
+  return [ants, setAnts];
 }
 
 export function useMap(): Map | undefined {
@@ -44,12 +49,28 @@ export function useMapParameters(): Pick<MapLayersCtxState, 'tileSize'> {
 
 // Component
 export const MapLayers: FC<MapLayersProps> = (props) => {
-  const { ants, map, tileSize, children } = { ...MAP_LAYERS_DEFAULTS, ...props };
+  const { map, tileSize, target, children } = { ...MAP_LAYERS_DEFAULTS, ...props };
+
+  // State
+  const [ants, setAnts] = useState<Ant[]>([]);
+
+  // Observables
+  const $ants = useObservable(pluckFirst, [ants]);
+
+  useSubscription(interval(500).pipe(
+    withLatestFrom($ants),
+    exhaustMap(([,ants]) => of(...ants).pipe(
+      startWith(null),
+      pairwise(),
+      filter(([prev, ant]) => !!ant && (!prev || prev.position.equals(target.position) || prev.position.distance(ant.position) > 2)),
+      mergeMap(([, ant]) => ant!.step(target.position))
+    )),
+  ));
 
   // Render
   return (
     <Box component="div" display="flex" minHeight="100vh" overflow="auto">
-      <MapLayersCtx.Provider value={{ ants, map, tileSize }}>
+      <MapLayersCtx.Provider value={{ map, tileSize, ants, setAnts }}>
         { children }
       </MapLayersCtx.Provider>
     </Box>

@@ -1,8 +1,6 @@
-import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { exhaustMap, filter, interval, mergeMap, of, pairwise, startWith, withLatestFrom } from 'rxjs';
 
-import { Ant, SmartAnt, Thing } from './ants';
+import { Thing } from './ants';
 import { CellularGenerator } from './generators';
 import { Map } from './maps';
 import { IVector, Rect, Vector } from './math2d';
@@ -14,7 +12,6 @@ import { LayerStack } from './components/LayerStack';
 import { MapLayers } from './components/MapLayers';
 import { BiomeLayer } from './components/layers/BiomeLayer';
 import { ThingLayer } from './components/layers/ThingsLayer';
-import { CreateAntDialog } from './components/bar/CreateAntDialog';
 
 // Constants
 const target = Thing.createTarget(new Vector({ x: 1, y: 8 }));
@@ -23,7 +20,6 @@ const target = Thing.createTarget(new Vector({ x: 1, y: 8 }));
 export const App: FC = () => {
   // State
   const [map, setMap] = useState<Map>(new Map('map', new Rect(0, 0, 19, 39)));
-  const [ants, setAnts] = useState<Ant[]>([]);
 
   // Callback
   const handleTileClick = useCallback((pos: IVector) => {
@@ -46,31 +42,17 @@ export const App: FC = () => {
     });
     console.log(`map generation took ${performance.now() - start}ms`);
 
-    const ants = [
-      new SmartAnt('Smart I', map, 'pink', new Vector({ x: 5, y: 15 })),
-      new SmartAnt('Smart II', map, 'blue', new Vector({ x: 31, y: 1 })),
-    ];
+    // const ants = [
+    //   new SmartAnt('Smart I', map, 'pink', new Vector({ x: 5, y: 15 })),
+    //   new SmartAnt('Smart II', map, 'blue', new Vector({ x: 31, y: 1 })),
+    // ];
 
     setMap(map);
-    setAnts(ants);
   })(), [map]);
-
-  // Observables
-  const $ants = useObservable(pluckFirst, [ants]);
-
-  useSubscription(interval(500).pipe(
-    withLatestFrom($ants),
-    exhaustMap(([,ants]) => of(...ants).pipe(
-      startWith(null),
-      pairwise(),
-      filter(([prev, ant]) => !!ant && (!prev || prev.position.equals(target.position) || prev.position.distance(ant.position) > 2)),
-      mergeMap(([, ant]) => ant!.step(target.position))
-    )),
-  ));
 
   // Render
   return (
-    <MapLayers ants={ants} map={map} tileSize={32}>
+    <MapLayers map={map} target={target} tileSize={32}>
       <AntLayersStore>
         <LayerBar />
         <LayerStack>
@@ -79,7 +61,6 @@ export const App: FC = () => {
           <ThingLayer things={[target]} />
         </LayerStack>
       </AntLayersStore>
-      <CreateAntDialog open onClose={() => null} />
     </MapLayers>
   );
 };

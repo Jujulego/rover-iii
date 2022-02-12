@@ -30,7 +30,7 @@ const AntLayer: FC<LayerProps> = ({ ant }) => {
 
 export const AntLayers: FC = () => {
   // Context
-  const ants = useAnts();
+  const [ants,] = useAnts();
 
   // Render
   return (

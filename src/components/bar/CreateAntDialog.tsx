@@ -1,22 +1,23 @@
 import {
-  Dialog,
+  Button,
+  Dialog, DialogActions,
   DialogContent,
   DialogTitle,
   FormControl, FormHelperText,
   InputLabel,
-  MenuItem,
+  MenuItem, PaperProps,
   Select,
   Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { BFSAnt, DFSAnt, SmartAnt, StupidAnt } from '../../ants';
 import { ANT_COLORS, AntColorName } from '../../ants/colors';
-import { IVector } from '../../math2d';
+import { IVector, Vector } from '../../math2d';
 
-import { useMap } from '../MapLayers';
+import { useAnts, useMap } from '../MapLayers';
 import { ControlledTextField } from '../utils/ControlledTextField';
 
 // Types
@@ -29,7 +30,7 @@ interface AntFormState {
   name: string;
   color: AntColorName;
   position: IVector;
-  algorithm: keyof typeof ALGORITHMS | null;
+  algorithm: keyof typeof ALGORITHMS;
 }
 
 // Constants
@@ -52,22 +53,44 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
   const { open, onClose } = props;
 
   // Context
+  const [,setAnts] = useAnts();
   const map = useMap();
 
   // Form
-  const { control } = useForm<AntFormState>({
+  const { control, handleSubmit, formState } = useForm<AntFormState>({
     mode: 'onChange',
     defaultValues: {
       color: 'blue',
-      algorithm: null,
     }
   });
 
+  // Callbacks
+  const createAnt = useCallback(({ name, algorithm, color, position }: AntFormState) => {
+    if (!map) return;
+
+    // Create ant
+    const ant = new ALGORITHMS[algorithm](name, map, color, new Vector(parseInt(position.x as unknown as string), parseInt(position.y as unknown as string)));
+    setAnts((old) => [...old, ant]);
+    onClose();
+  }, [map, setAnts, onClose]);
+
   // Render
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog
+      open={open} onClose={onClose}
+      PaperProps={{
+        component: 'form', onSubmit: handleSubmit(createAnt)
+      } as PaperProps<'div'>}
+    >
       <DialogTitle>Create a new ant</DialogTitle>
-      <DialogContent sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: 'auto', gap: 2 }}>
+      <DialogContent
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gridAutoRows: 'auto',
+          gap: 2,
+        }}
+      >
         <ControlledTextField
           label="Name" autoFocus fullWidth
           name="name" control={control}
@@ -129,7 +152,7 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
           render={({ field, fieldState }) => (
             <FormControl fullWidth required sx={{ gridColumn: 'span 2 / span 2' }}>
               <InputLabel>Algorithm</InputLabel>
-              <Select label="Algorithm" {...field}>
+              <Select label="Algorithm" {...field} value={field.value ?? ''}>
                 { Object.keys(ALGORITHMS).map((alg) => (
                   <MenuItem key={alg} value={alg}>{ alg }</MenuItem>
                 )) }
@@ -141,6 +164,10 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
           )}
         />
       </DialogContent>
+      <DialogActions>
+        <Button type="reset" color="secondary" onClick={onClose}>Cancel</Button>
+        <Button type="submit" variant="contained" disabled={!formState.isValid}>Create</Button>
+      </DialogActions>
     </Dialog>
   );
 };
