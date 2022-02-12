@@ -27,7 +27,7 @@ export const ControlledTextField = <TFV extends FieldValues, TN extends FieldPat
 
   return (
     <TextField
-      {...rest}
+      {...rest} inputProps={inputProps}
       inputRef={field.ref} value={field.value} required={!!rules?.required}
       error={!!fieldState.error} helperText={fieldState.error?.message}
       onBlur={field.onBlur} onChange={field.onChange}
