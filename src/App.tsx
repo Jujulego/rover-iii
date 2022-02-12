@@ -7,6 +7,7 @@ import { IVector, Rect, Vector } from './math2d';
 
 import { AntLayers } from './components/AntLayers';
 import { AntLayersStore } from './components/AntLayersStore';
+import { AutoCreateAnts } from './components/AutoCreateAnts';
 import { LayerBar } from './components/bar/LayerBar';
 import { LayerStack } from './components/LayerStack';
 import { MapLayers } from './components/MapLayers';
@@ -42,17 +43,13 @@ export const App: FC = () => {
     });
     console.log(`map generation took ${performance.now() - start}ms`);
 
-    // const ants = [
-    //   new SmartAnt('Smart I', map, 'pink', new Vector({ x: 5, y: 15 })),
-    //   new SmartAnt('Smart II', map, 'blue', new Vector({ x: 31, y: 1 })),
-    // ];
-
     setMap(map);
   })(), [map]);
 
   // Render
   return (
     <MapLayers map={map} target={target} tileSize={32}>
+      <AutoCreateAnts />
       <AntLayersStore>
         <LayerBar />
         <LayerStack>
