@@ -3,15 +3,13 @@ import {
   Dialog, DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl, FormHelperText,
-  InputLabel,
   MenuItem, PaperProps,
   Select,
   Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { FC, useCallback } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { BFSAnt, DFSAnt, SmartAnt, StupidAnt } from '../../ants';
 import { ANT_COLORS, AntColorName } from '../../ants/colors';
@@ -19,6 +17,7 @@ import { IVector, Vector } from '../../math2d';
 
 import { useAnts, useMap } from '../MapLayers';
 import { ControlledTextField } from '../utils/ControlledTextField';
+import { ControlledFormControl } from '../utils/ControlledFormControl';
 
 // Types
 export interface CreateAntDialogProps {
@@ -103,27 +102,21 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
           }}
         />
 
-        <Controller
-          name="color"
-          control={control}
+        <ControlledFormControl
+          label="Color"
+          name="color" control={control}
           rules={{ required: true }}
-          render={({ field, fieldState }) => (
-            <FormControl fullWidth required sx={{ gridColumn: 'span 2 / span 2' }}>
-              <InputLabel>Color</InputLabel>
-              <Select label="Color" {...field}>
-                { Object.values(ANT_COLORS).map(({ name, texture }) => (
-                  <MenuItem key={name} value={name}>
-                    <Img alt={name} src={texture.toString()} />
-                    <Typography component="span" sx={{ textTransform: 'capitalize' }}>{ name }</Typography>
-                  </MenuItem>
-                )) }
-              </Select>
-              { fieldState.error && (
-                <FormHelperText error>{ fieldState.error.message }</FormHelperText>
-              ) }
-            </FormControl>
-          )}
-        />
+          sx={{ gridColumn: 'span 2 / span 2' }}
+        >
+          <Select label="Color">
+            { Object.values(ANT_COLORS).map(({ name, texture }) => (
+              <MenuItem key={name} value={name}>
+                <Img alt={name} src={texture.toString()} />
+                <Typography component="span" sx={{ textTransform: 'capitalize' }}>{ name }</Typography>
+              </MenuItem>
+            )) }
+          </Select>
+        </ControlledFormControl>
 
         <ControlledTextField
           label="Position x" fullWidth type="number"
@@ -153,24 +146,18 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
           }}
         />
 
-        <Controller
-          name="algorithm"
-          control={control}
+        <ControlledFormControl
+          label="Algorithm"
+          name="algorithm" control={control}
           rules={{ required: true }}
-          render={({ field, fieldState }) => (
-            <FormControl fullWidth required sx={{ gridColumn: 'span 2 / span 2' }}>
-              <InputLabel>Algorithm</InputLabel>
-              <Select label="Algorithm" {...field} value={field.value ?? ''}>
-                { Object.keys(ALGORITHMS).map((alg) => (
-                  <MenuItem key={alg} value={alg}>{ alg }</MenuItem>
-                )) }
-              </Select>
-              { fieldState.error && (
-                <FormHelperText error>{ fieldState.error.message }</FormHelperText>
-              ) }
-            </FormControl>
-          )}
-        />
+          sx={{ gridColumn: 'span 2 / span 2' }}
+        >
+          <Select label="Algorithm">
+            { Object.keys(ALGORITHMS).map((alg) => (
+              <MenuItem key={alg} value={alg}>{ alg }</MenuItem>
+            )) }
+          </Select>
+        </ControlledFormControl>
       </DialogContent>
       <DialogActions>
         <Button type="reset" color="secondary" onClick={onClose}>Cancel</Button>

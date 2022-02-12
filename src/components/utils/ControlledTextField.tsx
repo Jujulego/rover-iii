@@ -25,7 +25,7 @@ export type ControlledTextFieldProps<TFV extends FieldValues, TN extends FieldPa
 
 // Component
 export const ControlledTextField = <TFV extends FieldValues, TN extends FieldPath<TFV>>(props: ControlledTextFieldProps<TFV, TN>) => {
-  const { name, control, rules, defaultValue, transform, inputProps = {}, type, ...rest } = props;
+  const { name, control, rules, defaultValue, transform, inputProps = {}, ...rest } = props;
 
   // Context
   const { field, fieldState } = useController<TFV, TN>({ name, control, rules, defaultValue });
@@ -44,7 +44,7 @@ export const ControlledTextField = <TFV extends FieldValues, TN extends FieldPat
 
   return (
     <TextField
-      {...rest} inputProps={inputProps} type={type}
+      {...rest} inputProps={inputProps}
       inputRef={field.ref} value={toInput(field.value) ?? ''} required={!!rules?.required}
       error={!!fieldState.error} helperText={fieldState.error?.message}
       onBlur={field.onBlur} onChange={(evt) => field.onChange(fromInput(evt.target.value))}
