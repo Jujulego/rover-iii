@@ -3,11 +3,10 @@ import {
   DialogContent,
   DialogTitle,
   FormControl, FormHelperText,
-  Grid,
   InputLabel,
   MenuItem,
   Select,
-  TextField, Typography
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { FC } from 'react';
@@ -68,82 +67,79 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Create a new ant</DialogTitle>
-      <DialogContent>
-        <Grid container direction="column" spacing={2} mt={0}>
-          <Grid item>
-            <ControlledTextField
-              name="name" control={control} rules={{ required: true }}
-              label="Name" autoFocus fullWidth
-            />
-          </Grid>
-          <Grid item>
-              <Controller
-                name="color"
-                control={control}
-                rules={{ required: true }}
-                render={({ field, fieldState }) => (
-                  <FormControl fullWidth required>
-                    <InputLabel>Color</InputLabel>
-                    <Select label="Color" {...field}>
-                      { Object.values(ANT_COLORS).map(({ name, texture }) => (
-                        <MenuItem key={name} value={name}>
-                          <Img alt={name} src={texture.toString()} />
-                          <Typography component="span" sx={{ textTransform: 'capitalize' }}>{ name }</Typography>
-                        </MenuItem>
-                      )) }
-                    </Select>
-                    { fieldState.error && (
-                      <FormHelperText error>{ fieldState.error.message }</FormHelperText>
-                    ) }
-                  </FormControl>
-                )}
-              />
-          </Grid>
-          <Grid item container spacing={2}>
-            <Grid item xs>
-              <ControlledTextField
-                label="Position x" fullWidth type="number"
-                name="position.x" control={control} defaultValue={0}
-                rules={{
-                  required: true,
-                  min: map && { value: map.bbox.l, message: 'Out of the map' },
-                  max: map && { value: map.bbox.r, message: 'Out of the map' },
-                }}
-              />
-            </Grid>
-            <Grid item xs>
-              <ControlledTextField
-                label="Position y" fullWidth type="number"
-                name="position.y" control={control} defaultValue={0}
-                rules={{
-                  required: true,
-                  min: map && { value: map.bbox.t, message: 'Out of the map' },
-                  max: map && { value: map.bbox.b, message: 'Out of the map' },
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Controller
-              name="algorithm"
-              control={control}
-              rules={{ required: true }}
-              render={({ field, fieldState }) => (
-                <FormControl fullWidth required>
-                  <InputLabel>Algorithm</InputLabel>
-                  <Select label="Algorithm" {...field}>
-                    { Object.keys(ALGORITHMS).map((alg) => (
-                      <MenuItem key={alg} value={alg}>{ alg }</MenuItem>
-                    )) }
-                  </Select>
-                  { fieldState.error && (
-                    <FormHelperText error>{ fieldState.error.message }</FormHelperText>
-                  ) }
-                </FormControl>
-              )}
-            />
-          </Grid>
-        </Grid>
+      <DialogContent sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: 'auto', gap: 2 }}>
+        <ControlledTextField
+          label="Name" autoFocus fullWidth
+          name="name" control={control}
+          rules={{
+            required: true,
+          }}
+          sx={{
+            gridColumn: 'span 2 / span 2',
+            mt: 1
+          }}
+        />
+
+        <Controller
+          name="color"
+          control={control}
+          rules={{ required: true }}
+          render={({ field, fieldState }) => (
+            <FormControl fullWidth required sx={{ gridColumn: 'span 2 / span 2' }}>
+              <InputLabel>Color</InputLabel>
+              <Select label="Color" {...field}>
+                { Object.values(ANT_COLORS).map(({ name, texture }) => (
+                  <MenuItem key={name} value={name}>
+                    <Img alt={name} src={texture.toString()} />
+                    <Typography component="span" sx={{ textTransform: 'capitalize' }}>{ name }</Typography>
+                  </MenuItem>
+                )) }
+              </Select>
+              { fieldState.error && (
+                <FormHelperText error>{ fieldState.error.message }</FormHelperText>
+              ) }
+            </FormControl>
+          )}
+        />
+
+        <ControlledTextField
+          label="Position x" fullWidth type="number"
+          name="position.x" control={control} defaultValue={0}
+          rules={{
+            required: true,
+            min: map && { value: map.bbox.l, message: 'Out of the map' },
+            max: map && { value: map.bbox.r, message: 'Out of the map' },
+          }}
+        />
+
+        <ControlledTextField
+          label="Position y" fullWidth type="number"
+          name="position.y" control={control} defaultValue={0}
+          rules={{
+            required: true,
+            min: map && { value: map.bbox.t, message: 'Out of the map' },
+            max: map && { value: map.bbox.b, message: 'Out of the map' },
+          }}
+        />
+
+        <Controller
+          name="algorithm"
+          control={control}
+          rules={{ required: true }}
+          render={({ field, fieldState }) => (
+            <FormControl fullWidth required sx={{ gridColumn: 'span 2 / span 2' }}>
+              <InputLabel>Algorithm</InputLabel>
+              <Select label="Algorithm" {...field}>
+                { Object.keys(ALGORITHMS).map((alg) => (
+                  <MenuItem key={alg} value={alg}>{ alg }</MenuItem>
+                )) }
+              </Select>
+              { fieldState.error && (
+                <FormHelperText error>{ fieldState.error.message }</FormHelperText>
+              ) }
+            </FormControl>
+          )}
+        />
       </DialogContent>
     </Dialog>
   );
