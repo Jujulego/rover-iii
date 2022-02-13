@@ -46,7 +46,7 @@ const Layer = styled('div', { skipSx: true })<LayerProps>((props) => ({
 }));
 
 // Components
-export const ThingTile = memo<ThingTileProps>(function BiomeTile({ thing }) {
+export const ThingTile = memo<ThingTileProps>(function ThingTile({ thing }) {
   // State
   const position = useObservableState(thing.position$, NULL_VECTOR);
 

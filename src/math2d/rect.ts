@@ -24,8 +24,8 @@ export function isRect(obj: IRect | number): obj is IRect {
   return typeof obj === 'object';
 }
 
-export function isRectTLBRHolder<N extends string>(attr: N, holder: RectHolder<N>): holder is RectTLBRHolder<N> {
-  return `${attr}Bottom` in holder;
+export function isRectTLBRHolder<N extends string>(prefix: N, holder: RectHolder<N>): holder is RectTLBRHolder<N> {
+  return `${prefix}Bottom` in holder;
 }
 
 export function parseRectArgs<O extends unknown[]>(args: RectArgs<O>): [IRect, ...O] {
@@ -89,20 +89,20 @@ export class Rect implements IRect {
     return new Rect(u.y, u.x, u.y + s.h, u.x + s.w);
   }
 
-  static fromHolder<N extends string>(attr: N, holder: RectHolder<N>): Rect {
-    if (isRectTLBRHolder(attr, holder)) {
+  static fromHolder<N extends string>(prefix: N, holder: RectHolder<N>): Rect {
+    if (isRectTLBRHolder(prefix, holder)) {
       return new Rect(
-        holder[`${attr}Top`],
-        holder[`${attr}Left`],
-        holder[`${attr}Bottom`],
-        holder[`${attr}Right`],
+        holder[`${prefix}Top`],
+        holder[`${prefix}Left`],
+        holder[`${prefix}Bottom`],
+        holder[`${prefix}Right`],
       );
     } else {
       return Rect.fromVectorSize(
-        holder[`${attr}Left`],
-        holder[`${attr}Top`],
-        holder[`${attr}Width`],
-        holder[`${attr}Height`],
+        holder[`${prefix}Left`],
+        holder[`${prefix}Top`],
+        holder[`${prefix}Width`],
+        holder[`${prefix}Height`],
       );
     }
   }

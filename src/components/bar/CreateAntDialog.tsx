@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { BFSAnt, DFSAnt, SmartAnt, StupidAnt } from '../../ants';
@@ -20,16 +20,17 @@ import { ControlledTextField } from '../utils/ControlledTextField';
 import { ControlledFormControl } from '../utils/ControlledFormControl';
 
 // Types
-export interface CreateAntDialogProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-interface AntFormState {
+export interface AntFormState {
   name: string;
   color: AntColorName;
   position: IVector;
   algorithm: keyof typeof ALGORITHMS;
+}
+
+export interface CreateAntDialogProps {
+  open: boolean;
+  onClose: () => void;
+  defaults?: Partial<AntFormState>;
 }
 
 // Constants
@@ -49,19 +50,30 @@ const Img = styled('img')(({ theme }) => ({
 
 // Component
 export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
-  const { open, onClose } = props;
+  const { open, defaults, onClose } = props;
 
   // Context
   const [,setAnts] = useAnts();
   const map = useMap();
 
   // Form
-  const { control, handleSubmit, formState } = useForm<AntFormState>({
+  const { control, handleSubmit, formState, reset } = useForm<AntFormState>({
     mode: 'onChange',
     defaultValues: {
       color: 'blue',
+      position: map?.bbox?.tl ?? { x: 0, y: 0 },
+      ...defaults
     }
   });
+
+  // Effects
+  useEffect(() => {
+    reset({
+      color: 'blue',
+      position: map?.bbox?.tl ?? { x: 0, y: 0 },
+      ...defaults
+    });
+  }, [reset, map, defaults]);
 
   // Callbacks
   const createAnt = useCallback(({ name, algorithm, color, position }: AntFormState) => {
@@ -121,7 +133,7 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
 
         <ControlledTextField
           label="Position x" fullWidth type="number"
-          name="position.x" control={control} defaultValue={0}
+          name="position.x" control={control}
           rules={{
             required: true,
             min: map && { value: map.bbox.l, message: 'Out of the map' },
@@ -135,7 +147,7 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
 
         <ControlledTextField
           label="Position y" fullWidth type="number"
-          name="position.y" control={control} defaultValue={0}
+          name="position.y" control={control}
           rules={{
             required: true,
             min: map && { value: map.bbox.t, message: 'Out of the map' },

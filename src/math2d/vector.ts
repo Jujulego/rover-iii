@@ -57,8 +57,8 @@ export class Vector implements IVector {
     return new Vector(s.w, s.h);
   }
 
-  static fromHolder<N extends string>(attr: N, holder: VectorHolder<N>): Vector {
-    return new Vector(holder[`${attr}X`], holder[`${attr}Y`]);
+  static fromHolder<N extends string>(prefix: N, holder: VectorHolder<N>): Vector {
+    return new Vector(holder[`${prefix}X`], holder[`${prefix}Y`]);
   }
 
   // Methods

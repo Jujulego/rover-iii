@@ -44,8 +44,8 @@ export class Size implements ISize {
   }
 
   // Static methods
-  static fromHolder<N extends string>(attr: N, holder: SizeHolder<N>): Size {
-    return new Size(holder[`${attr}Width`], holder[`${attr}Height`]);
+  static fromHolder<N extends string>(prefix: N, holder: SizeHolder<N>): Size {
+    return new Size(holder[`${prefix}Width`], holder[`${prefix}Height`]);
   }
 }
 
