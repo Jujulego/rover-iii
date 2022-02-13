@@ -10,8 +10,8 @@ export const LayerStack: FC = ({ children }) => {
   const { tileSize } = useMapParameters();
 
   // Render
-  const w = map ? map.bbox.w : 0;
-  const h = map ? map.bbox.h : 0;
+  const w = map ? map.bbox.w + 1: 0;
+  const h = map ? map.bbox.h + 1: 0;
 
   return (
     <Box component="main" flex={1}>

@@ -8,17 +8,4 @@ export const theme = createTheme({
     secondary: deepOrange,
     mode: 'dark',
   },
-  components: {
-    MuiCardHeader: {
-      defaultProps: {
-        titleTypographyProps: { variant: 'h6' },
-      },
-    },
-    MuiDialog: {
-      defaultProps: {
-        maxWidth: 'xs',
-        fullWidth: true,
-      },
-    },
-  },
 });

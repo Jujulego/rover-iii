@@ -62,10 +62,11 @@ export class Map {
   // Methods
   tiles(): Collection<TileEntity> {
     return db.tiles
-      .where('[map+pos.y+pos.x]').between(
+      .where(['map', 'pos.y', 'pos.x']).between(
       [this.name, this.bbox.t, this.bbox.l],
       [this.name, this.bbox.b + 1, this.bbox.r + 1],
-      );
+      )
+      .and(({ pos }) => this.bbox.contains(pos));
   }
 
   async tile(pos: Vector): Promise<Tile | null> {

@@ -77,6 +77,7 @@ export const CreateAntDialog: FC<CreateAntDialogProps> = (props) => {
   return (
     <Dialog
       open={open} onClose={onClose}
+      fullWidth maxWidth="sm"
       PaperProps={{
         component: 'form', onSubmit: handleSubmit(createAnt)
       } as PaperProps<'div'>}
