@@ -12,6 +12,9 @@ export type VectorArgs<O extends unknown[] = []> = [IVector, ...O] | [number, nu
 export type VectorOrderMode = 'xy' | 'yx';
 export type VectorDistanceMode = 'euclidean' | 'manhattan';
 
+export type VectorHolderAttr<N extends string> = `${N}${'X' | 'Y'}`;
+export type VectorHolder<N extends string> = Record<VectorHolderAttr<N>, number>;
+
 // Utils
 export function isVector(obj: IVector | number): obj is IVector {
   return typeof obj === 'object';
@@ -54,6 +57,10 @@ export class Vector implements IVector {
     return new Vector(s.w, s.h);
   }
 
+  static fromHolder<N extends string>(attr: N, holder: VectorHolder<N>): Vector {
+    return new Vector(holder[`${attr}X`], holder[`${attr}Y`]);
+  }
+
   // Methods
   // - unary operations
   norm(): number {
@@ -67,6 +74,10 @@ export class Vector implements IVector {
 
   normal(): Vector {
     return new Vector(this.y, -this.x);
+  }
+
+  floor(): Vector {
+    return new Vector(Math.floor(this.x), Math.floor(this.y));
   }
 
   // - binary operations

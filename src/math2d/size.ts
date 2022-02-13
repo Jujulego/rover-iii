@@ -6,6 +6,9 @@ export interface ISize {
 
 export type SizeArgs<O extends unknown[] = []> = [ISize, ...O] | [number, number, ...O];
 
+export type SizeHolderAttr<N extends string> = `${N}${'Width' | 'Height'}`;
+export type SizeHolder<N extends string> = Record<SizeHolderAttr<N>, number>;
+
 // Utils
 export function isSize(obj: ISize | number): obj is ISize {
   return typeof obj === 'object';
@@ -38,6 +41,11 @@ export class Size implements ISize {
     const [s] = parseSizeArgs(args);
     this.w = s.w;
     this.h = s.h;
+  }
+
+  // Static methods
+  static fromHolder<N extends string>(attr: N, holder: SizeHolder<N>): Size {
+    return new Size(holder[`${attr}Width`], holder[`${attr}Height`]);
   }
 }
 

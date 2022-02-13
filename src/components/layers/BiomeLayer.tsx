@@ -3,16 +3,12 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';
 
 import { BiomeName, BIOMES } from '../../biomes';
-import { IVector, Vector } from '../../math2d';
+import { Vector } from '../../math2d';
 
 import { useMapParameters } from '../MapLayers';
 import { needMap } from '../needMap';
 
 // Types
-export interface BiomeLayerProps {
-  onTileClick?: (pos: IVector) => void;
-}
-
 export interface BiomeTileProps {
   pos: Vector;
   biome: BiomeName;
@@ -63,7 +59,7 @@ export const BiomeTile = memo<BiomeTileProps>(function BiomeTile(props) {
   );
 });
 
-export const BiomeLayer = needMap<BiomeLayerProps>(function BiomeLayer({ map, onTileClick }) {
+export const BiomeLayer = needMap(function BiomeLayer({ map }) {
   // Context
   const { tileSize } = useMapParameters();
 
@@ -78,7 +74,6 @@ export const BiomeLayer = needMap<BiomeLayerProps>(function BiomeLayer({ map, on
           key={pos.x + ':' + pos.y}
           pos={map.bbox.tl.mul(-1).add(pos)}
           biome={biome}
-          onClick={() => onTileClick && onTileClick(pos)}
         />
       )) }
     </Layer>

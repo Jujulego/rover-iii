@@ -12,6 +12,7 @@ import { LayerBar } from './components/bar/LayerBar';
 import { LayerStack } from './components/LayerStack';
 import { MapLayers } from './components/MapLayers';
 import { BiomeLayer } from './components/layers/BiomeLayer';
+import { InteractiveLayer } from './components/layers/InteractLayer';
 import { ThingLayer } from './components/layers/ThingsLayer';
 
 // Constants
@@ -53,9 +54,10 @@ export const App: FC = () => {
       <AntLayersStore>
         <LayerBar />
         <LayerStack>
-          <BiomeLayer onTileClick={handleTileClick} />
+          <BiomeLayer />
           <AntLayers />
           <ThingLayer things={[target]} />
+          <InteractiveLayer onTileClick={handleTileClick} />
         </LayerStack>
       </AntLayersStore>
     </MapLayers>

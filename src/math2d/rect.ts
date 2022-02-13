@@ -11,9 +11,21 @@ export interface IRect {
 
 export type RectArgs<O extends unknown[] = []> = [IRect, ...O] | [number, number, number, number, ...O];
 
+export type RectTLBRHolderAttr<N extends string> = `${N}${'Top' | 'Left' | 'Bottom' | 'Right'}`;
+export type RectTLWHHolderAttr<N extends string> = `${N}${'Top' | 'Left' | 'Width' | 'Height'}`;
+
+export type RectTLBRHolder<N extends string> = Record<RectTLBRHolderAttr<N>, number>;
+export type RectTLWHHolder<N extends string> = Record<RectTLWHHolderAttr<N>, number>;
+
+export type RectHolder<N extends string> = RectTLBRHolder<N> | RectTLWHHolder<N>;
+
 // Utils
 export function isRect(obj: IRect | number): obj is IRect {
   return typeof obj === 'object';
+}
+
+export function isRectTLBRHolder<N extends string>(attr: N, holder: RectHolder<N>): holder is RectTLBRHolder<N> {
+  return `${attr}Bottom` in holder;
 }
 
 export function parseRectArgs<O extends unknown[]>(args: RectArgs<O>): [IRect, ...O] {
@@ -75,6 +87,24 @@ export class Rect implements IRect {
     const [s] = parseSizeArgs<[]>(others);
 
     return new Rect(u.y, u.x, u.y + s.h, u.x + s.w);
+  }
+
+  static fromHolder<N extends string>(attr: N, holder: RectHolder<N>): Rect {
+    if (isRectTLBRHolder(attr, holder)) {
+      return new Rect(
+        holder[`${attr}Top`],
+        holder[`${attr}Left`],
+        holder[`${attr}Bottom`],
+        holder[`${attr}Right`],
+      );
+    } else {
+      return Rect.fromVectorSize(
+        holder[`${attr}Left`],
+        holder[`${attr}Top`],
+        holder[`${attr}Width`],
+        holder[`${attr}Height`],
+      );
+    }
   }
 
   // Methods
