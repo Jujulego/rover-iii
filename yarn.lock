@@ -1661,7 +1661,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/react@npm:^11.8.2":
+"@emotion/react@npm:11.8.2":
   version: 11.8.2
   resolution: "@emotion/react@npm:11.8.2"
   dependencies:
@@ -1704,7 +1704,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/styled@npm:^11.8.1":
+"@emotion/styled@npm:11.8.1":
   version: 11.8.1
   resolution: "@emotion/styled@npm:11.8.1"
   dependencies:
@@ -2077,7 +2077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:^5.5.1":
+"@mui/icons-material@npm:5.5.1":
   version: 5.5.1
   resolution: "@mui/icons-material@npm:5.5.1"
   dependencies:
@@ -2093,7 +2093,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^5.5.3":
+"@mui/material@npm:5.5.3":
   version: 5.5.3
   resolution: "@mui/material@npm:5.5.3"
   dependencies:
@@ -3308,10 +3308,10 @@ __metadata:
     "@babel/preset-react": 7.16.7
     "@babel/preset-typescript": 7.16.7
     "@babel/runtime": 7.17.8
-    "@emotion/react": ^11.8.2
-    "@emotion/styled": ^11.8.1
-    "@mui/icons-material": ^5.5.1
-    "@mui/material": ^5.5.3
+    "@emotion/react": 11.8.2
+    "@emotion/styled": 11.8.1
+    "@mui/icons-material": 5.5.1
+    "@mui/material": 5.5.3
     "@types/jest": 27.4.1
     "@types/node": 14.18.12
     "@types/react": 17.0.43
@@ -3324,8 +3324,8 @@ __metadata:
     babel-loader: 8.2.4
     babel-plugin-import: 1.13.3
     copy-webpack-plugin: 10.2.4
-    dexie: ^3.2.1
-    dexie-react-hooks: ^1.1.1
+    dexie: 3.2.1
+    dexie-react-hooks: 1.1.1
     eslint: 8.12.0
     eslint-plugin-jest: 26.1.3
     eslint-plugin-react: 7.29.4
@@ -3333,14 +3333,14 @@ __metadata:
     fork-ts-checker-webpack-plugin: 7.2.3
     html-webpack-plugin: 5.5.0
     jest: 27.5.1
-    nanoid: ^3.3.2
-    observable-hooks: ^4.2.0
-    react: ^18.0.0
-    react-dom: ^18.0.0
-    react-hook-form: ^7.29.0
-    regenerator-runtime: ^0.13.9
-    rxjs: ^7.5.5
-    seedrandom: ^3.0.5
+    nanoid: 3.3.2
+    observable-hooks: 4.2.0
+    react: 18.0.0
+    react-dom: 18.0.0
+    react-hook-form: 7.29.0
+    regenerator-runtime: 0.13.9
+    rxjs: 7.5.5
+    seedrandom: 3.0.5
     ts-jest: 27.1.4
     ts-node: 10.7.0
     typescript: 4.6.3
@@ -4466,7 +4466,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexie-react-hooks@npm:^1.1.1":
+"dexie-react-hooks@npm:1.1.1":
   version: 1.1.1
   resolution: "dexie-react-hooks@npm:1.1.1"
   peerDependencies:
@@ -4477,7 +4477,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexie@npm:^3.2.1":
+"dexie@npm:3.2.1":
   version: 3.2.1
   resolution: "dexie@npm:3.2.1"
   checksum: ba2608005de06b129460cd6c3bfc2ca22a8bcccc0d319b621775b93c82e932f2292b59843dffbecc32549aca789af1497b253b7082cf3da6d3c34eca99887283
@@ -7410,7 +7410,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.2":
+"nanoid@npm:3.3.2":
   version: 3.3.2
   resolution: "nanoid@npm:3.3.2"
   bin:
@@ -7632,7 +7632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"observable-hooks@npm:^4.2.0":
+"observable-hooks@npm:4.2.0":
   version: 4.2.0
   resolution: "observable-hooks@npm:4.2.0"
   peerDependencies:
@@ -8083,7 +8083,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.0.0":
+"react-dom@npm:18.0.0":
   version: 18.0.0
   resolution: "react-dom@npm:18.0.0"
   dependencies:
@@ -8095,7 +8095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.29.0":
+"react-hook-form@npm:7.29.0":
   version: 7.29.0
   resolution: "react-hook-form@npm:7.29.0"
   peerDependencies:
@@ -8133,7 +8133,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.0.0":
+"react@npm:18.0.0":
   version: 18.0.0
   resolution: "react@npm:18.0.0"
   dependencies:
@@ -8202,7 +8202,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.4, regenerator-runtime@npm:^0.13.9":
+"regenerator-runtime@npm:0.13.9, regenerator-runtime@npm:^0.13.4":
   version: 0.13.9
   resolution: "regenerator-runtime@npm:0.13.9"
   checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
@@ -8445,7 +8445,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5":
+"rxjs@npm:7.5.5":
   version: 7.5.5
   resolution: "rxjs@npm:7.5.5"
   dependencies:
@@ -8527,7 +8527,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"seedrandom@npm:^3.0.5":
+"seedrandom@npm:3.0.5":
   version: 3.0.5
   resolution: "seedrandom@npm:3.0.5"
   checksum: 728b56bc3bc1b9ddeabd381e449b51cb31bdc0aa86e27fcd0190cea8c44613d5bcb2f6bb63ed79f78180cbe791c20b8ec31a9627f7b7fc7f476fd2bdb7e2da9f
