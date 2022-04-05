@@ -8,6 +8,6 @@ export default merge(common, {
   mode: 'production',
   devtool: 'source-map',
   plugins: [
-    new BundleAnalyzerPlugin()
+    new BundleAnalyzerPlugin() as never
   ]
 });

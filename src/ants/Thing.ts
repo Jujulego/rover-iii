@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Vector } from '../math2d';
 
@@ -8,14 +8,17 @@ export class Thing {
   // Attributes
   readonly id = nanoid();
 
-  private readonly _position$$ = new BehaviorSubject<Vector>(this._position);
-  readonly position$ = this._position$$.asObservable();
+  private readonly _position$$: BehaviorSubject<Vector>;
+  readonly position$: Observable<Vector>;
 
   // Constructor
   constructor(
     private _position: Vector,
     readonly image: URL,
-  ) {}
+  ) {
+    this._position$$ = new BehaviorSubject<Vector>(this._position);
+    this.position$ = this._position$$.asObservable();
+  }
 
   // Statics
   static createTarget(position: Vector): Thing {

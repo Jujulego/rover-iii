@@ -20,7 +20,7 @@ export function hasNetwork(ant: Ant): ant is AntWithNetwork {
 // Class
 export class AntNetwork {
   // Attributes
-  private readonly _channel = new BroadcastChannel(this.ant.map.name);
+  private readonly _channel: BroadcastChannel;
 
   private readonly _messages$$ = new Subject<Received<AntNetworkMessage>>();
   readonly messages$ = this._messages$$.asObservable()
@@ -36,6 +36,7 @@ export class AntNetwork {
   // Constructor
   constructor(readonly ant: Ant) {
     // Setup receive pipeline
+    this._channel = new BroadcastChannel(this.ant.map.name);
     this._channel.addEventListener('message', (evt: MessageEvent<Received<AntNetworkMessage>>) => {
       this._messages$$.next(evt.data);
     });

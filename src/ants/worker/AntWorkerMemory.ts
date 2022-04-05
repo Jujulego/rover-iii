@@ -1,4 +1,4 @@
-import { filter, firstValueFrom, map } from 'rxjs';
+import { filter, firstValueFrom, map, Observable } from 'rxjs';
 
 import { IVector } from '../../math2d';
 
@@ -9,15 +9,19 @@ import { RequestSender } from '../../workers/RequestSender';
 // Class
 export class AntWorkerMemory<T> extends AntMemory<T> {
   // Attributes
-  readonly updates$ = this.requests.results$.pipe(
-    filter((msg): msg is AntWorkerMemoryUpdate => msg.type === 'memoryUpdate'),
-    map((msg) => [msg.position, msg.data] as [IVector, T])
-  );
+  readonly updates$: Observable<[IVector, T]>;
 
   // Constructor
   constructor(
     readonly requests: RequestSender<AntRequest, AntResult>,
-  ) { super(); }
+  ) {
+    super();
+
+    this.updates$ = this.requests.results$.pipe(
+      filter((msg): msg is AntWorkerMemoryUpdate => msg.type === 'memoryUpdate'),
+      map((msg) => [msg.position, msg.data] as [IVector, T])
+    );
+  }
 
   // Methods
   get(pos: IVector): Promise<T | undefined> {
