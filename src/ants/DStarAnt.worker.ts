@@ -41,6 +41,8 @@ export abstract class DStarAntWorker extends Ant implements AntWorker, AntWithMe
 
     // Setup map updates pipeline
     this.network.mapUpdates$.subscribe(({ pos, biome }) => {
+      if (!this._target) return;
+
       const data = this.getMapData(pos);
       this._detected(new Vector(pos), data, biome);
       this._expand();

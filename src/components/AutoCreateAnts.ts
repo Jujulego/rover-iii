@@ -19,6 +19,8 @@ export const AutoCreateAnts = needMap(function AutoCreateAnts({ map }) {
     ];
 
     setAnts(ants);
+
+    return () => ants.forEach(ant => ant.terminate());
   }, [map, setAnts]);
 
   return null;

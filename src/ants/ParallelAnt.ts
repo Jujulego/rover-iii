@@ -11,7 +11,8 @@ import { RequestSender } from '../workers/RequestSender';
 // Class
 export abstract class ParallelAnt extends Ant {
   // Attributes
-  readonly requests = new RequestSender<AntRequest, AntResult>(this.worker());
+  private readonly _worker = this.worker();
+  readonly requests = new RequestSender<AntRequest, AntResult>(this._worker);
 
   // Constructor
   constructor(name: string, map: Map, color: AntColorName, position: Vector) {
@@ -49,5 +50,9 @@ export abstract class ParallelAnt extends Ant {
     return await firstValueFrom(this.requests.request({ type: 'compute', target }).pipe(
       map((msg) => new Vector(msg.move))
     ));
+  }
+
+  terminate(): void {
+    this._worker.terminate();
   }
 }
