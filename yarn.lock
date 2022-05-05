@@ -2566,10 +2566,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.18.12":
-  version: 14.18.12
-  resolution: "@types/node@npm:14.18.12"
-  checksum: 8a0273caa0584020adb8802784fc7d4f18f05e6c205335b7f3818a91d6b0c22736b9f51da3428d5bc54076ad47f1a4d6d57990a3ce8489a520ac66b2b3ff24bc
+"@types/node@npm:16.11.33":
+  version: 16.11.33
+  resolution: "@types/node@npm:16.11.33"
+  checksum: 5c86d3f1e3b996607b41405d368d2e19d410eee0054595cef73d230368a609a2863926e75ad19f5091f0fd742cd018b667d54c51292018dd8020a202a5b29fa9
   languageName: node
   linkType: hard
 
@@ -3323,7 +3323,7 @@ __metadata:
     "@mui/icons-material": 5.6.2
     "@mui/material": 5.6.4
     "@types/jest": 27.4.1
-    "@types/node": 14.18.12
+    "@types/node": 16.11.33
     "@types/react": 17.0.43
     "@types/react-dom": 17.0.14
     "@types/seedrandom": 3.0.2
