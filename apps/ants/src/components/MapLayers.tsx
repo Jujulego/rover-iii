@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { pluckFirst, useObservable, useSubscription } from 'observable-hooks';
-import { createContext, Dispatch, FC, SetStateAction, useContext, useState } from 'react';
+import { createContext, Dispatch, FC, ReactNode, SetStateAction, useContext, useState } from 'react';
 import { exhaustMap, filter, interval, mergeMap, of, pairwise, startWith, withLatestFrom } from 'rxjs';
 
 import { Ant, Thing } from '../ants';
@@ -19,6 +19,7 @@ export interface MapLayersProps {
   target: Thing;
   map?: Map;
   tileSize?: number;
+  children?: ReactNode;
 }
 
 // Constants

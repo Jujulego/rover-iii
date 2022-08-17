@@ -1,4 +1,4 @@
-import { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, FC, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { Ant } from 'src/ants';
 import { LayerKind, LayersState } from 'src/commons/layers';
@@ -36,7 +36,7 @@ export function useAntLayers(ant: Ant): [LayersState, LayerUpdator] {
 }
 
 // Component
-export const AntLayersStore: FC = ({ children }) => {
+export const AntLayersStore: FC<{ children?: ReactNode }> = ({ children }) => {
   // Context
   const [ants,] = useAnts();
 
