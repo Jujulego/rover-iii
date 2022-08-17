@@ -1,0 +1,28 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "root": true,
+  "plugins": [
+    "@typescript-eslint",
+    "workspaces"
+  ],
+  "overrides": [
+    {
+      "files": "**/*.{js,jsx,ts,tsx}",
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:workspaces/recommended"
+      ],
+      "env": {
+        "node": true
+      },
+      "rules": {
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "no-console": ["error", {
+          "allow": ["warn", "error"]
+        }]
+      }
+    }
+  ]
+}
