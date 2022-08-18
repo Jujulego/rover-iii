@@ -9,5 +9,6 @@
 coverage
 dist
 node_modules
+.env
 *.pid
 *.log
