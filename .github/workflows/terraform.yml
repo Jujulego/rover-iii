@@ -47,6 +47,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
+        working-directory: infra
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
@@ -80,4 +81,5 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        working-directory: infra
         run: terraform apply -auto-approve -input=false
