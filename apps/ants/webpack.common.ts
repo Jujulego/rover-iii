@@ -38,7 +38,7 @@ const config: webpack.Configuration = {
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: 'swc-loader',
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
