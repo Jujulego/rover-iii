@@ -32,7 +32,7 @@
     "react-dom": "18.0.0",
     "react-hook-form": "7.29.0",
     "regenerator-runtime": "0.13.9",
-    "rxjs": "7.5.5",
+    "rxjs": "7.5.6",
     "seedrandom": "3.0.5"
   },
   "devDependencies": {
