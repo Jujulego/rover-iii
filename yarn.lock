@@ -25,7 +25,7 @@ __metadata:
     "@swc/core": 1.2.239
     "@swc/jest": 0.2.22
     "@types/jest": 28.1.7
-    "@types/node": 16.11.33
+    "@types/node": 16.11.49
     "@types/react": 18.0.17
     "@types/react-dom": 18.0.6
     "@types/seedrandom": 3.0.2
@@ -2079,10 +2079,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.33":
-  version: 16.11.33
-  resolution: "@types/node@npm:16.11.33"
-  checksum: 5c86d3f1e3b996607b41405d368d2e19d410eee0054595cef73d230368a609a2863926e75ad19f5091f0fd742cd018b667d54c51292018dd8020a202a5b29fa9
+"@types/node@npm:16.11.49":
+  version: 16.11.49
+  resolution: "@types/node@npm:16.11.49"
+  checksum: 05545ee49da3b783ab77cddca45db6f4d47861c2bb148a17b774688e1082f20f27177591d140923724bcd8643b32291203f6f1eadba397e394232d4a1e28e07a
   languageName: node
   linkType: hard
 
