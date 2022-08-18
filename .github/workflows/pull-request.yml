@@ -71,8 +71,6 @@ jobs:
         continue-on-error: true
 
       - uses: actions/github-script@v6
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -81,9 +79,11 @@ jobs:
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
             <details><summary>Show Plan</summary>
-            \`\`\`\n
-            ${process.env.PLAN}
+            
+            \`\`\`terraform
+            ${{ steps.plan.outputs.stdout }}
             \`\`\`
+            
             </details>
             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
             github.rest.issues.createComment({
