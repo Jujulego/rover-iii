@@ -190,9 +190,6 @@ jobs:
       - name: Build ants api
         run: yarn workspace @ants/api build
 
-      - name: Package ants api
-        run: yarn workspace @ants/api sls package --verbose
-
   complete:
     runs-on: ubuntu-latest
     needs: [setup, terraform, lint, test, build-ants, build-api]
