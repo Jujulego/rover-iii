@@ -187,8 +187,11 @@ jobs:
       - name: Install
         run: yarn install --immutable
 
-      - name: Build ants app
+      - name: Build ants api
         run: yarn workspace @ants/api build
+
+      - name: Package ants api
+        run: yarn workspace @ants/api sls package --verbose
 
   complete:
     runs-on: ubuntu-latest
