@@ -89,6 +89,7 @@ jobs:
           path: ${{ matrix.root }}/coverage
 
   build-ants:
+    name: 'build @ants/ants'
     runs-on: ubuntu-latest
 
     steps:
@@ -106,9 +107,28 @@ jobs:
       - name: Build ants app
         run: yarn workspace @ants/ants build
 
+  build-api:
+    name: 'build @ants/api'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Install
+        run: yarn install --immutable
+
+      - name: Build ants app
+        run: yarn workspace @ants/api build
+
   complete:
     runs-on: ubuntu-latest
-    needs: [setup, lint, test, build-ants]
+    needs: [setup, lint, test, build-ants, build-api]
     if: ${{ always() }}
 
     steps:
