@@ -33,28 +33,29 @@ jobs:
       matrix-lint: ${{ steps.lint.outputs.matrix }}
       matrix-test: ${{ steps.test.outputs.matrix }}
 
-  terraform:
+  lint:
     runs-on: ubuntu-latest
-    environment: terraform
+    needs: [setup]
+    if: ${{ fromJson(needs.setup.outputs.matrix-lint)[0] }}
 
-    permissions:
-      pull-requests: write
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.setup.outputs.matrix-lint) }}
 
     steps:
       - uses: actions/checkout@v3.0.2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3.4.1
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          node-version: 16
+          cache: yarn
 
-      - name: Terraform Init
-        working-directory: infra
-        run: terraform init
+      - name: Install
+        run: yarn install --immutable
 
-      - name: Terraform Apply
-        working-directory: infra
-        run: terraform apply -auto-approve -input=false
+      - name: Lint
+        run: yarn workspace ${{ matrix.name }} lint
 
   test:
     runs-on: ubuntu-latest
@@ -86,11 +87,35 @@ jobs:
           name: ${{ matrix.slug }}-coverage
           path: ${{ matrix.root }}/coverage
 
+  terraform:
+    runs-on: ubuntu-latest
+    environment: terraform
+    needs: [lint, test]
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        working-directory: infra
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: infra
+        run: terraform apply -auto-approve -input=false
+
   deploy-api:
     name: 'deploy @ants/api'
     runs-on: ubuntu-latest
     environment: serverless
-    needs: [terraform, test]
+    needs: [terraform]
 
     steps:
       - uses: actions/checkout@v3.0.2
