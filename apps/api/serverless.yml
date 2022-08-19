@@ -1,0 +1,27 @@
+org: jujulego
+app: ants
+service: ants-api
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-west-3
+
+  tags:
+    Project: ants
+
+  stackTags:
+    Project: ants
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline

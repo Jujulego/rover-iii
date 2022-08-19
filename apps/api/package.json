@@ -1,0 +1,24 @@
+{
+  "name": "@ants/api",
+  "private": true,
+  "license": "MIT",
+  "author": "Julien Capellari <julien.capellari@google.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jujulego/ants",
+    "directory": "packages/api"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "sls offline"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.102",
+    "@types/node": "16.11.49",
+    "esbuild": "0.14.25",
+    "serverless": "3.22.0",
+    "serverless-esbuild": "1.25.0",
+    "serverless-offline": "9.2.5",
+    "typescript": "4.7.4"
+  }
+}
