@@ -1,11 +1,18 @@
 org: jujulego
 app: ants
-service: api
+service: ants-api
 frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: nodejs14.x
+  region: eu-west-3
+
+  tags:
+    Project: ants
+
+  stackTags:
+    Project: ants
 
 functions:
   hello:
