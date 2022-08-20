@@ -1,5 +1,5 @@
-data "aws_iam_user" "github-actions" {
-  user_name = "ants-github-actions"
+data "aws_iam_role" "github-actions" {
+  name = "ants-github-actions"
 }
 
 data "aws_iam_policy_document" "github-actions" {
@@ -23,8 +23,7 @@ resource "aws_iam_policy" "github-actions" {
   policy      = data.aws_iam_policy_document.github-actions.json
 }
 
-resource "aws_iam_policy_attachment" "github-actions" {
-  name       = "ants-github-actions-attachment"
+resource "aws_iam_role_policy_attachment" "github-actions" {
   policy_arn = aws_iam_policy.github-actions.arn
-  users = [data.aws_iam_user.github-actions.user_name]
+  role       = data.aws_iam_role.github-actions.name
 }

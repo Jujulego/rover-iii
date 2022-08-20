@@ -111,6 +111,41 @@ jobs:
         working-directory: infra
         run: terraform apply -auto-approve -input=false
 
+  deploy-ants:
+    name: 'deploy @ants/ants'
+    runs-on: ubuntu-latest
+    environment: frontend
+    needs: [terraform]
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Install
+        run: yarn install --immutable
+
+      - name: Build ants
+        run: yarn workspace @ants/ants build
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-3
+          role-to-assume: arn:aws:iam::220263915826:role/ants-github-actions
+
+      - name: Deploy ants to AWS
+        working-directory: apps/ants
+        run: |
+          aws s3 sync ./dist s3://jujulego-ants-frontend
+
   deploy-api:
     name: 'deploy @ants/api'
     runs-on: ubuntu-latest
