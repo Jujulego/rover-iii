@@ -7,9 +7,9 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 }
 
 resource "aws_cloudfront_distribution" "cf_distribution" {
-  enabled         = true
-  is_ipv6_enabled = true
-  price_class = "PriceClass_100"
+  enabled          = true
+  is_ipv6_enabled  = true
+  price_class      = "PriceClass_100"
   retain_on_delete = true
 
   default_root_object = "index.html"
