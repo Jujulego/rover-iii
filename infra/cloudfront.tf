@@ -1,10 +1,5 @@
 locals {
   s3_origin_id  = "ants-frontend-origin"
-  api_origin_id = "ants-api-origin"
-}
-
-data "aws_apigatewayv2_api" "serverless-api" {
-  api_id = "33xlrywqv8"
 }
 
 resource "aws_cloudfront_origin_access_identity" "oai" {
@@ -25,18 +20,6 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
-    }
-  }
-
-  origin {
-    domain_name = replace(data.aws_apigatewayv2_api.serverless-api.api_endpoint, "/^https?://([^/]*).*/", "$1")
-    origin_id   = local.api_origin_id
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
@@ -79,26 +62,6 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     default_ttl            = 0
     max_ttl                = 0
     compress               = true
-  }
-
-  ordered_cache_behavior {
-    path_pattern     = "/api/*"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.api_origin_id
-
-    forwarded_values {
-      query_string = true
-
-      cookies {
-        forward = "all"
-      }
-    }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
   }
 
   viewer_certificate {
