@@ -19,7 +19,7 @@ functions:
     handler: handler.hello
     events:
       - httpApi:
-          path: /
+          path: /api/hello
           method: get
 
 plugins:
