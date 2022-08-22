@@ -122,10 +122,6 @@ jobs:
     permissions:
       packages: write
 
-    strategy:
-      matrix:
-        include: ${{ fromJson(needs.setup.outputs.matrix-publish) }}
-
     steps:
       - uses: actions/checkout@v3.0.2
 
