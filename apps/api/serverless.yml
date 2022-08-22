@@ -8,6 +8,9 @@ provider:
   runtime: nodejs16.x
   region: eu-west-3
 
+  environment:
+    NODE_OPTIONS: '--enable-source-maps'
+
   tags:
     Project: ants
 
@@ -25,3 +28,7 @@ functions:
 plugins:
   - serverless-esbuild
   - serverless-offline
+
+custom:
+  esbuild:
+    sourcemap: true
