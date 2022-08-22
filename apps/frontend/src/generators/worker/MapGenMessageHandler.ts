@@ -1,9 +1,9 @@
+import { Rect } from '@ants/maths';
+
 import { Map } from '../../maps';
 import { MessageHandler } from '../../workers/MessageHandler';
-
 import { MapGenRequest, MapGenResult } from './message';
 import { MapGenerator } from '../MapGenerator';
-import { Rect } from '../../math2d';
 
 // Types
 export interface MapGeneratorType {

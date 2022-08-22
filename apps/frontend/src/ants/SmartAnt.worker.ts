@@ -1,4 +1,4 @@
-import { Vector } from '../math2d';
+import { Vector } from '@ants/maths';
 
 import { DStarAntWorker } from './DStarAnt.worker';
 import { RegisterAntWorker } from './worker/AntMessageHandler';

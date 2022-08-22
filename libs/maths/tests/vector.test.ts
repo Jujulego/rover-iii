@@ -1,4 +1,4 @@
-import { parseVectorArgs, Vector } from './vector';
+import { parseVectorArgs, Vector } from '../src';
 
 // Test
 // - utils

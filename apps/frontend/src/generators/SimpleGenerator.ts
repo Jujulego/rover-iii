@@ -1,8 +1,8 @@
+import { Vector } from '@ants/maths';
+
 import { BiomeName } from '../biomes';
 import { TileEntity } from '../db';
 import { Map } from '../maps';
-import { Vector } from '../math2d';
-
 import { MapGenOptions } from './MapGenerator';
 import { MapIterator } from './MapIterator';
 

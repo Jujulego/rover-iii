@@ -1,4 +1,4 @@
-import { Vector } from '../math2d';
+import { Vector } from '@ants/maths';
 
 // Constants
 export const MOVES = [

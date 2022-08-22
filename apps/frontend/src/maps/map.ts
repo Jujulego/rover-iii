@@ -1,9 +1,8 @@
+import { IVector, Rect, Vector } from '@ants/maths';
 import { Collection } from 'dexie';
 
 import { BiomeName } from '../biomes';
 import { db, TileEntity } from '../db';
-import { IVector, Rect, Vector } from '../math2d';
-
 import { Tile } from './tile';
 
 // Class

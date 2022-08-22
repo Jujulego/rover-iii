@@ -1,10 +1,10 @@
-import { BiomeName } from '../../biomes';
-import { IVector } from '../../math2d';
-
-import { Ant } from '../Ant';
-import { AntNetworkMapUpdate, AntNetworkMessage, Received } from './message';
+import { IVector } from '@ants/maths';
 import { nanoid } from 'nanoid';
 import { filter, Subject } from 'rxjs';
+
+import { BiomeName } from '../../biomes';
+import { Ant } from '../Ant';
+import { AntNetworkMapUpdate, AntNetworkMessage, Received } from './message';
 
 // Interface
 export interface AntWithNetwork extends Ant {

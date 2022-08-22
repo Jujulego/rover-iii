@@ -1,4 +1,4 @@
-import { parseSizeArgs } from './size';
+import { parseSizeArgs } from '../src';
 
 // Test
 // - utils

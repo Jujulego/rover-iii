@@ -1,6 +1,6 @@
-import { Map } from '../../maps';
-import { Vector } from '../../math2d';
+import { Vector } from '@ants/maths';
 
+import { Map } from '../../maps';
 import { Ant } from '../Ant';
 import { AntColorName } from '../colors';
 import { AntMemory } from '../memory/AntMemory';

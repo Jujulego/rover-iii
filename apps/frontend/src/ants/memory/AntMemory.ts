@@ -1,8 +1,7 @@
+import { IVector, Vector } from '@ants/maths';
 import { concat, defer, filter, map, Observable } from 'rxjs';
 
-import { IVector, Vector } from '../../math2d';
 import { Awaitable } from '../../types';
-
 import { Ant } from '../Ant';
 
 // Interfaces

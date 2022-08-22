@@ -1,6 +1,6 @@
-import { IRect, ISize } from '../../math2d';
-import { WorkerMessage } from '../../workers/messages';
+import { IRect } from '@ants/maths';
 
+import { WorkerMessage } from '../../workers/messages';
 import { MapGenOptions } from '../MapGenerator';
 
 // Types

@@ -1,6 +1,5 @@
+import { IVector } from '@ants/maths';
 import { filter, firstValueFrom, map, Observable } from 'rxjs';
-
-import { IVector } from '../../math2d';
 
 import { AntMemory } from '../memory/AntMemory';
 import { AntRequest, AntResult, AntWorkerMemoryUpdate } from './message';

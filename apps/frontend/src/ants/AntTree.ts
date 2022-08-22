@@ -1,6 +1,6 @@
+import { IVector, Vector } from '@ants/maths';
 import { map, sample, scan, startWith, Subject } from 'rxjs';
 
-import { IVector, Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { Ant } from './Ant';

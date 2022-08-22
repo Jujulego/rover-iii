@@ -1,9 +1,9 @@
+import { IVector, Rect, Vector } from '@ants/maths';
 import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Thing } from './ants';
 import { CellularGenerator } from './generators';
 import { Map, mapRepository } from './maps';
-import { IVector, Rect, Vector } from './math2d';
 
 import { AntLayers } from './components/AntLayers';
 import { AntLayersStore } from './components/AntLayersStore';

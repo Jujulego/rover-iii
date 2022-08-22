@@ -98,6 +98,29 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+  build-libs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Install
+        run: yarn install --immutable
+
+      - name: Build libraries
+        run: yarn run build:libs
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build-libs-artifacts
+          path: libs/*/dist/*
+
   lint:
     runs-on: ubuntu-latest
     needs: [setup]
@@ -124,7 +147,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: [setup]
+    needs: [setup, build-libs]
     if: ${{ fromJson(needs.setup.outputs.matrix-lint)[0] }}
 
     strategy:
@@ -143,6 +166,11 @@ jobs:
       - name: Install
         run: yarn install --immutable
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-libs-artifacts
+          path: libs
+
       - name: Test
         run: yarn workspace ${{ matrix.name }} test
 
@@ -155,6 +183,7 @@ jobs:
   build-ants:
     name: 'build @ants/frontend'
     runs-on: ubuntu-latest
+    needs: [build-libs]
 
     steps:
       - uses: actions/checkout@v3.0.2
@@ -167,6 +196,11 @@ jobs:
 
       - name: Install
         run: yarn install --immutable
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-libs-artifacts
+          path: libs
 
       - name: Build frontend
         run: yarn workspace @ants/frontend build
@@ -174,6 +208,7 @@ jobs:
   build-api:
     name: 'build @ants/api'
     runs-on: ubuntu-latest
+    needs: [build-libs]
 
     steps:
       - uses: actions/checkout@v3.0.2
@@ -187,12 +222,17 @@ jobs:
       - name: Install
         run: yarn install --immutable
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-libs-artifacts
+          path: libs
+
       - name: Build api
         run: yarn workspace @ants/api build
 
   complete:
     runs-on: ubuntu-latest
-    needs: [setup, terraform, lint, test, build-ants, build-api]
+    needs: [terraform, lint, test, build-ants, build-api]
     if: ${{ always() }}
 
     steps:

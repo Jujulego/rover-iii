@@ -10,8 +10,13 @@
     "not ie 11"
   ],
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "libs/*",
+    "tools"
   ],
+  "scripts": {
+    "build:libs": "yarn jill each build --no-private"
+  },
   "devDependencies": {
     "@jujulego/jill": "1.2.1",
     "@typescript-eslint/eslint-plugin": "5.33.1",

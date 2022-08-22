@@ -1,9 +1,8 @@
+import { NULL_VECTOR, Rect, Vector } from '@ants/maths';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import { FC, MouseEvent, useCallback, useState } from 'react';
-
-import { NULL_VECTOR, Rect, Vector } from '../../math2d';
 
 import { useMapParameters } from '../MapLayers';
 import { CreateAntDialog } from '../bar/CreateAntDialog';

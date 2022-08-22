@@ -1,7 +1,6 @@
+import { Vector } from '@ants/maths';
 import { nanoid } from 'nanoid';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-import { Vector } from '../math2d';
 
 // Class
 export class Thing {

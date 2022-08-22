@@ -1,9 +1,9 @@
+import { NULL_VECTOR } from '@ants/maths';
 import { styled } from '@mui/material/styles';
 import { useObservableState } from 'observable-hooks';
 import { FC, memo, useMemo } from 'react';
 
 import { Thing } from '../../ants';
-import { NULL_VECTOR } from '../../math2d';
 
 import { useAnts, useMapParameters } from '../MapLayers';
 

@@ -1,6 +1,6 @@
+import { IRect, IVector } from '@ants/maths';
 import Dexie, { Table } from 'dexie';
 
-import { IRect, IVector } from './math2d';
 import { BiomeName } from './biomes';
 
 // Constants

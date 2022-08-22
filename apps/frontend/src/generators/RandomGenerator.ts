@@ -1,9 +1,9 @@
+import { Vector } from '@ants/maths';
 import seedrandom from 'seedrandom';
 
 import { BIOME_NAMES, BiomeName } from '../biomes';
 import { TileEntity } from '../db';
 import { Map } from '../maps';
-import { Vector } from '../math2d';
 import { BST } from '../utils';
 
 import { MapGenOptions } from './MapGenerator';

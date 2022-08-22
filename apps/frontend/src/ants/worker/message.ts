@@ -1,6 +1,6 @@
-import { IRect, IVector } from '../../math2d';
-import { WorkerMessage } from '../../workers/messages';
+import { IRect, IVector } from '@ants/maths';
 
+import { WorkerMessage } from '../../workers/messages';
 import type { AntColorName } from '../colors';
 
 // Types

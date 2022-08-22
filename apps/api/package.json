@@ -6,8 +6,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/jujulego/ants",
-    "directory": "packages/api"
+    "directory": "apps/api"
   },
+  "browserslist": [
+    "node 16"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "sls offline"

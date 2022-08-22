@@ -1,7 +1,7 @@
-import { db } from '../db';
-import { IVector, NULL_VECTOR, Vector } from '../math2d';
-import { Stack } from '../utils';
+import { IVector, NULL_VECTOR, Vector } from '@ants/maths';
 
+import { db } from '../db';
+import { Stack } from '../utils';
 import { Ant } from './Ant';
 import { TreeData } from './AntTree';
 import { AntWithMemory } from './memory/AntMemory';

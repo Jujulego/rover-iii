@@ -1,7 +1,7 @@
+import { Rect } from '@ants/maths';
+
 import { db } from '../db';
 import { MapGenerator, MapGenOptions } from '../generators';
-import { Rect } from '../math2d';
-
 import { Map } from './map';
 
 // Class

@@ -1,9 +1,9 @@
+import { IVector, Vector } from '@ants/maths';
+
 import { BiomeName, BIOME_NAMES } from '../biomes';
 import { db, TileEntity } from '../db';
-import { IVector, Vector } from '../math2d';
 import { Map, Tile } from '../maps';
 import { BST } from '../utils';
-
 import { RandomGenerator, RandomGeneratorOptions } from './RandomGenerator';
 import { RegisterMapGenWorker } from './worker/MapGenMessageHandler';
 

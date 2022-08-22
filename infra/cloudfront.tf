@@ -1,5 +1,5 @@
 locals {
-  s3_origin_id  = "ants-frontend-origin"
+  s3_origin_id = "ants-frontend-origin"
 }
 
 resource "aws_cloudfront_origin_access_identity" "oai" {

@@ -1,4 +1,4 @@
-import { parseRectArgs, Rect } from './rect';
+import { parseRectArgs, Rect } from '../src';
 
 // Tests
 // - utils
