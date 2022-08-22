@@ -5,10 +5,10 @@
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/apps/ants/coverage" />
-      <excludeFolder url="file://$MODULE_DIR$/apps/ants/dist" />
       <excludeFolder url="file://$MODULE_DIR$/apps/api/.esbuild" />
       <excludeFolder url="file://$MODULE_DIR$/apps/api/.serverless" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/frontend/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/frontend/coverage" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

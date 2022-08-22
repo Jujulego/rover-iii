@@ -38,9 +38,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ants/ants@workspace:apps/ants":
+"@ants/api@workspace:apps/api":
   version: 0.0.0-use.local
-  resolution: "@ants/ants@workspace:apps/ants"
+  resolution: "@ants/api@workspace:apps/api"
+  dependencies:
+    "@types/aws-lambda": 8.10.102
+    "@types/node": 16.11.50
+    esbuild: 0.15.5
+    serverless: 3.22.0
+    serverless-esbuild: 1.32.7
+    serverless-offline: 9.2.5
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
+"@ants/frontend@workspace:apps/frontend":
+  version: 0.0.0-use.local
+  resolution: "@ants/frontend@workspace:apps/frontend"
   dependencies:
     "@emotion/react": 11.10.0
     "@emotion/styled": 11.10.0
@@ -86,20 +100,6 @@ __metadata:
     webpack-cli: 4.10.0
     webpack-dev-server: 4.10.0
     webpack-merge: 5.8.0
-  languageName: unknown
-  linkType: soft
-
-"@ants/api@workspace:apps/api":
-  version: 0.0.0-use.local
-  resolution: "@ants/api@workspace:apps/api"
-  dependencies:
-    "@types/aws-lambda": 8.10.102
-    "@types/node": 16.11.50
-    esbuild: 0.15.5
-    serverless: 3.22.0
-    serverless-esbuild: 1.32.7
-    serverless-offline: 9.2.5
-    typescript: 4.7.4
   languageName: unknown
   linkType: soft
 

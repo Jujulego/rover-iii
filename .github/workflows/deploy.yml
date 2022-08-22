@@ -112,7 +112,7 @@ jobs:
         run: terraform apply -auto-approve -input=false
 
   deploy-ants:
-    name: 'deploy @ants/ants'
+    name: 'deploy @ants/frontend'
     runs-on: ubuntu-latest
     environment: frontend
     needs: [terraform]
@@ -133,16 +133,16 @@ jobs:
       - name: Install
         run: yarn install --immutable
 
-      - name: Build ants
-        run: yarn workspace @ants/ants build
+      - name: Build frontend
+        run: yarn workspace @ants/frontend build
 
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: eu-west-3
           role-to-assume: arn:aws:iam::220263915826:role/ants-github-actions
 
-      - name: Deploy ants to AWS
-        working-directory: apps/ants
+      - name: Deploy frontend to AWS
+        working-directory: apps/frontend
         run: |
           aws s3 sync ./dist s3://jujulego-ants-frontend
 
@@ -164,7 +164,7 @@ jobs:
       - name: Install
         run: yarn install --immutable
 
-      - name: Deploy ants api
+      - name: Deploy api
         run: yarn workspace @ants/api sls deploy --verbose
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
