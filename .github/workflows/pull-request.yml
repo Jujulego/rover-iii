@@ -197,6 +197,11 @@ jobs:
       - name: Install
         run: yarn install --immutable
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-libs-artifacts
+          path: packages
+
       - name: Build frontend
         run: yarn workspace @ants/frontend build
 
@@ -216,6 +221,11 @@ jobs:
 
       - name: Install
         run: yarn install --immutable
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-libs-artifacts
+          path: packages
 
       - name: Build api
         run: yarn workspace @ants/api build
