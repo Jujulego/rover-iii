@@ -1,6 +1,6 @@
 org: jujulego
 app: ants
-service: ants-api
+service: api
 frameworkVersion: '3'
 
 provider:
@@ -12,9 +12,6 @@ provider:
     NODE_OPTIONS: '--enable-source-maps'
 
   tags:
-    Project: ants
-
-  stackTags:
     Project: ants
 
 functions:
