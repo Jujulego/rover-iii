@@ -1,8 +1,7 @@
+import { Vector } from '@ants/maths';
 import { firstValueFrom, map } from 'rxjs';
 
 import { Map } from '../maps';
-import { Vector } from '../math2d';
-
 import { Ant } from './Ant';
 import { AntColorName } from './colors';
 import { AntRequest, AntResult } from './worker/message';

@@ -1,5 +1,6 @@
+import { NULL_VECTOR, Vector } from '@ants/maths';
+
 import { Ant } from './Ant';
-import { NULL_VECTOR, Vector } from '../math2d';
 import { MOVES } from './utils';
 
 // Class

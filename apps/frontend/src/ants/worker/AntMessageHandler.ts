@@ -1,7 +1,7 @@
-import { Map } from '../../maps';
-import { Rect, Vector } from '../../math2d';
-import { MessageHandler } from '../../workers/MessageHandler';
+import { Rect, Vector } from '@ants/maths';
 
+import { Map } from '../../maps';
+import { MessageHandler } from '../../workers/MessageHandler';
 import { Ant } from '../Ant';
 import { AntWorker, AntWorkerType } from './AntWorker';
 import { AntRequest, AntResult } from './message';

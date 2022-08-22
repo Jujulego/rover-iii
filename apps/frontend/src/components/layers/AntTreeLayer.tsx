@@ -1,3 +1,4 @@
+import { IVector } from '@ants/maths';
 import { styled } from '@mui/material/styles';
 import { useObservableState } from 'observable-hooks';
 import { FC } from 'react';
@@ -5,7 +6,6 @@ import { debounceTime, map } from 'rxjs';
 
 import { AntWithTree, TreeNode } from '../../ants';
 import { Map } from '../../maps';
-import { IVector } from '../../math2d';
 import { useMapParameters } from '../MapLayers';
 
 // Types

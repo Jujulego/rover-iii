@@ -1,6 +1,5 @@
+import { IVector } from '@ants/maths';
 import { scan, Subject } from 'rxjs';
-
-import { IVector } from '../math2d';
 
 import { Ant } from './Ant';
 import { AntMemory } from './memory/AntMemory';

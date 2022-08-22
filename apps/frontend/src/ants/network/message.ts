@@ -1,5 +1,6 @@
+import { IVector } from '@ants/maths';
+
 import { BiomeName } from '../../biomes';
-import { IVector } from '../../math2d';
 import { WorkerMessage } from '../../workers/messages';
 
 // Types

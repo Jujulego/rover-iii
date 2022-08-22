@@ -1,10 +1,9 @@
+import { Vector } from '@ants/maths';
 import { styled } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';
 
 import { BiomeName, BIOMES } from '../../biomes';
-import { Vector } from '../../math2d';
-
 import { useMapParameters } from '../MapLayers';
 import { needMap } from '../needMap';
 

@@ -1,8 +1,7 @@
+import { Vector } from '@ants/maths';
 import { useEffect } from 'react';
 
 import { SmartAnt } from '../ants';
-import { Vector } from '../math2d';
-
 import { needMap } from './needMap';
 import { useAnts } from './MapLayers';
 

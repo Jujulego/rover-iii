@@ -1,13 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["esnext"],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "incremental": true,
     "rootDir": ".",
-    "baseUrl": "./",
-    "declaration": false,
-    "sourceMap": true,
-    "noEmit": true
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   }
 }

@@ -1,8 +1,8 @@
+import { IVector, NULL_VECTOR, Vector } from '@ants/maths';
+
 import { BiomeName } from '../biomes';
-import { IVector, NULL_VECTOR, Vector } from '../math2d';
 import { Map } from '../maps';
 import { PriorityQueue } from '../utils';
-
 import { Ant } from './Ant';
 import { KnownData } from './AntKnowledge';
 import { TreeData } from './AntTree';

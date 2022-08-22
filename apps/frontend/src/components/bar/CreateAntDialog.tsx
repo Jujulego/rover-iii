@@ -1,3 +1,4 @@
+import { IVector, Vector } from '@ants/maths';
 import {
   Button,
   Dialog, DialogActions,
@@ -13,7 +14,6 @@ import { useForm } from 'react-hook-form';
 
 import { BFSAnt, DFSAnt, SmartAnt, StupidAnt } from '../../ants';
 import { ANT_COLORS, AntColorName } from '../../ants/colors';
-import { IVector, Vector } from '../../math2d';
 
 import { useAnts, useMap } from '../MapLayers';
 import { ControlledTextField } from '../utils/ControlledTextField';
