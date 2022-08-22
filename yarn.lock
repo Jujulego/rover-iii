@@ -103,6 +103,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@ants/maths@workspace:libs/maths":
+  version: 0.0.0-use.local
+  resolution: "@ants/maths@workspace:libs/maths"
+  dependencies:
+    "@swc/core": 1.2.241
+    "@swc/jest": 0.2.22
+    "@types/jest": 28.1.7
+    "@types/node": 16.11.50
+    browserslist: 4.21.3
+    eslint: 8.22.0
+    eslint-plugin-jest: 26.8.3
+    eslint-plugin-workspaces: 0.7.0
+    jest: 28.1.3
+    ts-node: 10.9.1
+    typescript: 4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.16.7":
   version: 7.16.7
   resolution: "@babel/code-frame@npm:7.16.7"

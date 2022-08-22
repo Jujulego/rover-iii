@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "rootDir": ".",
+    "baseUrl": "./",
+    "declaration": false,
+    "sourceMap": true,
+    "noEmit": true
+  }
+}
