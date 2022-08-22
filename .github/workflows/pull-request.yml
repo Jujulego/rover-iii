@@ -169,7 +169,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: build-libs-artifacts
-          path: packages
+          path: libs
 
       - name: Test
         run: yarn workspace ${{ matrix.name }} test
@@ -200,7 +200,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: build-libs-artifacts
-          path: packages
+          path: libs
 
       - name: Build frontend
         run: yarn workspace @ants/frontend build
@@ -225,7 +225,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: build-libs-artifacts
-          path: packages
+          path: libs
 
       - name: Build api
         run: yarn workspace @ants/api build
