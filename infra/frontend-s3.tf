@@ -11,7 +11,7 @@ resource "aws_s3_bucket_acl" "frontend" {
 resource "aws_s3_bucket_logging" "frontend" {
   bucket        = aws_s3_bucket.frontend.id
   target_bucket = aws_s3_bucket.frontend-logs.id
-  target_prefix = "log/"
+  target_prefix = "s3-logs/"
 }
 
 resource "aws_s3_bucket_public_access_block" "frontend" {
