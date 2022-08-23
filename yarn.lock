@@ -43,7 +43,7 @@ __metadata:
   resolution: "@ants/api@workspace:apps/api"
   dependencies:
     "@types/aws-lambda": 8.10.102
-    "@types/node": 16.11.50
+    "@types/node": 16.11.54
     esbuild: 0.15.5
     serverless: 3.22.0
     serverless-esbuild: 1.32.7
@@ -64,7 +64,7 @@ __metadata:
     "@swc/core": 1.2.241
     "@swc/jest": 0.2.22
     "@types/jest": 28.1.7
-    "@types/node": 16.11.50
+    "@types/node": 16.11.54
     "@types/react": 18.0.17
     "@types/react-dom": 18.0.6
     "@types/seedrandom": 3.0.2
@@ -113,7 +113,7 @@ __metadata:
     "@swc/jest": 0.2.22
     "@types/gulp": 4.0.9
     "@types/jest": 28.1.7
-    "@types/node": 16.11.50
+    "@types/node": 16.11.54
     browserslist: 4.21.3
     del: 6.1.1
     eslint: 8.22.0
@@ -2967,10 +2967,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.50":
-  version: 16.11.50
-  resolution: "@types/node@npm:16.11.50"
-  checksum: 8b64129ed651661602049e8e034f0cb77c09c87303dadfad1a2bdef658ece16b4be96a3142ef956a5e1a815336225c5beb0512c31a410e7d76075f18906df6da
+"@types/node@npm:16.11.54":
+  version: 16.11.54
+  resolution: "@types/node@npm:16.11.54"
+  checksum: fa4d6a94498cc6ef96932a25557082587a178b5fa1da5e208bdb171b85265110a7ca6a4f296e740dca1b29d2a44b3c1e76e21d255e5eeed8be5f67ea538dcb9c
   languageName: node
   linkType: hard
 
