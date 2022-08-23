@@ -46,7 +46,7 @@ __metadata:
     "@types/node": 16.11.50
     esbuild: 0.15.5
     serverless: 3.22.0
-    serverless-esbuild: 1.32.7
+    serverless-esbuild: 1.32.8
     serverless-offline: 9.2.5
     typescript: 4.7.4
   languageName: unknown
@@ -13620,9 +13620,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serverless-esbuild@npm:1.32.7":
-  version: 1.32.7
-  resolution: "serverless-esbuild@npm:1.32.7"
+"serverless-esbuild@npm:1.32.8":
+  version: 1.32.8
+  resolution: "serverless-esbuild@npm:1.32.8"
   dependencies:
     acorn: ^8.7.1
     acorn-walk: ^8.2.0
@@ -13637,7 +13637,7 @@ __metadata:
     semver: ^7.3.5
   peerDependencies:
     esbuild: ">=0.8 <0.16"
-  checksum: da3a131fa2625ec402b589a8d0291e98add2974b2f893e3bba756936bca55cfc67893a92ba5f70d5430e3ce086d4ad7bbb053793e5c92d9609688e148146d7c1
+  checksum: d1719f1ab6329bc6f2766f3b569c001dd93a4e3568b0dc2a44aca96096abc29cb757cfb0ef80e6899a6482f4c8378a60b11763e4bb59034773bca731b6412d28
   languageName: node
   linkType: hard
 
