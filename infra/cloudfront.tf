@@ -14,7 +14,25 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
 
   default_root_object = "index.html"
 
-  origin {
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  logging_config {
+    bucket = aws_s3_bucket.frontend-logs.id
+    prefix = "cf-logs/"
+
+    include_cookies = false
+  }
+
+  # Origins
+  origin { # S3 bucket storing frontend code
     domain_name = aws_s3_bucket.frontend.bucket_regional_domain_name
     origin_id   = local.s3_origin_id
 
@@ -23,6 +41,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     }
   }
 
+  # Cache behaviour
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
@@ -43,7 +62,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     compress               = true
   }
 
-  ordered_cache_behavior {
+  ordered_cache_behavior { # Never cache index.html
     path_pattern     = "/index.html"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
@@ -64,10 +83,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     compress               = true
   }
 
-  viewer_certificate {
-    cloudfront_default_certificate = true
-  }
-
+  # On 403 and 404 errors always return index.html
   custom_error_response {
     error_caching_min_ttl = 300
     error_code            = 403
@@ -80,11 +96,5 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     error_code            = 404
     response_code         = 200
     response_page_path    = "/index.html"
-  }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
   }
 }
