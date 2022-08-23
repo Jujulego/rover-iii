@@ -1,17 +1,41 @@
 org: jujulego
 app: ants
-service: api
+service: ants-api
 frameworkVersion: '3'
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
 
 provider:
   name: aws
   runtime: nodejs16.x
   region: eu-west-3
 
+  tracing:
+    lambda: true
+    apiGateway: true
+
   environment:
+    DATA_TABLE: ${self:resources.Resources.DataTable.Properties.TableName}
     NODE_OPTIONS: '--enable-source-maps'
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - !GetAtt DataTable.Arn
+
   tags:
+    Project: ants
+
+  stackTags:
     Project: ants
 
 functions:
@@ -22,9 +46,25 @@ functions:
           path: /api/hello
           method: get
 
-plugins:
-  - serverless-esbuild
-  - serverless-offline
+resources:
+  Resources:
+    DataTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: 'ants-data-${sls:stage}'
+        AttributeDefinitions:
+          - AttributeName: table
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: table
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 custom:
   esbuild:
