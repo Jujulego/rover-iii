@@ -15,6 +15,13 @@
     "build": "tsc",
     "start": "sls offline"
   },
+  "dependencies": {
+    "@ants/maths": "1.0.0",
+    "@aws-sdk/client-dynamodb": "3.154.0",
+    "@aws-sdk/lib-dynamodb": "3.154.0",
+    "@aws-sdk/smithy-client": "3.142.0",
+    "@aws-sdk/types": "3.127.0"
+  },
   "devDependencies": {
     "@types/aws-lambda": "8.10.102",
     "@types/node": "16.11.54",
