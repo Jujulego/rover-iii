@@ -36,7 +36,7 @@
     "@swc/core": "1.2.242",
     "@swc/jest": "0.2.22",
     "@types/gulp": "4.0.9",
-    "@types/jest": "28.1.7",
+    "@types/jest": "28.1.8",
     "@types/node": "16.11.54",
     "browserslist": "4.21.3",
     "del": "6.1.1",
