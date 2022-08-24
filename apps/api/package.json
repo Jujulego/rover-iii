@@ -20,10 +20,14 @@
     "@aws-sdk/client-dynamodb": "3.154.0",
     "@aws-sdk/lib-dynamodb": "3.154.0",
     "@aws-sdk/smithy-client": "3.142.0",
-    "@aws-sdk/types": "3.127.0"
+    "@aws-sdk/types": "3.127.0",
+    "http-errors": "2.0.0",
+    "lodash.omit": "4.5.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.102",
+    "@types/http-errors": "1.8.2",
+    "@types/lodash.omit": "4.5.7",
     "@types/node": "16.11.54",
     "esbuild": "0.15.5",
     "serverless": "3.22.0",
