@@ -78,6 +78,9 @@ __metadata:
     "@ants/maths": 1.0.0
     "@emotion/react": 11.10.0
     "@emotion/styled": 11.10.0
+    "@jujulego/aegis": 1.0.0-rc.4
+    "@jujulego/aegis-api": 1.0.0-rc.3
+    "@jujulego/aegis-react": 1.0.0-rc.3
     "@mui/icons-material": 5.10.2
     "@mui/material": 5.10.2
     "@swc/core": 1.2.242
@@ -109,6 +112,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: 7.29.0
+    react-router-dom: 6.3.0
     regenerator-runtime: 0.13.9
     rxjs: 7.5.6
     seedrandom: 3.0.5
@@ -1583,7 +1587,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3":
+"@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.7.6":
   version: 7.18.9
   resolution: "@babel/runtime@npm:7.18.9"
   dependencies:
@@ -2721,6 +2725,50 @@ __metadata:
     "@jridgewell/resolve-uri": ^3.0.3
     "@jridgewell/sourcemap-codec": ^1.4.10
   checksum: 38917e9c2b014d469a9f51c016ed506acbe44dd16ec2f6f99b553ebf3764d22abadbf992f2367b6d2b3511f3eae8ed3a8963f6c1030093fda23efd35ecab2bae
+  languageName: node
+  linkType: hard
+
+"@jujulego/aegis-api@npm:1.0.0-rc.3":
+  version: 1.0.0-rc.3
+  resolution: "@jujulego/aegis-api@npm:1.0.0-rc.3"
+  peerDependencies:
+    "@jujulego/aegis": 1.0.0-rc.4
+    regenerator-runtime: ^0.13.0
+  checksum: 136bc7afd324d3097780d158793986974c0a4d485acb8d792a9dc5910ef20e63e68845150607899b6f4cd6e647c108d6e59921b9755ff44d41f6804b3f1c449e
+  languageName: node
+  linkType: hard
+
+"@jujulego/aegis-core@npm:^1.0.0-rc.2":
+  version: 1.0.0-rc.2
+  resolution: "@jujulego/aegis-core@npm:1.0.0-rc.2"
+  peerDependencies:
+    regenerator-runtime: ^0.13.0
+  checksum: 8f98aa6c8da62cf01bb4751d41e22b0e44a7b75f4a48f797c09b6fe6cbca2716868fbf7e1bf38f64912ac92d33e0ac65fb6cc1f1076a76a9ceac2a488412652e
+  languageName: node
+  linkType: hard
+
+"@jujulego/aegis-react@npm:1.0.0-rc.3":
+  version: 1.0.0-rc.3
+  resolution: "@jujulego/aegis-react@npm:1.0.0-rc.3"
+  dependencies:
+    dequal: ^2.0.2
+    use-sync-external-store: ^1.1.0
+  peerDependencies:
+    "@jujulego/aegis": ^1.0.0-rc.4
+    react: ^17.0.0 || ^18.0.0
+    regenerator-runtime: ^0.13.0
+  checksum: cc6947773253037a91f1ec0bcc725d2fc6b5428805f4cfcec0caf0353e9d1306f410fa1ad6cbe4b0ccab358893eeac651bf0de6e3491f721f9bb2a31f0e4c169
+  languageName: node
+  linkType: hard
+
+"@jujulego/aegis@npm:1.0.0-rc.4":
+  version: 1.0.0-rc.4
+  resolution: "@jujulego/aegis@npm:1.0.0-rc.4"
+  dependencies:
+    "@jujulego/aegis-core": ^1.0.0-rc.2
+  peerDependencies:
+    regenerator-runtime: ^0.13.0
+  checksum: 440b7962f427e635c57a7854089fdfd5bf8e6598b607fa6e5c1919b1ae03689828c9ae72fc38a4b1700e80e0bc2ce8cabd99117d1d3ed3e226008ee08fd355e0
   languageName: node
   linkType: hard
 
@@ -4833,7 +4881,7 @@ __metadata:
     eslint-plugin-workspaces: 0.7.0
     typescript: 4.7.4
   dependenciesMeta:
-    serverless-offline@9.2.5:
+    serverless-offline@9.2.6:
       unplugged: true
   languageName: unknown
   linkType: soft
@@ -7032,6 +7080,13 @@ __metadata:
   version: 1.1.2
   resolution: "depd@npm:1.1.2"
   checksum: 6b406620d269619852885ce15965272b829df6f409724415e0002c8632ab6a8c0a08ec1f0bd2add05dc7bd7507606f7e2cc034fa24224ab829580040b835ecd9
+  languageName: node
+  linkType: hard
+
+"dequal@npm:^2.0.2":
+  version: 2.0.3
+  resolution: "dequal@npm:2.0.3"
+  checksum: 8679b850e1a3d0ebbc46ee780d5df7b478c23f335887464023a631d1b9af051ad4a6595a44220f9ff8ff95a8ddccf019b5ad778a976fd7bbf77383d36f412f90
   languageName: node
   linkType: hard
 
@@ -9684,6 +9739,15 @@ __metadata:
   version: 1.0.0
   resolution: "hexoid@npm:1.0.0"
   checksum: 27a148ca76a2358287f40445870116baaff4a0ed0acc99900bf167f0f708ffd82e044ff55e9949c71963852b580fc024146d3ac6d5d76b508b78d927fa48ae2d
+  languageName: node
+  linkType: hard
+
+"history@npm:^5.2.0":
+  version: 5.3.0
+  resolution: "history@npm:5.3.0"
+  dependencies:
+    "@babel/runtime": ^7.7.6
+  checksum: d73c35df49d19ac172f9547d30a21a26793e83f16a78386d99583b5bf1429cc980799fcf1827eb215d31816a6600684fba9686ce78104e23bd89ec239e7c726f
   languageName: node
   linkType: hard
 
@@ -14003,6 +14067,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-router-dom@npm:6.3.0":
+  version: 6.3.0
+  resolution: "react-router-dom@npm:6.3.0"
+  dependencies:
+    history: ^5.2.0
+    react-router: 6.3.0
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 77603a654f8a8dc7f65535a2e5917a65f8d9ffcb06546d28dd297e52adcc4b8a84377e0115f48dca330b080af2da3e78f29d590c89307094d36927d2b1751ec3
+  languageName: node
+  linkType: hard
+
+"react-router@npm:6.3.0":
+  version: 6.3.0
+  resolution: "react-router@npm:6.3.0"
+  dependencies:
+    history: ^5.2.0
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 7be673f5e72104be01e6ab274516bdb932efd93305243170690f6560e3bd1035dd1df3d3c9ce1e0f452638a2529f43a1e77dcf0934fc8031c4783da657be13ca
+  languageName: node
+  linkType: hard
+
 "react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
@@ -16515,6 +16603,15 @@ __metadata:
     punycode: 1.3.2
     querystring: 0.2.0
   checksum: 7b83ddb106c27bf9bde8629ccbe8d26e9db789c8cda5aa7db72ca2c6f9b8a88a5adf206f3e10db78e6e2d042b327c45db34c7010c1bf0d9908936a17a2b57d05
+  languageName: node
+  linkType: hard
+
+"use-sync-external-store@npm:^1.1.0":
+  version: 1.2.0
+  resolution: "use-sync-external-store@npm:1.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 5c639e0f8da3521d605f59ce5be9e094ca772bd44a4ce7322b055a6f58eeed8dda3c94cabd90c7a41fb6fa852210092008afe48f7038792fd47501f33299116a
   languageName: node
   linkType: hard
 
