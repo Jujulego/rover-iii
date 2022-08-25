@@ -14,7 +14,8 @@
   "scripts": {
     "lint": "eslint .",
     "build": "tsc",
-    "start": "sls offline"
+    "start": "sls offline",
+    "test": "jest"
   },
   "dependencies": {
     "@ants/maths": "1.0.0",
