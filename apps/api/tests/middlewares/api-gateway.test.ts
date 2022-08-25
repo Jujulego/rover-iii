@@ -1,5 +1,6 @@
 import { apiGateway } from '../../src/middlewares';
 import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
+import { NotFound } from 'http-errors';
 
 // Setup
 let event: APIGatewayProxyEventV2;
@@ -54,12 +55,67 @@ describe('apiGateway', () => {
   it('should return structured result as is', async () => {
     const handler = jest.fn()
       .mockResolvedValue({
+        statusCode: 201,
         body: 'toto'
       });
 
     await expect(apiGateway(handler)(event, context))
       .resolves.toEqual({
+        statusCode: 201,
         body: 'toto'
       });
+  });
+
+  it('should return structured result with jsonified body', async () => {
+    const handler = jest.fn()
+      .mockResolvedValue({
+        statusCode: 201,
+        body: { id: 'test', success: true },
+      });
+
+    await expect(apiGateway(handler)(event, context))
+      .resolves.toEqual({
+        statusCode: 201,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: 'test', success: true })
+      });
+  });
+
+  it('should return result in structured form', async () => {
+    const handler = jest.fn()
+      .mockResolvedValue({ id: 'test', success: true });
+
+    await expect(apiGateway(handler)(event, context))
+      .resolves.toEqual({
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: 'test', success: true })
+      });
+  });
+
+  it('should handle http errors and return them in structured form', async () => {
+    const handler = jest.fn()
+      .mockRejectedValue(new NotFound('Not found!'));
+
+    await expect(apiGateway(handler)(event, context))
+      .resolves.toEqual({
+        statusCode: 404,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: 'Not found!' })
+      });
+  });
+
+  it('should throw unsupported errors', async () => {
+    const handler = jest.fn()
+      .mockRejectedValue(new Error('Failed !'));
+
+    await expect(apiGateway(handler)(event, context))
+      .rejects.toEqual(new Error('Failed !'));
   });
 });
