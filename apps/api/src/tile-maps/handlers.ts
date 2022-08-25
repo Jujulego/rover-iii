@@ -1,6 +1,6 @@
 import { NotFound } from 'http-errors';
 
-import { apiGateway } from '../middlewares/api-gateway';
+import { apiGateway } from '../middlewares';
 import { getTileMap } from '../tables/tile-maps';
 
 // Handlers
