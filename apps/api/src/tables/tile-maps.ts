@@ -11,6 +11,36 @@ export interface TileMap {
 }
 
 // Operations
+export async function listTileMaps(): Promise<TileMap[]> {
+  const client = dynamodbClient();
+
+  const keys = await client.query({
+    TableName: process.env.DATA_TABLE_NAME,
+    IndexName: 'table-index',
+    KeyConditionExpression: '#table = :table',
+    ExpressionAttributeNames: {
+      '#table': 'table'
+    },
+    ExpressionAttributeValues: {
+      ':table': 'tile-maps'
+    }
+  });
+
+  if (!keys.Items) {
+    return [];
+  }
+
+  const res = await client.batchGet({
+    RequestItems: {
+      [process.env.DATA_TABLE_NAME!]: {
+        Keys: keys.Items
+      }
+    }
+  });
+
+  return res.Responses?.[process.env.DATA_TABLE_NAME!] as TileMap[] ?? [];
+}
+
 export async function getTileMap(id: string): Promise<TileMap | undefined> {
   const client = dynamodbClient();
 
