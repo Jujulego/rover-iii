@@ -98,3 +98,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     response_page_path    = "/index.html"
   }
 }
+
+output "frontend_domain" {
+  value = aws_cloudfront_distribution.cf_distribution.domain_name
+}

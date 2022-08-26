@@ -7,6 +7,12 @@ plugins:
   - serverless-esbuild
   - serverless-offline
 
+custom:
+  data-table: 'ants-data-${sls:stage}'
+
+  esbuild:
+    sourcemap: true
+
 provider:
   name: aws
   runtime: nodejs16.x
@@ -17,8 +23,13 @@ provider:
     apiGateway: true
 
   environment:
-    DATA_TABLE_NAME: ${self:resources.Resources.DataTable.Properties.TableName}
+    DATA_TABLE_NAME: ${self:custom.data-table}
     NODE_OPTIONS: '--enable-source-maps'
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        - 'https://${file(../../infra/outputs.json):frontend_domain.value,"localhost:3000"}'
 
   iam:
     role:
@@ -60,7 +71,7 @@ resources:
     DataTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        TableName: 'ants-data-${sls:stage}'
+        TableName: ${self:custom.data-table}
         AttributeDefinitions:
           - AttributeName: table
             AttributeType: S
@@ -84,7 +95,3 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
-
-custom:
-  esbuild:
-    sourcemap: true

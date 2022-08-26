@@ -140,6 +140,15 @@ jobs:
         working-directory: infra
         run: terraform apply -auto-approve -input=false
 
+      - name: Terraform outputs
+        working-directory: infra
+        run: terraform output -json > outputs.json
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: terraform-outputs
+          path: infra/outputs.json
+
   deploy-ants:
     name: 'deploy @ants/frontend'
     runs-on: ubuntu-latest
@@ -167,6 +176,11 @@ jobs:
         with:
           name: build-libs-artifacts
           path: libs
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: terraform-outputs
+          path: infra/outputs.json
 
       - name: Build frontend
         run: yarn workspace @ants/frontend build
