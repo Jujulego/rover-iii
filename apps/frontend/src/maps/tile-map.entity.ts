@@ -1,6 +1,7 @@
 import { IRect } from '@ants/maths';
 import { $entity, $store } from '@jujulego/aegis';
-import { $api } from '@jujulego/aegis-api';
+
+import { $api } from '../api';
 
 // Types
 export interface ITileMap {
@@ -13,5 +14,5 @@ export interface ITileMap {
 // Entity
 export const TileMap = $entity('TileMap', $store.memory(), (itm: ITileMap) => itm.id)
   .$protocol(({ $list }) => ({
-    findAll: $list.query($api.get`http://localhost:3000/api/tile-maps`)
+    findAll: $list.query($api.get`/api/tile-maps`)
   }));

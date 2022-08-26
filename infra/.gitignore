@@ -34,3 +34,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Ingore ouput file
+outputs.json
