@@ -170,6 +170,8 @@ jobs:
 
       - name: Build frontend
         run: yarn workspace @ants/frontend build
+        env:
+          API_URL: 'https://u60e5tuv2a.execute-api.eu-west-3.amazonaws.com/'
 
       - uses: aws-actions/configure-aws-credentials@v1
         with:
