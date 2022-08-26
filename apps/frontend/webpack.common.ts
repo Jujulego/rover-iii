@@ -50,6 +50,9 @@ const config: webpack.Configuration = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      API_URL: 'http://localhost:3000'
+    }),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html'),
       filename: 'index.html',
