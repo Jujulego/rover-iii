@@ -24,12 +24,11 @@ provider:
 
   environment:
     DATA_TABLE_NAME: ${self:custom.data-table}
-    NODE_OPTIONS: '--enable-source-maps'
 
-#  httpApi:
-#    cors:
-#      allowedOrigins:
-#        - 'https://${file(../../infra/outputs.json):frontend_domain.value,"localhost:3000"}'
+  httpApi:
+    cors:
+      allowedOrigins:
+        - ${file(../../infra/outputs.json):frontendOrigin.value,"http://localhost:4000"}
 
   iam:
     role:
@@ -38,6 +37,7 @@ provider:
           Action:
             - dynamodb:Query
             - dynamodb:Scan
+            - dynamodb:BatchGetItem
             - dynamodb:GetItem
             - dynamodb:PutItem
             - dynamodb:UpdateItem

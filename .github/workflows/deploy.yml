@@ -140,6 +140,12 @@ jobs:
         working-directory: infra
         run: terraform apply -auto-approve -input=false
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
       - name: Terraform outputs
         working-directory: infra
         run: terraform output -json > outputs.json
@@ -176,11 +182,6 @@ jobs:
         with:
           name: build-libs-artifacts
           path: libs
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: terraform-outputs
-          path: infra/outputs.json
 
       - name: Build frontend
         run: yarn workspace @ants/frontend build
@@ -220,6 +221,11 @@ jobs:
         with:
           name: build-libs-artifacts
           path: libs
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: terraform-outputs
+          path: infra/outputs.json
 
       - name: Deploy api
         run: yarn workspace @ants/api sls deploy --verbose

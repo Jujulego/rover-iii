@@ -99,6 +99,6 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
   }
 }
 
-output "frontend_domain" {
-  value = aws_cloudfront_distribution.cf_distribution.domain_name
+output "frontendOrigin" {
+  value = "https://${aws_cloudfront_distribution.cf_distribution.domain_name}"
 }
