@@ -225,7 +225,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: terraform-outputs
-          path: infra/outputs.json
+          path: infra
 
       - name: Deploy api
         run: yarn workspace @ants/api sls deploy --verbose
