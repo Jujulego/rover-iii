@@ -26,10 +26,10 @@ provider:
     DATA_TABLE_NAME: ${self:custom.data-table}
     NODE_OPTIONS: '--enable-source-maps'
 
-  httpApi:
-    cors:
-      allowedOrigins:
-        - 'https://${file(../../infra/outputs.json):frontend_domain.value,"localhost:3000"}'
+#  httpApi:
+#    cors:
+#      allowedOrigins:
+#        - 'https://${file(../../infra/outputs.json):frontend_domain.value,"localhost:3000"}'
 
   iam:
     role:
@@ -44,6 +44,7 @@ provider:
             - dynamodb:DeleteItem
           Resource:
             - !GetAtt DataTable.Arn
+            - !Sub '${DataTable.Arn}/index/*'
 
   tags:
     Project: ants
