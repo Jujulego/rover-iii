@@ -54,7 +54,7 @@ export async function listTileMaps(): Promise<TileMap[]> {
       }));
 
       if (res.Responses?.[TABLE_NAME]) {
-        maps.push(...res.Responses[TABLE_NAME] as TileMap[])
+        maps.push(...res.Responses[TABLE_NAME] as TileMap[]);
       }
     }
 
