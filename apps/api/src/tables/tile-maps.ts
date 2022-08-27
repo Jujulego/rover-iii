@@ -1,6 +1,15 @@
 import { IRect } from '@ants/maths';
-import { BatchGetCommand, DynamoDBDocumentClient, GetCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  BatchGetCommand,
+  DynamoDBDocumentClient,
+  GetCommand,
+  paginateQuery,
+  QueryCommandInput
+} from '@aws-sdk/lib-dynamodb';
+
+// Constants
+const TABLE_NAME = process.env.DATA_TABLE_NAME!;
 
 // Types
 export interface TileMap {
@@ -15,8 +24,10 @@ export async function listTileMaps(): Promise<TileMap[]> {
   const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
   try {
-    const keys = await client.send(new QueryCommand({
-      TableName: process.env.DATA_TABLE_NAME,
+    const maps: TileMap[] = [];
+
+    const indexQuery: QueryCommandInput = {
+      TableName: TABLE_NAME,
       IndexName: 'table-index',
       KeyConditionExpression: '#table = :table',
       ExpressionAttributeNames: {
@@ -25,21 +36,29 @@ export async function listTileMaps(): Promise<TileMap[]> {
       ExpressionAttributeValues: {
         ':table': 'tile-maps'
       }
-    }));
+    };
 
-    if (!keys.Items) {
-      return [];
+    // Paginate on keys (from index)
+    for await (const keys of paginateQuery({ client }, indexQuery)) {
+      if (!keys.Items) {
+        continue;
+      }
+
+      // Request items
+      const res = await client.send(new BatchGetCommand({
+        RequestItems: {
+          [TABLE_NAME]: {
+            Keys: keys.Items
+          }
+        }
+      }));
+
+      if (res.Responses?.[TABLE_NAME]) {
+        maps.push(...res.Responses[TABLE_NAME] as TileMap[])
+      }
     }
 
-    const res = await client.send(new BatchGetCommand({
-      RequestItems: {
-        [process.env.DATA_TABLE_NAME!]: {
-          Keys: keys.Items
-        }
-      }
-    }));
-
-    return res.Responses?.[process.env.DATA_TABLE_NAME!] as TileMap[] ?? [];
+    return maps;
   } finally {
     client.destroy();
   }
