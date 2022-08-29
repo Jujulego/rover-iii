@@ -11,7 +11,7 @@ const config: webpack.Configuration = {
   },
   output: {
     clean: true,
-    publicPath: '/ants',
+    publicPath: '/ants/',
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     assetModuleFilename: 'assets/[hash][ext][query]'

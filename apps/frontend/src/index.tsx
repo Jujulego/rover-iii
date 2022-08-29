@@ -17,7 +17,7 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <HashRouter basename="/ants">
+      <HashRouter>
         <App />
       </HashRouter>
     </ThemeProvider>
