@@ -127,7 +127,7 @@ jobs:
     needs: [lint, test]
 
     environment:
-      name: frontend
+      name: github-pages
       url: ${{ steps.deployement.outputs.page_url }}
 
     permissions:
