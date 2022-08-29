@@ -17,7 +17,7 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
+      <BrowserRouter basename="/ants">
         <App />
       </BrowserRouter>
     </ThemeProvider>
