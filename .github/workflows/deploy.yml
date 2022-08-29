@@ -154,9 +154,11 @@ jobs:
 
       - name: Get api url
         id: info
-        run: echo "::set-output name=api_url::$(yarn sls info --verbose | grep HttpApiUrl | cut -d' ' -f 4)"
+        run: echo "::set-output name=api_url::$(yarn workspace @ants/api sls info --verbose | grep HttpApiUrl | cut -d' ' -f 4)"
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+
+      - run: echo "${{ steps.info.outputs.api_url }}"
 
     outputs:
       api-url: ${{ steps.info.outputs.api_url }}
@@ -168,7 +170,7 @@ jobs:
 
     environment:
       name: github-pages
-      url: ${{ steps.deployement.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
 
     permissions:
       contents: read
