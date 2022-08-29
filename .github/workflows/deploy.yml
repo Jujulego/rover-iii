@@ -195,11 +195,6 @@ jobs:
           name: build-libs-artifacts
           path: libs
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: terraform-outputs
-          path: infra
-
       - name: Deploy api
         run: yarn workspace @ants/api sls deploy --verbose
         env:
