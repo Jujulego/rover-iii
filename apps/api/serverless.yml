@@ -35,6 +35,14 @@ provider:
       allowedOrigins:
         - https://jujulego.github.io
 
+    authorizers:
+      cognito:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: !Sub 'https://cognito-idp.eu-west-3.amazonaws.com/${UserPool}'
+        audience:
+          - !Ref UserPoolClient
+
   iam:
     role:
       statements:
@@ -64,6 +72,8 @@ functions:
       - httpApi:
           path: /api/tile-maps
           method: get
+          authorizer:
+            name: cognito
 
   getTileMap:
     handler: src/tile-maps/handlers.getById
@@ -71,9 +81,50 @@ functions:
       - httpApi:
           path: /api/tile-maps/{id}
           method: get
+          authorizer:
+            name: cognito
 
 resources:
   Resources:
+    UserPool:
+      Type: 'AWS::Cognito::UserPool'
+      Properties:
+        UserPoolName: 'ants-user-pool-${sls:stage}'
+        AutoVerifiedAttributes:
+          - email
+        UsernameAttributes:
+          - email
+        UsernameConfiguration:
+          CaseSensitive: false
+
+    UserPoolClient:
+      Type: 'AWS::Cognito::UserPoolClient'
+      Properties:
+        ClientName: 'ants-frontend-${sls:stage}'
+        UserPoolId: !Ref UserPool
+        CallbackURLs:
+          - http://localhost:3000
+          - https://jujulego.github.io
+        GenerateSecret: false
+        SupportedIdentityProviders:
+          - COGNITO
+        AllowedOAuthFlows:
+          - implicit
+        AllowedOAuthFlowsUserPoolClient: true
+        AllowedOAuthScopes:
+          - email
+          - openid
+          - profile
+        ExplicitAuthFlows:
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+
+    UserPoolDomain:
+      Type: 'AWS::Cognito::UserPoolDomain'
+      Properties:
+        Domain: 'ants-${sls:stage}'
+        UserPoolId: !Ref UserPool
+
     DataTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
