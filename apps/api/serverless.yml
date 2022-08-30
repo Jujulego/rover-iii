@@ -13,6 +13,7 @@ custom:
   esbuild:
     bundle: true
     minify: false
+    plugins: 'esbuild-plugins.js'
 
 package:
   individually: true
@@ -29,19 +30,13 @@ provider:
 
   environment:
     DATA_TABLE_NAME: ${self:custom.data-table}
+    AUTH_CLIENT_ID: 18n89po3rl347oi32ibir91t0t
+    AUTH_USER_POOL_ID: eu-west-3_3GnLIjjNo
 
   httpApi:
     cors:
       allowedOrigins:
         - https://jujulego.github.io
-
-    authorizers:
-      cognito:
-        type: jwt
-        identitySource: $request.header.Authorization
-        issuerUrl: !Sub 'https://cognito-idp.${aws:region}.amazonaws.com/${UserPool}'
-        audience:
-          - !Ref UserPoolClient
 
   iam:
     role:
@@ -72,8 +67,6 @@ functions:
       - httpApi:
           path: /api/tile-maps
           method: get
-          authorizer:
-            name: cognito
 
   getTileMap:
     handler: src/tile-maps/handlers.getById
@@ -81,8 +74,6 @@ functions:
       - httpApi:
           path: /api/tile-maps/{id}
           method: get
-          authorizer:
-            name: cognito
 
 resources:
   Resources:

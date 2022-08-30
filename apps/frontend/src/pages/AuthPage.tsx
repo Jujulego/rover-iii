@@ -5,8 +5,6 @@ import { FC, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
-import '../auth';
-
 // Component
 const AuthPage: FC = () => {
   const [user, setUser] = useState<CognitoUser | null>(null);

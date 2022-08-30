@@ -57,7 +57,7 @@ const config: webpack.Configuration = {
     new webpack.EnvironmentPlugin({
       API_URL: 'http://localhost:3000',
       AUTH_DOMAIN: 'ants-dev.auth.eu-west-3.amazoncognito.com',
-      AUTH_IDENTITY_POOL_ID: 'eu-west-3:49a54efc-2d14-4e4f-8f79-483333afa4bf',
+      AUTH_IDENTITY_POOL_ID: 'eu-west-3:c92ed726-997f-4c3c-9427-83fee2a02062',
       AUTH_USER_POOL_ID: 'eu-west-3_3GnLIjjNo',
       AUTH_CLIENT_ID: '18n89po3rl347oi32ibir91t0t',
     }),

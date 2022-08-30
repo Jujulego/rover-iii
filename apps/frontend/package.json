@@ -18,6 +18,7 @@
   "dependencies": {
     "@ants/maths": "1.0.0",
     "@aws-amplify/auth": "4.6.4",
+    "@aws-amplify/core": "4.7.2",
     "@emotion/react": "11.10.0",
     "@emotion/styled": "11.10.0",
     "@jujulego/aegis": "1.0.0-rc.4",

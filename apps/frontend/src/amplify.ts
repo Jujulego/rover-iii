@@ -1,4 +1,4 @@
-import { Amplify } from 'aws-amplify';
+import { Amplify, Auth } from 'aws-amplify';
 
 Amplify.configure({
   Auth: {
@@ -12,5 +12,19 @@ Amplify.configure({
       redirectSignIn: window.location.origin + window.location.pathname,
       responseType: 'code',
     }
+  },
+  API: {
+    endpoints: [
+      {
+        name: 'ants-api',
+        endpoint: process.env.API_URL,
+        custom_header: async () => ({
+          Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}`,
+        })
+      }
+    ]
   }
 });
+
+
+Auth.currentSession().then((ses) => console.log(ses.getAccessToken()));

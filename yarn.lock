@@ -55,8 +55,10 @@ __metadata:
     "@types/node": 16.11.56
     "@typescript-eslint/eslint-plugin": 5.36.0
     "@typescript-eslint/parser": 5.36.0
+    aws-jwt-verify: 3.1.0
     esbuild: 0.15.5
     esbuild-jest: 0.5.0
+    esbuild-plugin-alias: 0.2.1
     eslint: 8.23.0
     eslint-plugin-jest: 27.0.1
     eslint-plugin-workspaces: 0.7.0
@@ -77,6 +79,7 @@ __metadata:
   dependencies:
     "@ants/maths": 1.0.0
     "@aws-amplify/auth": 4.6.4
+    "@aws-amplify/core": 4.7.2
     "@emotion/react": 11.10.0
     "@emotion/styled": 11.10.0
     "@jujulego/aegis": 1.0.0-rc.4
@@ -7164,7 +7167,7 @@ __metadata:
     eslint-plugin-workspaces: 0.7.0
     typescript: 4.8.2
   dependenciesMeta:
-    serverless-offline@9.2.6:
+    serverless-offline@9.3.0:
       unplugged: true
   languageName: unknown
   linkType: soft
@@ -7556,6 +7559,13 @@ __metadata:
     "@aws-amplify/ui": 2.0.5
     "@aws-amplify/xr": 3.0.51
   checksum: cc46ccc1420096cdd4e94b888c1ef759a20e49883929308872a4900ee1c1dfd061c1e8fb625a928834386ace77a3c43f5814153f171bde9938c9c6b9447fb891
+  languageName: node
+  linkType: hard
+
+"aws-jwt-verify@npm:3.1.0":
+  version: 3.1.0
+  resolution: "aws-jwt-verify@npm:3.1.0"
+  checksum: b978817018a234b91a711f3615ce93eb0a128ca1bffc37801e82faf63e264d458b4afdb32a2f9a7ac353ae170de13c8471a035764996d685c34da6443c7beafd
   languageName: node
   linkType: hard
 
@@ -10139,6 +10149,13 @@ __metadata:
   version: 0.15.5
   resolution: "esbuild-openbsd-64@npm:0.15.5"
   conditions: os=openbsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"esbuild-plugin-alias@npm:0.2.1":
+  version: 0.2.1
+  resolution: "esbuild-plugin-alias@npm:0.2.1"
+  checksum: afe2d2c8b5f09d5321cb8d9c0825e8a9f6e03c2d50df92f953a291d4620cc29eddb3da9e33b238f6d8f77738e0277bdcb831f127399449fecf78fb84c04e5da9
   languageName: node
   linkType: hard
 
