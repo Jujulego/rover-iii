@@ -39,7 +39,7 @@ provider:
       cognito:
         type: jwt
         identitySource: $request.header.Authorization
-        issuerUrl: !Sub 'https://cognito-idp.eu-west-3.amazonaws.com/${UserPool}'
+        issuerUrl: !Sub 'https://cognito-idp.${aws:region}.amazonaws.com/${UserPool}'
         audience:
           - !Ref UserPoolClient
 
@@ -103,12 +103,13 @@ resources:
         ClientName: 'ants-frontend-${sls:stage}'
         UserPoolId: !Ref UserPool
         CallbackURLs:
-          - http://localhost:3000
-          - https://jujulego.github.io
+          - http://localhost:4000/ants/
+          - https://jujulego.github.io/ants/
         GenerateSecret: false
         SupportedIdentityProviders:
           - COGNITO
         AllowedOAuthFlows:
+          - code
           - implicit
         AllowedOAuthFlowsUserPoolClient: true
         AllowedOAuthScopes:
@@ -124,6 +125,78 @@ resources:
       Properties:
         Domain: 'ants-${sls:stage}'
         UserPoolId: !Ref UserPool
+
+    IdentityPool:
+      Type: 'AWS::Cognito::IdentityPool'
+      Properties:
+        IdentityPoolName: 'ants-identity-pool-${sls:stage}'
+        AllowUnauthenticatedIdentities: true
+        CognitoIdentityProviders:
+          - ClientId: !Ref UserPoolClient
+            ProviderName: !GetAtt UserPool.ProviderName
+
+    IdentityPoolRoleMapping:
+      Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+      Properties:
+        IdentityPoolId: !Ref IdentityPool
+        Roles:
+          authenticated: !GetAtt CognitoAuthorizedRole.Arn
+          unauthenticated: !GetAtt CognitoUnAuthorizedRole.Arn
+
+    CognitoUnAuthorizedRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Federated: "cognito-identity.amazonaws.com"
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  "cognito-identity.amazonaws.com:aud": !Ref IdentityPool
+                "ForAnyValue:StringLike":
+                  "cognito-identity.amazonaws.com:amr": unauthenticated
+        Policies:
+          - PolicyName: "CognitoUnauthorizedPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "mobileanalytics:PutEvents"
+                    - "cognito-sync:*"
+                  Resource: "*"
+
+    CognitoAuthorizedRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Federated: "cognito-identity.amazonaws.com"
+              Action:
+                - "sts:AssumeRoleWithWebIdentity"
+              Condition:
+                StringEquals:
+                  "cognito-identity.amazonaws.com:aud": !Ref IdentityPool
+                "ForAnyValue:StringLike":
+                  "cognito-identity.amazonaws.com:amr": authenticated
+        Policies:
+          - PolicyName: "CognitoAuthorizedPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "mobileanalytics:PutEvents"
+                    - "cognito-sync:*"
+                    - "cognito-identity:*"
+                  Resource: "*"
 
     DataTable:
       Type: 'AWS::DynamoDB::Table'
@@ -152,3 +225,16 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
+
+  Outputs:
+    AuthDomain:
+      Value: !Sub '${UserPoolDomain}.auth.${aws:region}.amazon.cognito.com'
+
+    AuthIdentityPoolId:
+      Value: !Ref IdentityPool
+
+    AuthUserPoolId:
+      Value: !Ref UserPool
+
+    AuthClientId:
+      Value: !Ref UserPoolClient

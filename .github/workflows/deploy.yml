@@ -177,16 +177,23 @@ jobs:
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
 
-      - name: Get api url
+      - name: Get outputs
         id: info
-        run: echo "::set-output name=api_url::$(yarn workspace @ants/api sls info --verbose | grep HttpApiUrl | cut -d' ' -f 4)"
+        run: |
+          echo "::set-output name=HttpApiUrl::$(yarn workspace @ants/api sls info --verbose | grep HttpApiUrl | cut -d' ' -f 4)"
+          echo "::set-output name=AuthDomain::$(yarn workspace @ants/api sls info --verbose | grep AuthDomain | cut -d' ' -f 4)"
+          echo "::set-output name=AuthIdentityPoolId::$(yarn workspace @ants/api sls info --verbose | grep AuthIdentityPoolId | cut -d' ' -f 4)"
+          echo "::set-output name=AuthUserPoolId::$(yarn workspace @ants/api sls info --verbose | grep AuthUserPoolId | cut -d' ' -f 4)"
+          echo "::set-output name=AuthClientId::$(yarn workspace @ants/api sls info --verbose | grep AuthClientId | cut -d' ' -f 4)"
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
 
-      - run: echo "${{ steps.info.outputs.api_url }}"
-
     outputs:
-      api-url: ${{ steps.info.outputs.api_url }}
+      HttpApiUrl: ${{ steps.info.outputs.HttpApiUrl }}
+      AuthDomain: ${{ steps.info.outputs.AuthDomain }}
+      AuthIdentityPoolId: ${{ steps.info.outputs.AuthIdentityPoolId }}
+      AuthUserPoolId: ${{ steps.info.outputs.AuthUserPoolId }}
+      AuthClientId: ${{ steps.info.outputs.AuthClientId }}
 
   deploy-ants:
     name: 'deploy @ants/frontend'
@@ -222,7 +229,11 @@ jobs:
       - name: Build frontend
         run: yarn workspace @ants/frontend build
         env:
-          API_URL: ${{ needs.deploy-api.outputs.api-url }}
+          API_URL: ${{ needs.deploy-api.outputs.HttpApiUrl }}
+          AUTH_DOMAIN: ${{ needs.deploy-api.outputs.AuthDomain }}
+          AUTH_IDENTITY_POOL_ID: ${{ needs.deploy-api.outputs.AuthIdentityPoolId }}
+          AUTH_USER_POOL_ID: ${{ needs.deploy-api.outputs.AuthUserPoolId }}
+          AUTH_CLIENT_ID: ${{ needs.deploy-api.outputs.AuthClientId }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v2

@@ -48,10 +48,18 @@ const config: webpack.Configuration = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    fallback: {
+      buffer: require.resolve('buffer/'),
+      url: require.resolve('url/'),
+    }
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      API_URL: 'http://localhost:3000'
+      API_URL: 'http://localhost:3000',
+      AUTH_DOMAIN: 'ants-dev.auth.eu-west-3.amazoncognito.com',
+      AUTH_IDENTITY_POOL_ID: 'eu-west-3:49a54efc-2d14-4e4f-8f79-483333afa4bf',
+      AUTH_USER_POOL_ID: 'eu-west-3_3GnLIjjNo',
+      AUTH_CLIENT_ID: '18n89po3rl347oi32ibir91t0t',
     }),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html'),
