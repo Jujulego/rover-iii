@@ -1,30 +1,15 @@
-import { Amplify, Auth } from 'aws-amplify';
+import { Auth } from '@aws-amplify/auth';
 
-Amplify.configure({
-  Auth: {
-    region: 'eu-west-3',
-    identityPoolId: process.env.AUTH_IDENTITY_POOL_ID,
-    userPoolId: process.env.AUTH_USER_POOL_ID,
-    userPoolWebClientId: process.env.AUTH_CLIENT_ID,
-    oauth: {
-      domain: process.env.AUTH_DOMAIN,
-      scope: ['email', 'openid', 'profile'],
-      redirectSignIn: window.location.origin + window.location.pathname,
-      responseType: 'code',
-    }
-  },
-  API: {
-    endpoints: [
-      {
-        name: 'ants-api',
-        endpoint: process.env.API_URL,
-        custom_header: async () => ({
-          Authorization: `Bearer ${(await Auth.currentSession()).getAccessToken().getJwtToken()}`,
-        })
-      }
-    ]
+// Configure authentication
+Auth.configure({
+  region: 'eu-west-3',
+  identityPoolId: process.env.AUTH_IDENTITY_POOL_ID,
+  userPoolId: process.env.AUTH_USER_POOL_ID,
+  userPoolWebClientId: process.env.AUTH_CLIENT_ID,
+  oauth: {
+    domain: process.env.AUTH_DOMAIN,
+    scope: ['email', 'openid', 'profile'],
+    redirectSignIn: window.location.origin + window.location.pathname,
+    responseType: 'code',
   }
 });
-
-
-Auth.currentSession().then((ses) => console.log(ses.getAccessToken()));

@@ -1,5 +1,5 @@
-import { CognitoUser } from '@aws-amplify/auth';
-import { Auth, Hub } from 'aws-amplify';
+import { Auth, CognitoUser } from '@aws-amplify/auth';
+import { Hub } from '@aws-amplify/core';
 import { FC, useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
@@ -25,7 +25,7 @@ const AuthPage: FC = () => {
     });
 
     Auth.currentAuthenticatedUser()
-      .then(currentUser => setUser(currentUser))
+      .then((currentUser) => setUser(currentUser))
       .catch(() => console.log("Not signed in"));
 
     return unsubscribe;
