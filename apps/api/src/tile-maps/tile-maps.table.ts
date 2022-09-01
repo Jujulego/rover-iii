@@ -1,12 +1,7 @@
 import { IRect } from '@ants/maths';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  BatchGetCommand,
-  DynamoDBDocumentClient,
-  GetCommand,
-  paginateQuery,
-  QueryCommandInput
-} from '@aws-sdk/lib-dynamodb';
+import { BatchGetCommand, GetCommand, paginateQuery, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
+
+import { dynamodbClient } from '../dynamodb';
 
 // Constants
 const TABLE_NAME = process.env.DATA_TABLE_NAME!;
@@ -21,7 +16,7 @@ export interface TileMap {
 
 // Operations
 export async function listTileMaps(): Promise<TileMap[]> {
-  const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+  const client = dynamodbClient();
 
   try {
     const maps: TileMap[] = [];
@@ -65,7 +60,7 @@ export async function listTileMaps(): Promise<TileMap[]> {
 }
 
 export async function getTileMap(id: string): Promise<TileMap | undefined> {
-  const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+  const client = dynamodbClient();
 
   try {
     const res = await client.send(new GetCommand({

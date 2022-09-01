@@ -1,14 +1,15 @@
 import { NotFound } from 'http-errors';
 
 import { apiGateway, auth } from '../middlewares';
-import { getTileMap, listTileMaps } from '../tables/tile-maps';
+
+import { getTileMap, listTileMaps } from './tile-maps.table';
 
 // Handlers
 export const list = apiGateway(auth({ anonymous: true })(async () => {
   return await listTileMaps();
 }));
 
-export const getById = apiGateway(async (event) => {
+export const getById = apiGateway(auth({ anonymous: true })(async (event) => {
   const id = event.pathParameters?.id;
   const map = id && await getTileMap(id);
 
@@ -17,4 +18,4 @@ export const getById = apiGateway(async (event) => {
   }
 
   return map;
-});
+}));
