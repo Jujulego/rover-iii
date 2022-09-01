@@ -11,22 +11,22 @@ const AuthPage: FC = () => {
   const [customState, setCustomState] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
+    const unsubscribe = Hub.listen('auth', ({ payload: { event, data } }) => {
       switch (event) {
-        case "signIn":
+        case 'signIn':
           setUser(data);
           break;
-        case "signOut":
+        case 'signOut':
           setUser(null);
           break;
-        case "customOAuthState":
+        case 'customOAuthState':
           setCustomState(data);
       }
     });
 
     Auth.currentAuthenticatedUser()
       .then((currentUser) => setUser(currentUser))
-      .catch(() => console.log("Not signed in"));
+      .catch(() => console.warn('Not signed in'));
 
     return unsubscribe;
   }, []);

@@ -26,11 +26,11 @@ const config: webpack.Configuration = {
           //name: 'vendors',
           name(module: webpack.Module, chunks: webpack.Chunk[], cacheGroupKey: string) {
             if (module.identifier().match(/[\\/](@aws|amazon)/)) {
-              return 'aws.vendors'
+              return 'aws.vendors';
             }
 
             if (module.identifier().match(/[\\/](@mui|@emotion)/)) {
-              return 'mui.vendors'
+              return 'mui.vendors';
             }
 
             return 'vendors';
