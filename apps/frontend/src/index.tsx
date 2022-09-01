@@ -6,6 +6,7 @@ import { HashRouter } from 'react-router-dom';
 
 import { App } from './App';
 import { theme } from './theme';
+import './amplify';
 
 // Polyfills
 import 'regenerator-runtime/runtime';

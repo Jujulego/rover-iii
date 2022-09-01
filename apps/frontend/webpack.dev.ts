@@ -10,6 +10,7 @@ export default merge(common, {
   devServer: {
     port: 4000,
     hot: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    open: ['/ants']
   }
 });

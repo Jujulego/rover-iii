@@ -1,6 +1,7 @@
-import { apiGateway } from '../../src/middlewares';
 import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
 import { NotFound } from 'http-errors';
+
+import { apiGateway } from '../../src/middlewares';
 
 // Setup
 let event: APIGatewayProxyEventV2;

@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@ants/maths": "1.0.0",
+    "@aws-amplify/auth": "4.6.4",
+    "@aws-amplify/core": "4.7.2",
     "@emotion/react": "11.10.0",
     "@emotion/styled": "11.10.0",
     "@jujulego/aegis": "1.0.0-rc.4",
@@ -25,6 +27,7 @@
     "@mui/icons-material": "5.10.2",
     "@mui/material": "5.10.2",
     "axios": "0.27.2",
+    "buffer": "6.0.3",
     "dexie": "3.2.2",
     "dexie-react-hooks": "1.1.1",
     "nanoid": "4.0.0",
@@ -35,7 +38,8 @@
     "react-router-dom": "6.3.0",
     "regenerator-runtime": "0.13.9",
     "rxjs": "7.5.6",
-    "seedrandom": "3.0.5"
+    "seedrandom": "3.0.5",
+    "url": "0.11.0"
   },
   "devDependencies": {
     "@swc/core": "1.2.244",
@@ -45,7 +49,6 @@
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",
     "@types/seedrandom": "3.0.2",
-    "@types/webpack": "5.28.0",
     "@types/webpack-bundle-analyzer": "4.4.2",
     "@typescript-eslint/eslint-plugin": "5.36.0",
     "@typescript-eslint/parser": "5.36.0",

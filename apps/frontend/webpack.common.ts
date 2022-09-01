@@ -23,7 +23,18 @@ const config: webpack.Configuration = {
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
+          //name: 'vendors',
+          name(module: webpack.Module, chunks: webpack.Chunk[], cacheGroupKey: string) {
+            if (module.identifier().match(/[\\/](@aws|amazon)/)) {
+              return 'aws.vendors';
+            }
+
+            if (module.identifier().match(/[\\/](@mui|@emotion)/)) {
+              return 'mui.vendors';
+            }
+
+            return 'vendors';
+          },
           chunks: 'all',
         },
       },
@@ -48,10 +59,18 @@ const config: webpack.Configuration = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    fallback: {
+      buffer: require.resolve('buffer/'),
+      url: require.resolve('url/'),
+    }
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      API_URL: 'http://localhost:3000'
+      API_URL: 'http://localhost:3000',
+      AUTH_DOMAIN: 'ants-dev.auth.eu-west-3.amazoncognito.com',
+      AUTH_IDENTITY_POOL_ID: 'eu-west-3:c92ed726-997f-4c3c-9427-83fee2a02062',
+      AUTH_USER_POOL_ID: 'eu-west-3_3GnLIjjNo',
+      AUTH_CLIENT_ID: '18n89po3rl347oi32ibir91t0t',
     }),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html'),
