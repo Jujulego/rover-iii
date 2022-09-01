@@ -3,7 +3,7 @@ import { BadRequest, NotFound } from 'http-errors';
 import { apiGateway, auth } from '../middlewares';
 
 import { createTileMapSchema, updateTileMapSchema } from './tile-map.schema';
-import { createTileMap, getTileMap, listTileMaps, updateTileMap } from './tile-maps.table';
+import { createTileMap, deleteTileMap, getTileMap, listTileMaps, updateTileMap } from './tile-maps.table';
 
 // Handlers
 export const list = apiGateway(auth({ anonymous: true })(async () => {
@@ -45,4 +45,12 @@ export const update = apiGateway(auth()(async (event) => {
   }
 
   return map;
+}));
+
+export const deleteById = apiGateway(auth()(async (event) => {
+  const id = event.pathParameters?.id;
+
+  if (id) {
+    await deleteTileMap(id);
+  }
 }));

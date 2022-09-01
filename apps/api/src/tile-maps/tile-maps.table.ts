@@ -1,7 +1,7 @@
 import { IRect } from '@ants/maths';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 import {
-  BatchGetCommand,
+  BatchGetCommand, DeleteCommand,
   GetCommand,
   paginateQuery,
   PutCommand,
@@ -148,6 +148,22 @@ export async function updateTileMap(id: string, data: UpdateTileMapData): Promis
     }
 
     throw err;
+  } finally {
+    client.destroy();
+  }
+}
+
+export async function deleteTileMap(id: string): Promise<void> {
+  const client = dynamodbClient();
+
+  try {
+    const res = await client.send(new DeleteCommand({
+      TableName: process.env.DATA_TABLE_NAME,
+      Key: {
+        id,
+        table: 'tile-maps'
+      }
+    }));
   } finally {
     client.destroy();
   }

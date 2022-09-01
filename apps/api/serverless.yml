@@ -90,6 +90,13 @@ functions:
           path: /api/tile-maps/{id}
           method: put
 
+  deleteTileMap:
+    handler: src/tile-maps/handlers.deleteById
+    events:
+      - httpApi:
+          path: /api/tile-maps/{id}
+          method: delete
+
 resources:
   Resources:
     DataTable:
