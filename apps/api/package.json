@@ -28,7 +28,7 @@
     "lodash.omit": "4.5.0"
   },
   "devDependencies": {
-    "@swc/core": "1.2.244",
+    "@swc/core": "1.2.245",
     "@types/aws-lambda": "8.10.102",
     "@types/http-errors": "1.8.2",
     "@types/jest": "29.0.0",
