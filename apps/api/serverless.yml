@@ -30,8 +30,8 @@ provider:
 
   environment:
     DATA_TABLE_NAME: ${self:custom.data-table}
-    AUTH_CLIENT_ID: 18n89po3rl347oi32ibir91t0t
-    AUTH_USER_POOL_ID: eu-west-3_3GnLIjjNo
+    AUTH_CLIENT_ID: ${ssm:/ants/${sls:stage}/client-id}
+    AUTH_USER_POOL_ID: ${ssm:/ants/${sls:stage}/user-pool-id}
 
   httpApi:
     cors:
@@ -77,118 +77,6 @@ functions:
 
 resources:
   Resources:
-    UserPool:
-      Type: 'AWS::Cognito::UserPool'
-      Properties:
-        UserPoolName: 'ants-user-pool-${sls:stage}'
-        AutoVerifiedAttributes:
-          - email
-        UsernameAttributes:
-          - email
-        UsernameConfiguration:
-          CaseSensitive: false
-
-    UserPoolClient:
-      Type: 'AWS::Cognito::UserPoolClient'
-      Properties:
-        ClientName: 'ants-frontend-${sls:stage}'
-        UserPoolId: !Ref UserPool
-        CallbackURLs:
-          - http://localhost:4000/ants/
-          - https://jujulego.github.io/ants/
-        GenerateSecret: false
-        SupportedIdentityProviders:
-          - COGNITO
-        AllowedOAuthFlows:
-          - code
-          - implicit
-        AllowedOAuthFlowsUserPoolClient: true
-        AllowedOAuthScopes:
-          - email
-          - openid
-          - profile
-        ExplicitAuthFlows:
-          - ALLOW_USER_SRP_AUTH
-          - ALLOW_REFRESH_TOKEN_AUTH
-
-    UserPoolDomain:
-      Type: 'AWS::Cognito::UserPoolDomain'
-      Properties:
-        Domain: 'ants-${sls:stage}'
-        UserPoolId: !Ref UserPool
-
-    IdentityPool:
-      Type: 'AWS::Cognito::IdentityPool'
-      Properties:
-        IdentityPoolName: 'ants-identity-pool-${sls:stage}'
-        AllowUnauthenticatedIdentities: true
-        CognitoIdentityProviders:
-          - ClientId: !Ref UserPoolClient
-            ProviderName: !GetAtt UserPool.ProviderName
-
-    IdentityPoolRoleMapping:
-      Type: "AWS::Cognito::IdentityPoolRoleAttachment"
-      Properties:
-        IdentityPoolId: !Ref IdentityPool
-        Roles:
-          authenticated: !GetAtt CognitoAuthorizedRole.Arn
-          unauthenticated: !GetAtt CognitoUnAuthorizedRole.Arn
-
-    CognitoUnAuthorizedRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Principal:
-                Federated: "cognito-identity.amazonaws.com"
-              Action:
-                - "sts:AssumeRoleWithWebIdentity"
-              Condition:
-                StringEquals:
-                  "cognito-identity.amazonaws.com:aud": !Ref IdentityPool
-                "ForAnyValue:StringLike":
-                  "cognito-identity.amazonaws.com:amr": unauthenticated
-        Policies:
-          - PolicyName: "CognitoUnauthorizedPolicy"
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: "Allow"
-                  Action:
-                    - "mobileanalytics:PutEvents"
-                    - "cognito-sync:*"
-                  Resource: "*"
-
-    CognitoAuthorizedRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Principal:
-                Federated: "cognito-identity.amazonaws.com"
-              Action:
-                - "sts:AssumeRoleWithWebIdentity"
-              Condition:
-                StringEquals:
-                  "cognito-identity.amazonaws.com:aud": !Ref IdentityPool
-                "ForAnyValue:StringLike":
-                  "cognito-identity.amazonaws.com:amr": authenticated
-        Policies:
-          - PolicyName: "CognitoAuthorizedPolicy"
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: "Allow"
-                  Action:
-                    - "mobileanalytics:PutEvents"
-                    - "cognito-sync:*"
-                    - "cognito-identity:*"
-                  Resource: "*"
-
     DataTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -216,16 +104,8 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
-
-  Outputs:
-    AuthDomain:
-      Value: !Sub '${UserPoolDomain}.auth.${aws:region}.amazon.cognito.com'
-
-    AuthIdentityPoolId:
-      Value: !Ref IdentityPool
-
-    AuthUserPoolId:
-      Value: !Ref UserPool
-
-    AuthClientId:
-      Value: !Ref UserPoolClient
+        Tags:
+          - Key: Project
+            Value: ants
+          - Key: STAGE
+            Value: ${sls:stage}
