@@ -1,7 +1,8 @@
+import { Auth } from '@aws-amplify/auth';
 import { AegisApi } from '@jujulego/aegis-api';
 import axios, { AxiosRequestConfig } from 'axios';
 
-// Api
+// Api util
 export const $api = new AegisApi<AxiosRequestConfig>(
   (req, signal, opts) =>
     axios.request({
@@ -14,3 +15,16 @@ export const $api = new AegisApi<AxiosRequestConfig>(
     })
       .then((res) => res.data)
 );
+
+// Configure axios to use token from amplify
+axios.interceptors.request.use(async (config) => {
+  const session = await Auth.currentSession()
+    .catch(() => undefined);
+
+  if (session) {
+    config.headers ??= {};
+    config.headers['Authorization'] = `Bearer ${session.getAccessToken().getJwtToken()}`;
+  }
+
+  return config;
+});

@@ -10,6 +10,7 @@ Auth.configure({
     domain: process.env.AUTH_DOMAIN,
     scope: ['email', 'openid', 'profile'],
     redirectSignIn: window.location.origin + window.location.pathname,
+    redirectSignOut: window.location.origin + window.location.pathname,
     responseType: 'code',
   }
 });
