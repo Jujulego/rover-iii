@@ -13,6 +13,7 @@ custom:
   esbuild:
     bundle: true
     minify: false
+    sourcemap: true
 
 package:
   individually: true
@@ -28,6 +29,7 @@ provider:
     apiGateway: true
 
   environment:
+    NODE_OPTIONS: '--enable-source-maps'
     DATA_TABLE_NAME: ${self:custom.data-table}
     AUTH_CLIENT_ID: ${ssm:/ants/${sls:stage}/client-id}
     AUTH_USER_POOL_ID: ${ssm:/ants/${sls:stage}/user-pool-id}
@@ -67,12 +69,26 @@ functions:
           path: /api/tile-maps
           method: get
 
+  createTileMap:
+    handler: src/tile-maps/handlers.create
+    events:
+      - httpApi:
+          path: /api/tile-maps
+          method: post
+
   getTileMap:
     handler: src/tile-maps/handlers.getById
     events:
       - httpApi:
           path: /api/tile-maps/{id}
           method: get
+
+  updateTileMap:
+    handler: src/tile-maps/handlers.update
+    events:
+      - httpApi:
+          path: /api/tile-maps/{id}
+          method: put
 
 resources:
   Resources:

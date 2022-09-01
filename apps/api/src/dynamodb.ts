@@ -4,7 +4,11 @@ import AwsXRay from 'aws-xray-sdk-core';
 
 // Utils
 export function dynamodbClient() {
-  return DynamoDBDocumentClient.from(
-    AwsXRay.captureAWSv3Client(new DynamoDBClient({}))
-  );
+  let client = new DynamoDBClient({});
+
+  if (!process.env.IS_OFFLINE) {
+    client = AwsXRay.captureAWSv3Client(client);
+  }
+
+  return DynamoDBDocumentClient.from(client);
 }
