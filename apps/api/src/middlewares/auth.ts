@@ -54,5 +54,5 @@ export function auth<O>(opts?: { anonymous?: boolean }): Middleware<APIGatewayPr
     } else {
       throw new Unauthorized();
     }
-  }
+  };
 }

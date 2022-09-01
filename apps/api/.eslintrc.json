@@ -5,6 +5,12 @@
   ],
   "overrides": [
     {
+      "files": "**/*.{js,jsx,ts,tsx}",
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
       "files": "**/*.test.{js,jsx,ts,tsx}",
       "globals": {
         "jest/globals": true
