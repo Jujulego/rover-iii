@@ -55,10 +55,9 @@ __metadata:
     "@types/node": 16.11.56
     "@typescript-eslint/eslint-plugin": 5.36.0
     "@typescript-eslint/parser": 5.36.0
-    aws-jwt-verify: 3.1.0
+    aws-jwt-verify: 2.1.3
     esbuild: 0.15.5
     esbuild-jest: 0.5.0
-    esbuild-plugin-alias: 0.2.1
     eslint: 8.23.0
     eslint-plugin-jest: 27.0.1
     eslint-plugin-workspaces: 0.7.0
@@ -5937,10 +5936,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-jwt-verify@npm:3.1.0":
-  version: 3.1.0
-  resolution: "aws-jwt-verify@npm:3.1.0"
-  checksum: b978817018a234b91a711f3615ce93eb0a128ca1bffc37801e82faf63e264d458b4afdb32a2f9a7ac353ae170de13c8471a035764996d685c34da6443c7beafd
+"aws-jwt-verify@npm:2.1.3":
+  version: 2.1.3
+  resolution: "aws-jwt-verify@npm:2.1.3"
+  checksum: 5273bb199a3fef17f8ba62273896099b8f4b41cdc6a18b478fad799e5fb562b047f80a75adca1585f206cb94be77ab47d74f860f6d1182b393f10a52c008e144
   languageName: node
   linkType: hard
 
@@ -8504,13 +8503,6 @@ __metadata:
   version: 0.15.5
   resolution: "esbuild-openbsd-64@npm:0.15.5"
   conditions: os=openbsd & cpu=x64
-  languageName: node
-  linkType: hard
-
-"esbuild-plugin-alias@npm:0.2.1":
-  version: 0.2.1
-  resolution: "esbuild-plugin-alias@npm:0.2.1"
-  checksum: afe2d2c8b5f09d5321cb8d9c0825e8a9f6e03c2d50df92f953a291d4620cc29eddb3da9e33b238f6d8f77738e0277bdcb831f127399449fecf78fb84c04e5da9
   languageName: node
   linkType: hard
 

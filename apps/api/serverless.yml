@@ -13,7 +13,6 @@ custom:
   esbuild:
     bundle: true
     minify: false
-    plugins: 'esbuild-plugins.js'
 
 package:
   individually: true
