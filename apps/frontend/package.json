@@ -42,6 +42,7 @@
     "url": "0.11.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-ssm": "3.163.0",
     "@swc/core": "1.2.245",
     "@swc/jest": "0.2.22",
     "@types/jest": "29.0.0",

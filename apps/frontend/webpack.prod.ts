@@ -3,7 +3,9 @@ import { merge } from 'webpack-merge';
 import common from './webpack.common';
 
 // Config
-export default merge(common, {
-  mode: 'production',
-  devtool: 'source-map',
-});
+export default async function prod() {
+  return merge(await common(), {
+    mode: 'production',
+    devtool: 'source-map',
+  });
+}
