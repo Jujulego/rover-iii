@@ -1,92 +1,107 @@
+import { GetParametersByPathCommand, SSMClient } from '@aws-sdk/client-ssm';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HTMLWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 import webpack from 'webpack';
 
+// Utils
+async function loadParameters() {
+  try {
+    const client = new SSMClient({ region: 'eu-west-3' });
+    const parameters = await client.send(new GetParametersByPathCommand({ Path: '/ants/dev' }));
+
+    return new Map(parameters.Parameters?.map((p) => [p.Name, p.Value]));
+  } catch (err) {
+    console.warn('Failed to load SSM Parameters', err);
+    return new Map();
+  }
+}
+
 // Config
-const config: webpack.Configuration = {
-  entry: {
-    main: './src/index'
-  },
-  output: {
-    clean: true,
-    publicPath: '/ants/',
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
-    assetModuleFilename: 'assets/[hash][ext][query]'
-  },
-  optimization: {
-    runtimeChunk: 'single',
-    moduleIds: 'deterministic',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          //name: 'vendors',
-          name(module: webpack.Module, chunks: webpack.Chunk[], cacheGroupKey: string) {
-            if (module.identifier().match(/[\\/](@aws|amazon)/)) {
-              return 'aws.vendors';
-            }
+export default async function common(): Promise<webpack.Configuration> {
+  const ssm = await loadParameters();
 
-            if (module.identifier().match(/[\\/](@mui|@emotion)/)) {
-              return 'mui.vendors';
-            }
+  return {
+    entry: {
+      main: './src/index'
+    },
+    output: {
+      clean: true,
+        publicPath: '/ants/',
+        filename: '[name].[contenthash].js',
+        path: path.resolve(__dirname, 'dist'),
+        assetModuleFilename: 'assets/[hash][ext][query]'
+    },
+    optimization: {
+      runtimeChunk: 'single',
+        moduleIds: 'deterministic',
+        splitChunks: {
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+              name(module: webpack.Module) {
+              if (module.identifier().match(/[\\/](@aws|amazon)/)) {
+                return 'aws.vendors';
+              }
 
-            return 'vendors';
+              if (module.identifier().match(/[\\/](@mui|@emotion)/)) {
+                return 'mui.vendors';
+              }
+
+              return 'vendors';
+            },
+            chunks: 'all',
           },
-          chunks: 'all',
         },
       },
     },
-  },
-  performance: {
-    maxAssetSize: 500000,
-    maxEntrypointSize: 1000000,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
-        use: 'swc-loader',
-      },
-      {
-        test: /\.(png|jpe?g|gif)$/i,
-        type: 'asset'
-      }
-    ],
-  },
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
-    fallback: {
-      buffer: require.resolve('buffer/'),
-      url: require.resolve('url/'),
-    }
-  },
-  plugins: [
-    new webpack.EnvironmentPlugin({
-      API_URL: 'http://localhost:3000',
-      AUTH_DOMAIN: 'ants-dev.auth.eu-west-3.amazoncognito.com',
-      AUTH_IDENTITY_POOL_ID: 'eu-west-3:c92ed726-997f-4c3c-9427-83fee2a02062',
-      AUTH_USER_POOL_ID: 'eu-west-3_3GnLIjjNo',
-      AUTH_CLIENT_ID: '18n89po3rl347oi32ibir91t0t',
-    }),
-    new HTMLWebpackPlugin({
-      template: path.resolve(__dirname, 'public', 'index.html'),
-      filename: 'index.html',
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
+    performance: {
+      maxAssetSize: 500000,
+        maxEntrypointSize: 1000000,
+    },
+    module: {
+      rules: [
         {
-          from: '**',
-          context: path.resolve(__dirname, 'public'),
-          globOptions: { ignore: ['**/public/index.html'] }
+          test: /\.(js|jsx|ts|tsx)$/,
+          exclude: /node_modules/,
+          use: 'swc-loader',
         },
-      ]
-    }),
-    new ForkTsCheckerWebpackPlugin()
-  ],
-};
-
-export default config;
+        {
+          test: /\.(png|jpe?g|gif)$/i,
+          type: 'asset'
+        }
+      ],
+    },
+    resolve: {
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        fallback: {
+        buffer: require.resolve('buffer/'),
+          url: require.resolve('url/'),
+      }
+    },
+    plugins: [
+      new webpack.EnvironmentPlugin({
+        API_URL: 'http://localhost:3000',
+        AUTH_DOMAIN: ssm.get('/ants/dev/auth-domain') ?? 'AUTH_DOMAIN',
+        AUTH_IDENTITY_POOL_ID: ssm.get('/ants/dev/identity-pool-id') ?? 'AUTH_IDENTITY_POOL_ID',
+        AUTH_USER_POOL_ID: ssm.get('/ants/dev/user-pool-id') ?? 'AUTH_USER_POOL_ID',
+        AUTH_CLIENT_ID: ssm.get('/ants/dev/client-id') ?? 'AUTH_CLIENT_ID',
+      }),
+      new HTMLWebpackPlugin({
+        template: path.resolve(__dirname, 'public', 'index.html'),
+        filename: 'index.html',
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: '**',
+            context: path.resolve(__dirname, 'public'),
+            globOptions: { ignore: ['**/public/index.html'] }
+          },
+        ]
+      }),
+      new ForkTsCheckerWebpackPlugin()
+    ],
+  };
+}

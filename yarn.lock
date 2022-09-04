@@ -79,6 +79,7 @@ __metadata:
     "@ants/maths": 1.0.0
     "@aws-amplify/auth": 4.6.5
     "@aws-amplify/core": 4.7.3
+    "@aws-sdk/client-ssm": 3.163.0
     "@emotion/react": 11.10.4
     "@emotion/styled": 11.10.4
     "@jujulego/aegis": 1.0.0-rc.4
@@ -487,6 +488,50 @@ __metadata:
     tslib: ^2.3.1
     uuid: ^8.3.2
   checksum: 9ebc3bd67d357eccc5a1c11c20b70009d006e963dd6ee9dae6513ee7acd872df05f4b0cd7316f39c93fe72b0db92332bcb0577618d262ba3ea5b9cdd8e8b1ac1
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/client-ssm@npm:3.163.0":
+  version: 3.163.0
+  resolution: "@aws-sdk/client-ssm@npm:3.163.0"
+  dependencies:
+    "@aws-crypto/sha256-browser": 2.0.0
+    "@aws-crypto/sha256-js": 2.0.0
+    "@aws-sdk/client-sts": 3.163.0
+    "@aws-sdk/config-resolver": 3.163.0
+    "@aws-sdk/credential-provider-node": 3.163.0
+    "@aws-sdk/fetch-http-handler": 3.162.0
+    "@aws-sdk/hash-node": 3.162.0
+    "@aws-sdk/invalid-dependency": 3.162.0
+    "@aws-sdk/middleware-content-length": 3.162.0
+    "@aws-sdk/middleware-host-header": 3.162.0
+    "@aws-sdk/middleware-logger": 3.162.0
+    "@aws-sdk/middleware-recursion-detection": 3.162.0
+    "@aws-sdk/middleware-retry": 3.162.0
+    "@aws-sdk/middleware-serde": 3.162.0
+    "@aws-sdk/middleware-signing": 3.163.0
+    "@aws-sdk/middleware-stack": 3.162.0
+    "@aws-sdk/middleware-user-agent": 3.162.0
+    "@aws-sdk/node-config-provider": 3.162.0
+    "@aws-sdk/node-http-handler": 3.162.0
+    "@aws-sdk/protocol-http": 3.162.0
+    "@aws-sdk/smithy-client": 3.162.0
+    "@aws-sdk/types": 3.162.0
+    "@aws-sdk/url-parser": 3.162.0
+    "@aws-sdk/util-base64-browser": 3.109.0
+    "@aws-sdk/util-base64-node": 3.55.0
+    "@aws-sdk/util-body-length-browser": 3.154.0
+    "@aws-sdk/util-body-length-node": 3.55.0
+    "@aws-sdk/util-defaults-mode-browser": 3.162.0
+    "@aws-sdk/util-defaults-mode-node": 3.163.0
+    "@aws-sdk/util-user-agent-browser": 3.162.0
+    "@aws-sdk/util-user-agent-node": 3.162.0
+    "@aws-sdk/util-utf8-browser": 3.109.0
+    "@aws-sdk/util-utf8-node": 3.109.0
+    "@aws-sdk/util-waiter": 3.162.0
+    tslib: ^2.3.1
+    uuid: ^8.3.2
+  checksum: 694719e6258ac16b99b991d17ae61e744de6946d6814c0f26b8021a5878e2291f5d10714d0db4ffa12f9e0bac1e3bbcf0d993804bbe442d213c9bf7f0ed43548
   languageName: node
   linkType: hard
 
