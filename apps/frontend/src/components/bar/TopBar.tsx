@@ -13,7 +13,7 @@ export const TopBar: FC = () => {
   const user = useCognitoUser();
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Ants
