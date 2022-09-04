@@ -1,5 +1,5 @@
 output "AuthDomain" {
-  value = "${aws_cognito_user_pool_domain.ants.domain}.auth.${var.region}.amazon.cognito.com"
+  value = "${aws_cognito_user_pool_domain.ants.domain}.auth.${var.region}.amazoncognito.com"
 }
 
 output "AuthIdentityPoolId" {
