@@ -5564,7 +5564,7 @@ __metadata:
     eslint-plugin-workspaces: 0.7.0
     typescript: 4.8.2
   dependenciesMeta:
-    serverless-offline@9.3.0:
+    serverless-offline@10.0.0:
       unplugged: true
   languageName: unknown
   linkType: soft
