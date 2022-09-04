@@ -40,8 +40,7 @@ export default async function common(): Promise<webpack.Configuration> {
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
-              //name: 'vendors',
-              name(module: webpack.Module, chunks: webpack.Chunk[], cacheGroupKey: string) {
+              name(module: webpack.Module) {
               if (module.identifier().match(/[\\/](@aws|amazon)/)) {
                 return 'aws.vendors';
               }
@@ -104,5 +103,5 @@ export default async function common(): Promise<webpack.Configuration> {
       }),
       new ForkTsCheckerWebpackPlugin()
     ],
-  }
-};
+  };
+}
