@@ -84,10 +84,10 @@ export default async function common(): Promise<webpack.Configuration> {
     plugins: [
       new webpack.EnvironmentPlugin({
         API_URL: 'http://localhost:3000',
-        AUTH_DOMAIN: ssm.get('/ants/dev/auth-domain'),
-        AUTH_IDENTITY_POOL_ID: ssm.get('/ants/dev/identity-pool-id'),
-        AUTH_USER_POOL_ID: ssm.get('/ants/dev/user-pool-id'),
-        AUTH_CLIENT_ID: ssm.get('/ants/dev/client-id'),
+        AUTH_DOMAIN: ssm.get('/ants/dev/auth-domain') ?? 'AUTH_DOMAIN',
+        AUTH_IDENTITY_POOL_ID: ssm.get('/ants/dev/identity-pool-id') ?? 'AUTH_IDENTITY_POOL_ID',
+        AUTH_USER_POOL_ID: ssm.get('/ants/dev/user-pool-id') ?? 'AUTH_USER_POOL_ID',
+        AUTH_CLIENT_ID: ssm.get('/ants/dev/client-id') ?? 'AUTH_CLIENT_ID',
       }),
       new HTMLWebpackPlugin({
         template: path.resolve(__dirname, 'public', 'index.html'),
