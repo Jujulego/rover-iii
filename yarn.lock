@@ -116,7 +116,7 @@ __metadata:
     observable-hooks: 4.2.0
     react: 18.2.0
     react-dom: 18.2.0
-    react-hook-form: 7.29.0
+    react-hook-form: 7.34.2
     react-router-dom: 6.3.0
     regenerator-runtime: 0.13.9
     rxjs: 7.5.6
@@ -14959,12 +14959,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.29.0":
-  version: 7.29.0
-  resolution: "react-hook-form@npm:7.29.0"
+"react-hook-form@npm:7.34.2":
+  version: 7.34.2
+  resolution: "react-hook-form@npm:7.34.2"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 4379f972c916d01f4706c27c0fb207b1676b382fc4803ee557edf77cb2355ff320a659940325fda81c1f4fd799e685a6e228577c1050e5b8c32e815884d0defe
+  checksum: 485cde0248e668ad1845b927f9cc05b434c384141bb03bc143a7d7cc937eebf119c935114ccbfa397b463808283dab5b2334022fe5dba975402b201e601d6876
   languageName: node
   linkType: hard
 

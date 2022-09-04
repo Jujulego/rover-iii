@@ -4,7 +4,6 @@ import {
   FieldPath,
   FieldPathValue,
   FieldValues,
-  UnpackNestedValue,
   useController,
   UseControllerProps
 } from 'react-hook-form';
@@ -20,7 +19,7 @@ export type ControlledTextFieldProps<TFV extends FieldValues, TN extends FieldPa
   control: Control<TFV>;
   rules?: UseControllerProps<TFV, TN>['rules'];
   defaultValue?: UseControllerProps<TFV, TN>['defaultValue'];
-  transform?: ControlledTransform<UnpackNestedValue<FieldPathValue<TFV, TN>>>;
+  transform?: ControlledTransform<FieldPathValue<TFV, TN>>;
 }
 
 // Component
@@ -39,7 +38,7 @@ export const ControlledTextField = <TFV extends FieldValues, TN extends FieldPat
     inputProps.min = typeof rules.min === 'object' ? rules.min.value : rules.min;
   }
 
-  const toInput = transform?.toInput ?? ((v: UnpackNestedValue<FieldPathValue<TFV, TN>>) => v);
+  const toInput = transform?.toInput ?? ((v: FieldPathValue<TFV, TN>) => v);
   const fromInput = transform?.fromInput ?? ((v: string) => v);
 
   return (
