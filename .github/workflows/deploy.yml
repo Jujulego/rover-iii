@@ -213,7 +213,7 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: eu-west-3
-          role-to-assume: ${{ secret.AWS_ROLE }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
 
       - name: Install
         run: yarn install --immutable
