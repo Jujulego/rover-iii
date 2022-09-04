@@ -7,10 +7,15 @@ import webpack from 'webpack';
 
 // Utils
 async function loadParameters() {
-  const client = new SSMClient({ region: 'eu-west-3' });
-  const parameters = await client.send(new GetParametersByPathCommand({ Path: '/ants/dev' }));
+  try {
+    const client = new SSMClient({ region: 'eu-west-3' });
+    const parameters = await client.send(new GetParametersByPathCommand({ Path: '/ants/dev' }));
 
-  return new Map(parameters.Parameters?.map((p) => [p.Name, p.Value]));
+    return new Map(parameters.Parameters?.map((p) => [p.Name, p.Value]));
+  } catch (err) {
+    console.warn('Failed to load SSM Parameters', err);
+    return new Map();
+  }
 }
 
 // Config

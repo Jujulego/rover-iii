@@ -210,6 +210,11 @@ jobs:
           node-version: 16
           cache: yarn
 
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-3
+          role-to-assume: ${{ secret.AWS_ROLE }}
+
       - name: Install
         run: yarn install --immutable
 
