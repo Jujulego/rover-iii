@@ -13,7 +13,7 @@ custom:
   esbuild:
     bundle: true
     minify: false
-    sourcemap: true
+#    sourcemap: true
 
 package:
   individually: true
@@ -29,7 +29,7 @@ provider:
     apiGateway: true
 
   environment:
-    NODE_OPTIONS: '--enable-source-maps'
+#    NODE_OPTIONS: '--enable-source-maps'
     DATA_TABLE_NAME: ${self:custom.data-table}
     AUTH_CLIENT_ID: ${ssm:/ants/${sls:stage}/client-id}
     AUTH_USER_POOL_ID: ${ssm:/ants/${sls:stage}/user-pool-id}
