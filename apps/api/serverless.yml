@@ -9,6 +9,7 @@ plugins:
 
 custom:
   data-table: 'ants-data-${sls:stage}'
+  tiles-table: 'ants-tiles-${sls:stage}'
 
   esbuild:
     bundle: true
@@ -31,6 +32,7 @@ provider:
   environment:
 #    NODE_OPTIONS: '--enable-source-maps'
     DATA_TABLE_NAME: ${self:custom.data-table}
+    TILES_TABLE_NAME: ${self:custom.tiles-table}
     AUTH_CLIENT_ID: ${ssm:/ants/${sls:stage}/client-id}
     AUTH_USER_POOL_ID: ${ssm:/ants/${sls:stage}/user-pool-id}
 
@@ -58,6 +60,7 @@ provider:
           Resource:
             - !GetAtt DataTable.Arn
             - !Sub '${DataTable.Arn}/index/*'
+            - !GetAtt TilesTable.Arn
 
   tags:
     Project: ants
@@ -101,6 +104,13 @@ functions:
           path: /api/tile-maps/{id}
           method: delete
 
+  listTiles:
+    handler: src/tiles/handlers.list
+    events:
+      - httpApi:
+          path: /api/tile-maps/{id}/tiles
+          method: get
+
 resources:
   Resources:
     DataTable:
@@ -130,6 +140,29 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
+        Tags:
+          - Key: Project
+            Value: ants
+          - Key: STAGE
+            Value: ${sls:stage}
+
+    TilesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.tiles-table}
+        AttributeDefinitions:
+          - AttributeName: blockId
+            AttributeType: S
+          - AttributeName: tileId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: blockId
+            KeyType: HASH
+          - AttributeName: tileId
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
         Tags:
           - Key: Project
             Value: ants

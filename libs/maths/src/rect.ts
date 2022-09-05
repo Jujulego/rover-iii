@@ -108,6 +108,14 @@ export class Rect implements IRect {
   }
 
   // Methods
+  equals(r: IRect): boolean;
+  equals(t: number, l: number, b: number, r: number): boolean;
+  equals(...args: RectArgs): boolean {
+    const [r] = parseRectArgs(args);
+
+    return this.t === r.t && this.l === r.l && this.b === r.b && this.r === r.r;
+  }
+
   within(r: IRect): boolean;
   within(t: number, l: number, b: number, r: number): boolean;
   within(...args: RectArgs): boolean {
@@ -121,6 +129,19 @@ export class Rect implements IRect {
   contains(...args: VectorArgs): boolean {
     const [v] = parseVectorArgs(args);
     return v.x >= this.l && v.x <= this.r && v.y >= this.t && v.y <= this.b;
+  }
+
+  intersect(r: IRect): Rect;
+  intersect(t: number, l: number, b: number, r: number): Rect;
+  intersect(...args: RectArgs): Rect {
+    const [r] = parseRectArgs(args);
+
+    return new Rect(
+      Math.max(this.t, r.t),
+      Math.max(this.l, r.l),
+      Math.min(this.b, r.b),
+      Math.min(this.r, r.r),
+    );
   }
 
   // Properties
