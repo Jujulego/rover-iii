@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
+import { useCognitoUser } from '../../auth/useCognitoUser';
 import { ITileMap, TileMap } from '../../maps/tile-map.entity';
 import { EditTileMapDialog } from './EditTileMapDialog';
 import { DeleteTileMapsAlert } from './DeleteTileMapsAlert';
@@ -28,6 +29,8 @@ const useTileMaps = $hook.list(TileMap.findAll);
 
 // Component
 const TileMapsTable: FC = () => {
+  const user = useCognitoUser();
+
   // Fetch all maps
   const maps = useTileMaps('all');
 
@@ -74,21 +77,21 @@ const TileMapsTable: FC = () => {
         ) : (
           <Typography sx={{ flex: 1 }} color="inherit" variant="subtitle1">{selected.length} tile map(s) selected</Typography>
         ) }
-        { selected.length === 0 && (
+        { user && selected.length === 0 && (
           <Tooltip title="Create">
             <IconButton onClick={() => setEditing(true)}>
               <AddIcon />
             </IconButton>
           </Tooltip>
         ) }
-        { selected.length === 1 && (
+        { user && selected.length === 1 && (
           <Tooltip title="Edit">
             <IconButton onClick={() => setEditing(maps.data.find(m => m.id === selected[0]) ?? false)}>
               <EditIcon />
             </IconButton>
           </Tooltip>
         ) }
-        { selected.length > 0 && (
+        { user && selected.length > 0 && (
           <Tooltip title="Delete" sx={{ ml: 1 }}>
             <IconButton onClick={() => setDeleting(true)}>
               <DeleteIcon />
