@@ -64,7 +64,7 @@ export const EditTileMapDialog: FC<EditTileMapDialogProps> = (props) => {
     } finally {
       setSaving(false);
     }
-  }, [tileMap]);
+  }, [tileMap, onClose]);
 
   // Render
   return (
@@ -147,7 +147,7 @@ export const EditTileMapDialog: FC<EditTileMapDialogProps> = (props) => {
       <DialogActions>
         <Button type="reset" color="secondary" onClick={onClose}>Cancel</Button>
         <LoadingButton
-          type="submit" variant="contained"
+          type="submit"
           loading={saving} loadingIndicator="Saving..."
           disabled={!formState.isValid}
         >

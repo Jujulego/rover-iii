@@ -15,11 +15,13 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { ITileMap, TileMap } from '../../maps/tile-map.entity';
 import { EditTileMapDialog } from './EditTileMapDialog';
+import { DeleteTileMapsAlert } from './DeleteTileMapsAlert';
 
 // Api calls
 const useTileMaps = $hook.list(TileMap.findAll);
@@ -31,6 +33,7 @@ const TileMapsTable: FC = () => {
 
   // State
   const [editing, setEditing] = useState<boolean | ITileMap>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
   const [selected, setSelected] = useState<string[]>([]);
 
   // Callbacks
@@ -82,6 +85,13 @@ const TileMapsTable: FC = () => {
           <Tooltip title="Edit">
             <IconButton onClick={() => setEditing(maps.data.find(m => m.id === selected[0]) ?? false)}>
               <EditIcon />
+            </IconButton>
+          </Tooltip>
+        ) }
+        { selected.length > 0 && (
+          <Tooltip title="Delete" sx={{ ml: 1 }}>
+            <IconButton onClick={() => setDeleting(true)}>
+              <DeleteIcon />
             </IconButton>
           </Tooltip>
         ) }
@@ -140,6 +150,14 @@ const TileMapsTable: FC = () => {
       <EditTileMapDialog
         tileMap={typeof editing === "object" ? editing : undefined}
         open={!!editing} onClose={() => setEditing(false)}
+      />
+
+      <DeleteTileMapsAlert
+        tileMaps={
+          selected.map((id) => maps.data.find((map) => map.id === id))
+            .filter((map): map is ITileMap => !!map)
+        }
+        open={deleting} onClose={() => setDeleting(false)}
       />
     </Paper>
   );

@@ -23,4 +23,5 @@ export const TileMap = $entity('TileMap', $store.memory(), (itm: ITileMap) => it
         .body<Partial<TileMapDTO>>(),
       ({ id }) => id as string
     ),
+    delete: $item.delete($api.delete`/api/tile-maps/${'id'}`, ({ id }) => id as string)
   }));
