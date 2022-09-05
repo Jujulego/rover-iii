@@ -64,7 +64,7 @@ export class Vector implements IVector {
   // Methods
   // - unary operations
   norm(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
+    return Math.hypot(this.x, this.y);
   }
 
   unit(): Vector {

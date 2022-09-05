@@ -82,7 +82,7 @@ export async function createTileMap(data: CreateTileMapData): Promise<TileMap> {
     };
 
     await client.send(new PutCommand({
-      TableName: process.env.DATA_TABLE_NAME,
+      TableName: TABLE_NAME,
       Item: tileMap
     }));
 
@@ -97,7 +97,7 @@ export async function getTileMap(id: string): Promise<TileMap | undefined> {
 
   try {
     const res = await client.send(new GetCommand({
-      TableName: process.env.DATA_TABLE_NAME,
+      TableName: TABLE_NAME,
       Key: {
         id,
         table: 'tile-maps'
@@ -129,7 +129,7 @@ export async function updateTileMap(id: string, data: UpdateTileMapData): Promis
 
     // Update !
     const res = await client.send(new UpdateCommand({
-      TableName: process.env.DATA_TABLE_NAME,
+      TableName: TABLE_NAME,
       Key: {
         id,
         table: 'tile-maps'
@@ -159,7 +159,7 @@ export async function deleteTileMap(id: string): Promise<void> {
 
   try {
     await client.send(new DeleteCommand({
-      TableName: process.env.DATA_TABLE_NAME,
+      TableName: TABLE_NAME,
       Key: {
         id,
         table: 'tile-maps'

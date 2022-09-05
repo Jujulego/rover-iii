@@ -104,6 +104,13 @@ functions:
           path: /api/tile-maps/{id}
           method: delete
 
+  listTiles:
+    handler: src/tiles/handlers.list
+    events:
+      - httpApi:
+          path: /api/tile-maps/{id}/tiles
+          method: get
+
 resources:
   Resources:
     DataTable:
