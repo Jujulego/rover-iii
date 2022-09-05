@@ -32,7 +32,7 @@ export const DeleteTileMapsAlert: FC<DeleteTileMapsAlertProps> = ({ tileMaps, op
     try {
       await Promise.all(tileMaps.map((map) => TileMap.delete({ id: map.id })));
       TileMap.$list('all').data = TileMap.$list('all').data
-        .filter((map) => !tileMaps.find((del) => del.id === map.id))
+        .filter((map) => !tileMaps.find((del) => del.id === map.id));
 
       onClose();
     } finally {

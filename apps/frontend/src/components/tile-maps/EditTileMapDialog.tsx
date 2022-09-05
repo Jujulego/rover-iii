@@ -156,4 +156,4 @@ export const EditTileMapDialog: FC<EditTileMapDialogProps> = (props) => {
       </DialogActions>
     </Dialog>
   );
-}
+};

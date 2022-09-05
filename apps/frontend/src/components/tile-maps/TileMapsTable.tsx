@@ -56,7 +56,7 @@ const TileMapsTable: FC = () => {
         ...selected.slice(idx + 1)
       ]);
     }
-  }, [selected, maps]);
+  }, [selected]);
 
   // Render
   return (
@@ -148,7 +148,7 @@ const TileMapsTable: FC = () => {
       </TableContainer>
 
       <EditTileMapDialog
-        tileMap={typeof editing === "object" ? editing : undefined}
+        tileMap={typeof editing === 'object' ? editing : undefined}
         open={!!editing} onClose={() => setEditing(false)}
       />
 
