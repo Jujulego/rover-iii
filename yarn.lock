@@ -90,6 +90,7 @@ __metadata:
     "@jujulego/aegis-api": 1.0.0-rc.3
     "@jujulego/aegis-react": 1.0.0-rc.3
     "@mui/icons-material": 5.10.3
+    "@mui/lab": 5.0.0-alpha.97
     "@mui/material": 5.10.3
     "@swc/core": 1.2.242
     "@swc/jest": 0.2.22
@@ -3666,6 +3667,35 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 9c32f3e9fc2be61b6518418818ead346469fb4650852307291fe23e16909fc1c2f4bc3b09a524fb0e90920aa1a26a6a41e91815e0da1d15d7e26ccad4f6915fa
+  languageName: node
+  linkType: hard
+
+"@mui/lab@npm:5.0.0-alpha.97":
+  version: 5.0.0-alpha.97
+  resolution: "@mui/lab@npm:5.0.0-alpha.97"
+  dependencies:
+    "@babel/runtime": ^7.18.9
+    "@mui/base": 5.0.0-alpha.95
+    "@mui/system": ^5.10.3
+    "@mui/utils": ^5.10.3
+    clsx: ^1.2.1
+    prop-types: ^15.8.1
+    react-is: ^18.2.0
+  peerDependencies:
+    "@emotion/react": ^11.5.0
+    "@emotion/styled": ^11.3.0
+    "@mui/material": ^5.0.0
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    "@types/react":
+      optional: true
+  checksum: 4d9f032961a3fe76ba802144e3ba3dd48bbfe0053a61caf8b58f2527b227754ac336b6fe1138fa8c8366d01562639e45f799fb20d86cb2c88144a0221d5fca61
   languageName: node
   linkType: hard
 

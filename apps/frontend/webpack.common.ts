@@ -28,19 +28,19 @@ export default async function common(): Promise<webpack.Configuration> {
     },
     output: {
       clean: true,
-        publicPath: '/ants/',
-        filename: '[name].[contenthash].js',
-        path: path.resolve(__dirname, 'dist'),
-        assetModuleFilename: 'assets/[hash][ext][query]'
+      publicPath: '/ants/',
+      filename: '[name].[contenthash].js',
+      path: path.resolve(__dirname, 'dist'),
+      assetModuleFilename: 'assets/[hash][ext][query]'
     },
     optimization: {
       runtimeChunk: 'single',
-        moduleIds: 'deterministic',
-        splitChunks: {
+      moduleIds: 'deterministic',
+      splitChunks: {
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
-              name(module: webpack.Module) {
+            name(module: webpack.Module) {
               if (module.identifier().match(/[\\/](@aws|amazon)/)) {
                 return 'aws.vendors';
               }
@@ -58,7 +58,7 @@ export default async function common(): Promise<webpack.Configuration> {
     },
     performance: {
       maxAssetSize: 500000,
-        maxEntrypointSize: 1000000,
+      maxEntrypointSize: 1000000,
     },
     module: {
       rules: [
@@ -75,9 +75,9 @@ export default async function common(): Promise<webpack.Configuration> {
     },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
-        fallback: {
+      fallback: {
         buffer: require.resolve('buffer/'),
-          url: require.resolve('url/'),
+        url: require.resolve('url/'),
       }
     },
     plugins: [

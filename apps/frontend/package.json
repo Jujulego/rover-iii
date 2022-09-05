@@ -25,6 +25,7 @@
     "@jujulego/aegis-api": "1.0.0-rc.3",
     "@jujulego/aegis-react": "1.0.0-rc.3",
     "@mui/icons-material": "5.10.3",
+    "@mui/lab": "5.0.0-alpha.97",
     "@mui/material": "5.10.3",
     "axios": "0.27.2",
     "buffer": "6.0.3",

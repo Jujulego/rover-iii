@@ -13,17 +13,20 @@ export const TopBar: FC = () => {
   const user = useCognitoUser();
 
   return (
-    <AppBar position="fixed">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Ants
-        </Typography>
-        { user ? (
-          <Button color="inherit" onClick={() => Auth.signOut()}>Logout</Button>
-        ) : (
-          <Button color="inherit" onClick={() => Auth.federatedSignIn()}>Login</Button>
-        ) }
-      </Toolbar>
-    </AppBar>
+    <>
+      <AppBar position="fixed">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Ants
+          </Typography>
+          { user ? (
+            <Button color="inherit" onClick={() => Auth.signOut()}>Logout</Button>
+          ) : (
+            <Button color="inherit" onClick={() => Auth.federatedSignIn()}>Login</Button>
+          ) }
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
+    </>
   );
 };
