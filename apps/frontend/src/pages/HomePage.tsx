@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import Box from '@mui/material/Box';
 
-import TileMapsTable from '../components/TileMapsTable';
+import TileMapsTable from '../components/tile-maps/TileMapsTable';
 
 // Component
 const HomePage: FC = () => {

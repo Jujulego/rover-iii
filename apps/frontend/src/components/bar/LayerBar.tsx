@@ -1,8 +1,15 @@
-import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { CSSObject, Theme } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { FC, useState } from 'react';
+
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Toolbar from '@mui/material/Toolbar';
 
 import { AntMenu } from './AntMenu';
 import { useAnts } from '../MapLayers';
@@ -49,14 +56,19 @@ export const LayerBar: FC = () => {
 
         ...(open ? openMixin(theme) : closedMixin(theme)),
         '& .MuiDrawer-paper': {
+          display: 'flex',
+          flexDirection: 'column',
           overflowX: 'hidden',
+          zIndex: theme.zIndex.appBar - 1,
+
           ...(open ? openMixin(theme) : closedMixin(theme))
         },
       })}
     >
+      <Toolbar />
       <List
         sx={{
-          minHeight: '100%',
+          flex: 1,
 
           display: 'flex',
           flexDirection: 'column',

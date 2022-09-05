@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "eslint .",
     "build": "webpack --config webpack.prod.ts",
-    "start": "webpack serve --open --config webpack.dev.ts",
+    "start": "webpack serve --config webpack.dev.ts",
     "stats": "webpack --config webpack.stats.ts",
     "test": "jest"
   },
@@ -25,6 +25,7 @@
     "@jujulego/aegis-api": "1.0.0-rc.3",
     "@jujulego/aegis-react": "1.0.0-rc.3",
     "@mui/icons-material": "5.10.3",
+    "@mui/lab": "5.0.0-alpha.97",
     "@mui/material": "5.10.3",
     "axios": "0.27.2",
     "buffer": "6.0.3",
@@ -43,7 +44,7 @@
   },
   "devDependencies": {
     "@aws-sdk/client-ssm": "3.163.0",
-    "@swc/core": "1.2.245",
+    "@swc/core": "1.2.242",
     "@swc/jest": "0.2.22",
     "@types/jest": "29.0.0",
     "@types/node": "16.11.56",

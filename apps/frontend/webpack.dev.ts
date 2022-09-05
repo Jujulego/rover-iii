@@ -12,7 +12,7 @@ export default async function dev() {
       port: 4000,
       hot: true,
       historyApiFallback: true,
-      open: ['/ants']
+      open: ['/ants/']
     }
   });
 }
