@@ -23,6 +23,7 @@ export interface TileMap {
   table: 'tile-maps';
   name: string;
   bbox: IRect;
+  blockSize: number;
 }
 
 // Operations
@@ -157,7 +158,7 @@ export async function deleteTileMap(id: string): Promise<void> {
   const client = dynamodbClient();
 
   try {
-    const res = await client.send(new DeleteCommand({
+    await client.send(new DeleteCommand({
       TableName: process.env.DATA_TABLE_NAME,
       Key: {
         id,
