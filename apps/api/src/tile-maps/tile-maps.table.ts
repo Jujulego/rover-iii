@@ -78,7 +78,7 @@ export async function createTileMap(data: CreateTileMapData): Promise<TileMap> {
       id: uuid(),
       table: 'tile-maps',
       ...data
-    }
+    };
 
     await client.send(new PutCommand({
       TableName: process.env.DATA_TABLE_NAME,
@@ -144,7 +144,7 @@ export async function updateTileMap(id: string, data: UpdateTileMapData): Promis
   } catch (err) {
     if (err instanceof ConditionalCheckFailedException) {
       // Object does not exists !
-      return undefined
+      return undefined;
     }
 
     throw err;
