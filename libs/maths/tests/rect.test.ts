@@ -133,7 +133,7 @@ describe('Rect.intersect', () => {
     const r2 = new Rect(1, 2, 5, 5);
 
     expect(r1.intersect(r2))
-      .toEqual({ t: 1, l: 2, b: 2, r: 3 })
+      .toEqual({ t: 1, l: 2, b: 2, r: 3 });
   });
 
   it('should return (1, 2) to (2, 3) (inset)', () => {
@@ -141,7 +141,7 @@ describe('Rect.intersect', () => {
     const r2 = new Rect(0, 0, 5, 5);
 
     expect(r1.intersect(r2))
-      .toEqual({ t: 1, l: 2, b: 2, r: 3 })
+      .toEqual({ t: 1, l: 2, b: 2, r: 3 });
   });
 });
 
