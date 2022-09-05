@@ -13,6 +13,7 @@ resource "aws_cognito_user_pool_client" "ants-frontend" {
   name          = "ants-frontend-${var.stage}"
   user_pool_id  = aws_cognito_user_pool.ants-user-pool.id
   callback_urls = ["http://localhost:4000/ants/", var.frontend-url]
+  logout_urls   = ["http://localhost:4000/ants/", var.frontend-url]
 
   generate_secret              = false
   explicit_auth_flows          = ["ALLOW_REFRESH_TOKEN_AUTH"]
