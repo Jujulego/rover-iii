@@ -18,4 +18,9 @@ export const TileMap = $entity('TileMap', $store.memory(), (itm: ITileMap) => it
   .$protocol(({ $list, $item }) => ({
     findAll: $list.query($api.get`/api/tile-maps`),
     create: $item.mutate($api.post<ITileMap>`/api/tile-maps`.body<TileMapDTO>()),
+    update: $item.mutate(
+      $api.put<ITileMap, ['id']>`/api/tile-maps/${'id'}`
+        .body<Partial<TileMapDTO>>(),
+      ({ id }) => id as string
+    ),
   }));

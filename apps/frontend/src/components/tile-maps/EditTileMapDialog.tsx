@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@mui/material/Button';
@@ -9,46 +9,62 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { PaperProps } from '@mui/material/Paper';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { TileMap, TileMapDTO } from '../../maps/tile-map.entity';
+import { ITileMap, TileMap, TileMapDTO } from '../../maps/tile-map.entity';
 import { ControlledTextField } from '../utils/ControlledTextField';
 
 // Types
 export interface EditTileMapDialogProps {
+  tileMap?: ITileMap;
+
   open: boolean;
   onClose: () => void;
 }
 
 // Component
 export const EditTileMapDialog: FC<EditTileMapDialogProps> = (props) => {
-  const { open, onClose } = props;
+  const { tileMap, open, onClose } = props;
 
   // State
   const [saving, setSaving] = useState(false);
 
   // Form
-  const { control, handleSubmit, formState } = useForm<TileMapDTO>({
+  const { control, handleSubmit, formState, reset } = useForm<TileMapDTO>({
     mode: 'onChange',
     defaultValues: {
       bbox: { t: 0, l: 0, b: 20, r: 20 }
     }
   });
 
+  // Effects
+  useEffect(() => {
+    if (open) {
+      reset({
+        name: tileMap?.name,
+        bbox: tileMap?.bbox ?? { t: 0, l: 0, b: 20, r: 20 },
+      });
+    }
+  }, [tileMap, open, reset]);
+
   // Callbacks
   const saveTileMap = useCallback(async (data: TileMapDTO) => {
     setSaving(true);
 
     try {
-      const map = await TileMap.create({}, data);
-      TileMap.$list('all').data = [
-        ...TileMap.$list('all').data,
-        map,
-      ];
+      if (tileMap) {
+        await TileMap.update({ id: tileMap.id }, data);
+      } else {
+        const map = await TileMap.create({}, data);
+        TileMap.$list('all').data = [
+          ...TileMap.$list('all').data,
+          map,
+        ];
+      }
 
       onClose();
     } finally {
-      setSaving(true);
+      setSaving(false);
     }
-  }, []);
+  }, [tileMap]);
 
   // Render
   return (
