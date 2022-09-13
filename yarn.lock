@@ -52,7 +52,7 @@ __metadata:
     "@types/http-errors": 1.8.2
     "@types/jest": 29.0.0
     "@types/lodash.omit": 4.5.7
-    "@types/node": 16.11.57
+    "@types/node": 16.11.59
     "@types/uuid": 8.3.4
     "@typescript-eslint/eslint-plugin": 5.36.1
     "@typescript-eslint/parser": 5.36.1
@@ -95,7 +95,7 @@ __metadata:
     "@swc/core": 1.2.242
     "@swc/jest": 0.2.22
     "@types/jest": 29.0.0
-    "@types/node": 16.11.57
+    "@types/node": 16.11.59
     "@types/react": 18.0.18
     "@types/react-dom": 18.0.6
     "@types/seedrandom": 3.0.2
@@ -147,7 +147,7 @@ __metadata:
     "@swc/jest": 0.2.22
     "@types/gulp": 4.0.9
     "@types/jest": 29.0.0
-    "@types/node": 16.11.57
+    "@types/node": 16.11.59
     browserslist: 4.21.3
     del: 6.1.1
     eslint: 8.23.0
@@ -4842,10 +4842,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.11.57":
-  version: 16.11.57
-  resolution: "@types/node@npm:16.11.57"
-  checksum: 7c34f5e50e38460fd0f18ae939ad62d5ecf992be7b9db7b1b86b9cc76a4d153b55bf3a94c6379da23df0803c11ad1a96be54c45d3ce612206cb8a18ce433028b
+"@types/node@npm:16.11.59":
+  version: 16.11.59
+  resolution: "@types/node@npm:16.11.59"
+  checksum: b3a2986ef8f8216bb7fd1187dcf2e69aca3e6b6b5fdfd6abf4cf11c44e3cdd587fae875a28dc4ef257e2b369e2c5290642aff6a0a9d702f3385a78f561293259
   languageName: node
   linkType: hard
 
