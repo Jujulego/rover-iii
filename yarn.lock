@@ -86,8 +86,8 @@ __metadata:
     "@aws-sdk/client-ssm": 3.163.0
     "@emotion/react": 11.10.4
     "@emotion/styled": 11.10.4
-    "@jujulego/aegis": 1.0.0-rc.4
-    "@jujulego/aegis-api": 1.0.0-rc.3
+    "@jujulego/aegis": 1.0.0-rc.6
+    "@jujulego/aegis-api": 1.0.0-rc.5
     "@jujulego/aegis-react": 1.0.0-rc.3
     "@mui/icons-material": 5.10.3
     "@mui/lab": 5.0.0-alpha.97
@@ -3488,22 +3488,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/aegis-api@npm:1.0.0-rc.3":
-  version: 1.0.0-rc.3
-  resolution: "@jujulego/aegis-api@npm:1.0.0-rc.3"
+"@jujulego/aegis-api@npm:1.0.0-rc.5":
+  version: 1.0.0-rc.5
+  resolution: "@jujulego/aegis-api@npm:1.0.0-rc.5"
   peerDependencies:
-    "@jujulego/aegis": 1.0.0-rc.4
+    "@jujulego/aegis": 1.0.0-rc.6
     regenerator-runtime: ^0.13.0
-  checksum: 136bc7afd324d3097780d158793986974c0a4d485acb8d792a9dc5910ef20e63e68845150607899b6f4cd6e647c108d6e59921b9755ff44d41f6804b3f1c449e
+  checksum: 3ef566592dd6ea11e40297bba176c85bcc0369469538f1128615a88332b747e97d5ed07e2011531092dc21c0f1366dacd3e460844d5aef5e4828d629282a13c3
   languageName: node
   linkType: hard
 
-"@jujulego/aegis-core@npm:^1.0.0-rc.2":
-  version: 1.0.0-rc.2
-  resolution: "@jujulego/aegis-core@npm:1.0.0-rc.2"
+"@jujulego/aegis-core@npm:^1.0.0-rc.4":
+  version: 1.0.0-rc.4
+  resolution: "@jujulego/aegis-core@npm:1.0.0-rc.4"
+  dependencies:
+    "@jujulego/event-tree": 1.1.0-alpha.6
   peerDependencies:
     regenerator-runtime: ^0.13.0
-  checksum: 8f98aa6c8da62cf01bb4751d41e22b0e44a7b75f4a48f797c09b6fe6cbca2716868fbf7e1bf38f64912ac92d33e0ac65fb6cc1f1076a76a9ceac2a488412652e
+  checksum: ecea6a9abc7253a3b82fad8a786ccb9898997ab860315da77f50d26bbab8f747258a7d661efbeeece6ec5c2a7cc3c5b51273319c015be1e0bcb3bb6db9aba487
   languageName: node
   linkType: hard
 
@@ -3521,14 +3523,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/aegis@npm:1.0.0-rc.4":
-  version: 1.0.0-rc.4
-  resolution: "@jujulego/aegis@npm:1.0.0-rc.4"
+"@jujulego/aegis@npm:1.0.0-rc.6":
+  version: 1.0.0-rc.6
+  resolution: "@jujulego/aegis@npm:1.0.0-rc.6"
   dependencies:
-    "@jujulego/aegis-core": ^1.0.0-rc.2
+    "@jujulego/aegis-core": ^1.0.0-rc.4
+    "@jujulego/event-tree": ^1.1.0-alpha.6
   peerDependencies:
     regenerator-runtime: ^0.13.0
-  checksum: 440b7962f427e635c57a7854089fdfd5bf8e6598b607fa6e5c1919b1ae03689828c9ae72fc38a4b1700e80e0bc2ce8cabd99117d1d3ed3e226008ee08fd355e0
+  checksum: 4934e2eba3e0b08cd313af31a8e6ef55af5b359868b1a0edb49b9f063f7daa89fce3c0d1cc381afb4b6c90fb85f9734cd0c8c8be1da9d6845889ef3465be9bd8
+  languageName: node
+  linkType: hard
+
+"@jujulego/event-tree@npm:1.1.0-alpha.6, @jujulego/event-tree@npm:^1.1.0-alpha.6":
+  version: 1.1.0-alpha.6
+  resolution: "@jujulego/event-tree@npm:1.1.0-alpha.6"
+  peerDependencies:
+    regenerator-runtime: 0.13.9
+  checksum: a0ba7d9c14b83409bef3e15b67f407bff301caec185783c2d4980516f251efa6e506eee78a428af9a5346178991c4ca79eb1dd8fd2fc67a57f74061fd43109ef
   languageName: node
   linkType: hard
 
