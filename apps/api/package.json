@@ -36,7 +36,7 @@
     "@types/http-errors": "1.8.2",
     "@types/jest": "29.0.0",
     "@types/lodash.omit": "4.5.7",
-    "@types/node": "16.11.57",
+    "@types/node": "16.11.59",
     "@types/uuid": "8.3.4",
     "@typescript-eslint/eslint-plugin": "5.36.1",
     "@typescript-eslint/parser": "5.36.1",
