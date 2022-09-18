@@ -38,7 +38,7 @@
     "@types/gulp": "4.0.9",
     "@types/jest": "29.0.0",
     "@types/node": "16.11.59",
-    "browserslist": "4.21.3",
+    "browserslist": "4.21.4",
     "del": "6.1.1",
     "eslint": "8.23.0",
     "eslint-plugin-jest": "27.0.1",
