@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs';
 import { AntWithKnowledge } from '../../ants';
 
 import { useMapParameters } from '../MapLayers';
+import { liveQuery } from 'dexie';
 
 // Types
 export interface AntFogLayerProps {

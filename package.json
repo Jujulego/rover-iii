@@ -4,7 +4,7 @@
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@google.com>",
   "repository": "git@github.com:Jujulego/ants.git",
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "yarn@3.2.4",
   "browserslist": [
     "defaults",
     "not ie 11"
@@ -18,12 +18,12 @@
     "build:libs": "yarn jill each build --no-private"
   },
   "devDependencies": {
-    "@jujulego/jill": "1.2.1",
-    "@typescript-eslint/eslint-plugin": "5.36.1",
-    "@typescript-eslint/parser": "5.36.1",
-    "eslint": "8.23.0",
+    "@jujulego/jill": "2.0.0",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
+    "@typescript-eslint/parser": "5.42.0",
+    "eslint": "8.26.0",
     "eslint-plugin-workspaces": "0.7.0",
-    "typescript": "4.8.2"
+    "typescript": "4.8.4"
   },
   "dependenciesMeta": {
     "serverless-offline@10.0.0": {
