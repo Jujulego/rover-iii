@@ -26,12 +26,16 @@
   },
   "scripts": {
     "build": "jill group build:cjs // build:esm // build:types",
-    "build:cjs": "swc src -d dist/cjs",
+    "build:cjs": "swc src -d dist/cjs -C module.type=commonjs",
     "build:esm": "swc src -d dist/esm",
     "build:types": "tsc --project tsconfig.types.json",
     "clean": "rimraf dist",
     "lint": "eslint .",
     "test": "jest"
+  },
+  "dependencies": {
+    "@jujulego/2d-maths": "^1.2.0",
+    "@jujulego/aegis": "^1.0.0-rc.7"
   },
   "devDependencies": {
     "@jujulego/jill": "2.1.0-alpha.3",
