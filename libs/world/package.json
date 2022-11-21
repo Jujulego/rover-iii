@@ -34,8 +34,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jujulego/2d-maths": "^1.2.0",
-    "@jujulego/aegis": "^1.0.0-rc.7"
+    "@jujulego/2d-maths": "^1.2.0"
   },
   "devDependencies": {
     "@jujulego/jill": "2.1.0-alpha.3",
