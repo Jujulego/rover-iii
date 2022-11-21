@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { FC, useEffect } from 'react';
 
 import { worldClient } from './world-client';
@@ -19,7 +18,7 @@ export const App: FC = () => {
       { pos: { x: 1, y: 2 }, biome: 'grass' },
       { pos: { x: 0, y: 2 }, biome: 'grass' },
     ]);
-  })());
+  })(), []);
 
   // Render
   return (
