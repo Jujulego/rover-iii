@@ -1,0 +1,18 @@
+{
+  "jsc": {
+    "target": "es2022",
+    "parser": {
+      "syntax": "typescript"
+    }
+  },
+  "module": {
+    "type": "es6"
+  },
+  "sourceMaps": true,
+  "env": {
+    "targets": [
+      "defaults",
+      "node 16"
+    ]
+  }
+}

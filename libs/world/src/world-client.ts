@@ -14,7 +14,7 @@ export abstract class WorldClient {
    * @param world
    * @param pos
    */
-  abstract getTile(world: string, pos: IPoint): Promise<ITile>;
+  abstract getTile(world: string, pos: IPoint): Promise<ITile | undefined>;
 
   /**
    * Load all tiles within the given bounding box
