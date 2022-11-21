@@ -5,3 +5,6 @@ import water from './water';
 
 // Constants
 export const BIOMES = { grass, rock, sand, water };
+
+// Types
+export type BiomeName = keyof typeof BIOMES;

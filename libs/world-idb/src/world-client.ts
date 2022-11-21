@@ -1,5 +1,5 @@
 import { ITile, WorldClient } from '@ants/world';
-import { IPoint, IRect } from '@jujulego/2d-maths';
+import { IPoint, Rect } from '@jujulego/2d-maths';
 import Dexie from 'dexie';
 
 // Constants
@@ -39,12 +39,13 @@ export class WorldIdbClient extends WorldClient {
     return this._tiles.get({ world, pos });
   }
 
-  loadTilesIn(world: string, bbox: IRect): Promise<ITile[]> {
+  loadTilesIn(world: string, bbox: Rect): Promise<ITile[]> {
     const coll = this._tiles.where(TILES_XY_INDEX)
       .between(
         [world, bbox.l, bbox.b],
         [world, bbox.r + 1, bbox.t + 1],
-      );
+      )
+      .filter((tile) => bbox.contains(tile.pos));
 
     return coll.toArray();
   }

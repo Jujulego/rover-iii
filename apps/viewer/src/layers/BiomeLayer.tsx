@@ -1,21 +1,24 @@
-import { IPoint, rect } from '@jujulego/2d-maths';
+import { tileKey } from '@ants/world';
+import { IPoint, Rect, transformMatrix } from '@jujulego/2d-maths';
 import { styled } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { worldClient } from '../world-client';
+import { BiomeName, BIOMES } from '../biomes';
 
 // Types
 export interface BiomeLayerProps {
   readonly world: string;
+  readonly area: Rect;
 }
 
 interface TileProps {
-  pos: IPoint;
+  readonly pos: IPoint;
 }
 
 interface LayerProps {
-  s: number;
+  readonly s: number;
 }
 
 // Styles
@@ -40,12 +43,25 @@ const Layer = styled('div', { skipSx: true })<LayerProps>((props) => ({
 // Components
 export const BiomeLayer: FC<BiomeLayerProps> = (props) => {
   // Load tiles
-  const tiles = useLiveQuery(() => worldClient.loadTilesIn(props.world, rect({ x: 0, y: 0 }, { x: 2, y: 2 })), [props.world]);
+  const tiles = useLiveQuery(() => worldClient.loadTilesIn(props.world, props.area), [props.world, props.area], []);
 
+  // Memos
+  const toScreen = useMemo(() => transformMatrix({
+    a: 1, b: 0,
+    c: 0, d: -1,
+    e: 0, f: -props.area.size.dy
+  }), [props.area]);
+
+  // Render
   return (
     <Layer s={64}>
-      { tiles?.map((tile) => (
-        <Tile key={`${tile.pos.x},${tile.pos.y}`} pos={tile.pos} alt={tile.biome} />
+      { tiles.map((tile) => (
+        <Tile
+          key={tileKey(tile)}
+          pos={toScreen.dot(tile.pos)}
+          src={BIOMES[tile.biome as BiomeName]?.texture.toString()}
+          alt={tile.biome}
+        />
       )) }
     </Layer>
   );

@@ -15,3 +15,8 @@ export interface ITile {
    */
   readonly biome: string;
 }
+
+// Utils
+export function tileKey(tile: ITile): string {
+  return `${tile.pos.x},${tile.pos.y}`;
+}
