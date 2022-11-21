@@ -1,0 +1,41 @@
+{
+  "ignorePatterns": [
+    "coverage/**",
+    "dist/**"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": "**/*.{js,jsx,ts,tsx}",
+      "extends": [
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:react-hooks/recommended"
+      ],
+      "rules": {
+        "jsx-quotes": ["error", "prefer-double"],
+        "react/prop-types": "off",
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["@mui/*/*/*", "!@mui/material/test-utils/*"]
+          }
+        ]
+      }
+    },
+    {
+      "files": "**/*.test.{js,jsx,ts,tsx}",
+      "globals": {
+        "jest/globals": true
+      },
+      "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest/style"
+      ]
+    }
+  ]
+}
