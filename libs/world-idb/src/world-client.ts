@@ -4,8 +4,8 @@ import Dexie from 'dexie';
 
 // Constants
 const DB_VERSION = 1;
-const TILES_XY_INDEX = '&[world+pos.x+pos.y]';
-const TILES_YX_INDEX = '&[world+pos.y+pos.x]';
+const TILES_XY_INDEX = '[world+pos.x+pos.y]';
+const TILES_YX_INDEX = '[world+pos.y+pos.x]';
 
 // Types
 export interface ITileEntity extends ITile {
@@ -31,7 +31,7 @@ export class WorldIdbClient extends WorldClient {
   private _initDatabase() {
     this._database.version(DB_VERSION)
       .stores({
-        tiles: [TILES_XY_INDEX, TILES_YX_INDEX].join(', ')
+        tiles: `&${TILES_XY_INDEX}, &${TILES_YX_INDEX}`
       });
   }
 
@@ -39,16 +39,14 @@ export class WorldIdbClient extends WorldClient {
     return this._tiles.get({ world, pos });
   }
 
-  async *loadTilesIn(world: string, bbox: IRect): AsyncGenerator<ITile> {
+  loadTilesIn(world: string, bbox: IRect): Promise<ITile[]> {
     const coll = this._tiles.where(TILES_XY_INDEX)
       .between(
         [world, bbox.l, bbox.b],
         [world, bbox.r + 1, bbox.t + 1],
       );
 
-    for (const tile of await coll.toArray()) {
-      yield tile;
-    }
+    return coll.toArray();
   }
 
   async putTile(world: string, tile: ITile): Promise<void> {

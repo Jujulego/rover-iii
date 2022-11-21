@@ -7,6 +7,7 @@
           <resourceRoots>
             <path value="file://$PROJECT_DIR$/public" />
             <path value="file://$PROJECT_DIR$/apps/frontend/public" />
+            <path value="file://$PROJECT_DIR$/apps/viewer/public" />
           </resourceRoots>
         </entryData>
       </entry>

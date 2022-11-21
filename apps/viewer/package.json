@@ -16,10 +16,15 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ants/world": "1.0.0",
+    "@ants/world-idb": "1.0.0",
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
+    "@jujulego/2d-maths": "1.2.0",
     "@mui/icons-material": "5.10.14",
     "@mui/material": "5.10.14",
+    "dexie": "3.2.2",
+    "dexie-react-hooks": "1.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.4.3",

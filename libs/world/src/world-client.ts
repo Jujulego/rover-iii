@@ -22,7 +22,7 @@ export abstract class WorldClient {
    * @param world
    * @param bbox
    */
-  abstract loadTilesIn(world: string, bbox: IRect): AsyncGenerator<ITile>;
+  abstract loadTilesIn(world: string, bbox: IRect): Promise<ITile[]>;
 
   /**
    * Store the tile

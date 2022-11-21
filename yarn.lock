@@ -187,8 +187,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ants/viewer@workspace:apps/viewer"
   dependencies:
+    "@ants/world": 1.0.0
+    "@ants/world-idb": 1.0.0
     "@emotion/react": 11.10.5
     "@emotion/styled": 11.10.5
+    "@jujulego/2d-maths": 1.2.0
     "@mui/icons-material": 5.10.14
     "@mui/material": 5.10.14
     "@swc/core": 1.3.19
@@ -202,6 +205,8 @@ __metadata:
     "@typescript-eslint/parser": 5.43.0
     browserslist: 4.21.4
     copy-webpack-plugin: 11.0.0
+    dexie: 3.2.2
+    dexie-react-hooks: 1.1.1
     eslint: 8.28.0
     eslint-plugin-jest: 27.1.5
     eslint-plugin-react: 7.31.11
@@ -226,7 +231,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ants/world-idb@workspace:libs/world-idb":
+"@ants/world-idb@1.0.0, @ants/world-idb@workspace:libs/world-idb":
   version: 0.0.0-use.local
   resolution: "@ants/world-idb@workspace:libs/world-idb"
   dependencies:
@@ -240,7 +245,7 @@ __metadata:
     "@types/node": 16.18.3
     "@typescript-eslint/eslint-plugin": 5.43.0
     "@typescript-eslint/parser": 5.43.0
-    dexie: ^3.2.2
+    dexie: 3.2.2
     eslint: 8.27.0
     eslint-plugin-jest: 27.1.5
     eslint-plugin-workspaces: 0.7.0
@@ -248,10 +253,12 @@ __metadata:
     rimraf: 3.0.2
     ts-node: 10.9.1
     typescript: 4.8.4
+  peerDependencies:
+    dexie: ^3.2.2
   languageName: unknown
   linkType: soft
 
-"@ants/world@^1.0.0, @ants/world@workspace:libs/world":
+"@ants/world@1.0.0, @ants/world@^1.0.0, @ants/world@workspace:libs/world":
   version: 0.0.0-use.local
   resolution: "@ants/world@workspace:libs/world"
   dependencies:
@@ -4174,7 +4181,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/2d-maths@npm:^1.2.0":
+"@jujulego/2d-maths@npm:1.2.0, @jujulego/2d-maths@npm:^1.2.0":
   version: 1.2.0
   resolution: "@jujulego/2d-maths@npm:1.2.0"
   checksum: 0c26ab122ba2deb079930fcb86e7987600e3b0e55a998d3a405d0183b34a18fe9d686869b433cb175f9bd26db0a5277e402a1d04dae0aae9c6331201f5354050
@@ -9829,7 +9836,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexie@npm:3.2.2, dexie@npm:^3.2.2":
+"dexie@npm:3.2.2":
   version: 3.2.2
   resolution: "dexie@npm:3.2.2"
   checksum: 7a21079f7ab139ebd724a009917f9293f2b01c341e2a3cd51d2455dda4d4e78b9ca7de0373e963108395cf1921ce7f6556cac967c1e957005a3c7c11794ceccf
