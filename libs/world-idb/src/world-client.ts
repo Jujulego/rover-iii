@@ -58,8 +58,12 @@ export class WorldIdbClient extends WorldClient {
     await this._tiles.bulkPut(tiles.map((tile) => ({ ...tile, world })));
   }
 
-  // Properties
-  get _tiles() {
+  async clear(world: string): Promise<void> {
+    await this._tiles.where({ world }).delete();
+  }
+
+// Properties
+  private get _tiles() {
     return this._database.table<ITileEntity, ITileIndexed>('tiles');
   }
 }

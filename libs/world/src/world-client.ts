@@ -39,4 +39,10 @@ export abstract class WorldClient {
    * @param tiles
    */
   abstract bulkPutTile(world: string, tiles: ITile[]): Promise<void>;
+
+
+  /**
+   * Deletes all data for given world
+   */
+  abstract clear(world: string): Promise<void>;
 }
