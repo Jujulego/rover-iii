@@ -1,29 +1,37 @@
 import { rect } from '@jujulego/2d-maths';
-import { UniformGenerator } from '@ants/world';
-import { FC, useEffect } from 'react';
+import { RandomGenerator } from '@ants/world';
+import { FC, useEffect, useState } from 'react';
 
 import { worldClient } from './world-client';
 import { BiomeLayer } from './layers/BiomeLayer';
 
 // Constant
-const AREA = rect({ x: 0, y: 0 }, { dx: 15, dy: 10 });
+const AREA = rect({ x: 0, y: 0 }, { dx: 40, dy: 20 });
 
 // Utils
-const generator = new UniformGenerator(worldClient);
+const generator = new RandomGenerator(worldClient);
 
 // Component
 export const App: FC = () => {
+  // State
+  const [n, setN] = useState(0);
+
   // Effects
   useEffect(() => void (async () => {
-    await worldClient.clear('test');
-
-    await generator.run({ world: 'test', bbox: AREA }, { biome: 'grass' });
-    await generator.run({ world: 'test', bbox: rect({ x: 3, y: 6 }, { dx: 9, dy: 2 }) }, { biome: 'sand' });
-    await generator.run({ world: 'test', bbox: rect({ x: 5, y: 2 }, { dx: 5, dy: 5 }) }, { biome: 'rock' });
-  })(), []);
+    await generator.run({ world: 'test', bbox: AREA }, {
+      biomes: {
+        water: 0.3,
+        grass: 0.4,
+        sand: 0.3
+      },
+      chunkSize: AREA.size.dx - 1
+    });
+  })(), [n]);
 
   // Render
   return (
-    <BiomeLayer world="test" area={AREA} />
+    <div onClick={() => setN((old) => old+1)}>
+      <BiomeLayer world="test" area={AREA} />
+    </div>
   );
 };

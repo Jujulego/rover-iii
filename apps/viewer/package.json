@@ -20,7 +20,7 @@
     "@ants/world-idb": "1.0.0",
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
-    "@jujulego/2d-maths": "1.4.0",
+    "@jujulego/2d-maths": "1.4.1",
     "@mui/icons-material": "5.10.14",
     "@mui/material": "5.10.14",
     "dexie": "3.2.2",

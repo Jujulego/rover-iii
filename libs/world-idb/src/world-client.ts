@@ -43,7 +43,7 @@ export class WorldIdbClient extends WorldClient {
     const coll = this._tiles.where(TILES_XY_INDEX)
       .between(
         [world, bbox.l, bbox.b],
-        [world, bbox.r + 1, bbox.t + 1],
+        [world, bbox.r, bbox.t],
       )
       .filter((tile) => bbox.contains(tile.pos));
 

@@ -54,7 +54,7 @@ export const BiomeLayer: FC<BiomeLayerProps> = (props) => {
 
   // Render
   return (
-    <Layer s={64}>
+    <Layer s={32}>
       { tiles.map((tile) => (
         <Tile
           key={tileKey(tile)}
