@@ -1,8 +1,7 @@
 import seedrandom from 'seedrandom';
 
-import { IBlock, TileGenerator, TileGeneratorOpts } from './tile-generator';
+import { TileGenerator, TileGeneratorOpts } from './tile-generator';
 import { ITile } from '../tile';
-import { rect } from '@jujulego/2d-maths';
 
 // Types
 export interface RandomGeneratorOpts extends TileGeneratorOpts {
@@ -48,14 +47,14 @@ export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
     return biomes[biomes.length - 1][0];
   }
 
-  protected *generate(block: IBlock, opts: RandomGeneratorOpts): Generator<ITile> {
+  protected *generate(world: string, opts: RandomGeneratorOpts): Generator<ITile> {
     const biomes = this._cumulate(opts.biomes);
     const generator = seedrandom(opts.seed);
 
     const cnt: Record<string, number> = {};
 
-    for (let y = block.bbox.b; y < block.bbox.t; ++y) {
-      for (let x = block.bbox.l; x < block.bbox.r; ++x) {
+    for (let y = opts.bbox.b; y < opts.bbox.t; ++y) {
+      for (let x = opts.bbox.l; x < opts.bbox.r; ++x) {
         const biome = this._select(biomes, generator());
         cnt[biome] = (cnt[biome] ?? 0) + 1;
 

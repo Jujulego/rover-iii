@@ -18,13 +18,14 @@ export const App: FC = () => {
 
   // Effects
   useEffect(() => void (async () => {
-    await generator.run({ world: 'test', bbox: AREA }, {
+    await generator.run('test', {
+      chunkSize: AREA.size.dx - 1,
+      bbox: AREA,
       biomes: {
         water: 0.3,
         grass: 0.4,
         sand: 0.3
-      },
-      chunkSize: AREA.size.dx - 1
+      }
     });
   })(), [n]);
 

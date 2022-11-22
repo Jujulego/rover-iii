@@ -5,12 +5,8 @@ import { WorldClient } from '../world-client';
 
 // Types
 export interface TileGeneratorOpts {
-  readonly chunkSize?: number;
-}
-
-export interface IBlock {
-  readonly world: string;
   readonly bbox: IRect;
+  readonly chunkSize?: number;
 }
 
 // Class
@@ -21,24 +17,24 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> {
   ) {}
 
   // Methods
-  protected abstract generate(block: IBlock, opts: O): AsyncGenerator<ITile> | Generator<ITile>;
+  protected abstract generate(world: string, opts: O): AsyncGenerator<ITile> | Generator<ITile>;
 
-  async run(block: IBlock, opts: O): Promise<void> {
+  async run(world: string, opts: O): Promise<void> {
     const { chunkSize = 500 } = opts;
 
     let chunk: ITile[] = [];
 
-    for await (const tile of this.generate(block, opts)) {
+    for await (const tile of this.generate(world, opts)) {
       chunk.push(tile);
 
       if (chunk.length > chunkSize) {
-        await this.client.bulkPutTile(block.world, chunk);
+        await this.client.bulkPutTile(world, chunk);
         chunk = [];
       }
     }
 
     if (chunk.length > 0) {
-      await this.client.bulkPutTile(block.world, chunk);
+      await this.client.bulkPutTile(world, chunk);
     }
   }
 }
