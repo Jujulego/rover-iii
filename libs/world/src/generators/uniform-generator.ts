@@ -1,5 +1,3 @@
-import { rect } from '@jujulego/2d-maths';
-
 import { IBlock, TileGenerator, TileGeneratorOpts } from './tile-generator';
 import { ITile } from '../tile';
 
@@ -12,10 +10,8 @@ export interface UniformGeneratorOpts extends TileGeneratorOpts {
 export class UniformGenerator extends TileGenerator<UniformGeneratorOpts> {
   // Methods
   protected *generate(block: IBlock, opts: UniformGeneratorOpts): Generator<ITile> {
-    const bbox = rect(block.bbox);
-
-    for (let y = 0; y <= bbox.size.dy; ++y) {
-      for (let x = 0; x <= bbox.size.dx; ++x) {
+    for (let y = block.bbox.b; y <= block.bbox.t; ++y) {
+      for (let x = block.bbox.l; x <= block.bbox.r; ++x) {
         yield {
           pos: { x, y },
           biome: opts.biome

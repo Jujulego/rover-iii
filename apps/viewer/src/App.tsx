@@ -16,6 +16,8 @@ export const App: FC = () => {
   // Effects
   useEffect(() => void (async () => {
     await generator.run({ world: 'test', bbox: AREA }, { biome: 'grass' });
+    await generator.run({ world: 'test', bbox: rect({ x: 5, y: 2 }, { dx: 5, dy: 5 }) }, { biome: 'rock' });
+    await generator.run({ world: 'test', bbox: rect({ x: 3, y: 6 }, { dx: 9, dy: 2 }) }, { biome: 'sand' });
   })(), []);
 
   // Render
