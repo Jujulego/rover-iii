@@ -2,13 +2,13 @@ import { IRect, rect } from '@jujulego/2d-maths';
 import { EventSource } from '@jujulego/event-tree';
 
 import { ITile } from '../tile';
-import { IWorld } from '../world';
 import { WorldClient } from '../world-client';
 
 // Types
 export interface TileGeneratorOpts {
   readonly bbox: IRect;
   readonly chunkSize?: number;
+  readonly version?: number;
 }
 
 export interface ProgressEvent {
@@ -20,6 +20,8 @@ export type TileGeneratorEventMap = {
   progress: ProgressEvent;
 };
 
+export type AwaitableGenerator<T> = AsyncGenerator<T> | Generator<T>;
+
 // Class
 export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSource<TileGeneratorEventMap> {
   // Constructor
@@ -30,10 +32,10 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
   }
 
   // Methods
-  protected abstract generate(world: IWorld, opts: O): AsyncGenerator<ITile> | Generator<ITile>;
+  protected abstract generate(world: string, opts: O): AwaitableGenerator<ITile>;
 
-  async run(world: IWorld, opts: O): Promise<void> {
-    const { chunkSize = 500 } = opts;
+  async run(world: string, opts: O): Promise<void> {
+    const { chunkSize = 500, version } = opts;
     const size = rect(opts.bbox).size;
 
     let chunk: ITile[] = [];
@@ -43,7 +45,7 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
       chunk.push(tile);
 
       if (chunk.length >= chunkSize) {
-        await this.client.bulkPutTile(world, chunk);
+        await this.client.bulkPutTile(world, chunk, { version });
 
         count += chunk.length;
         this.emit('progress', { count, progress: count / (size.dx * size.dy) });
@@ -53,7 +55,7 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
     }
 
     if (chunk.length > 0) {
-      await this.client.bulkPutTile(world, chunk);
+      await this.client.bulkPutTile(world, chunk, { version });
 
       count += chunk.length;
       this.emit('progress', { count, progress: count / (size.dx * size.dy) });

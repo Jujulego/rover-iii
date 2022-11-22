@@ -1,5 +1,5 @@
 import { rect } from '@jujulego/2d-maths';
-import { RandomGenerator } from '@ants/world';
+import { CellularGenerator, RandomGenerator, UniformGenerator } from '@ants/world';
 import { FC, useEffect, useRef, useState } from 'react';
 
 import { worldClient } from './world-client';
@@ -10,9 +10,13 @@ const WORLD = 'test';
 const AREA = rect({ x: 0, y: 0 }, { dx: 40, dy: 20 });
 
 // Utils
-const generator = new RandomGenerator(worldClient);
+const cellular = new CellularGenerator(worldClient);
+const random = new RandomGenerator(worldClient);
+const uniform = new UniformGenerator(worldClient);
 
-generator.subscribe('progress', (event) => console.log(event));
+cellular.subscribe('progress', (event) => console.log(`cellular ${event.count} (${event.progress * 100}%)`));
+random.subscribe('progress', (event) => console.log(`random ${event.count} (${event.progress * 100}%)`));
+uniform.subscribe('progress', (event) => console.log(`uniform ${event.count} (${event.progress * 100}%)`));
 
 // Component
 export const App: FC = () => {
@@ -24,11 +28,26 @@ export const App: FC = () => {
   useEffect(() => void (async () => {
     if (a === 0) return;
 
+    await worldClient.clear(WORLD);
+
     console.group(`Generation n°${a}`);
+    console.time('uniform');
+    await uniform.run(WORLD, {
+      chunkSize: AREA.size.dx + 2,
+      bbox: rect({ x: -1, y: -1 }, { dx: 42, dy: 22 }),
+      // bbox: rect({ x: 0, y: 0 }, { dx: 5, dy: 5 }),
+      version: 0,
+      biome: 'water'
+    });
+    console.timeEnd('uniform');
+
     console.time('random');
-    await generator.run({ name: WORLD, version: 0 }, {
+    await random.run(WORLD, {
       chunkSize: AREA.size.dx,
       bbox: AREA,
+      // bbox: rect({ x: 1, y: 1 }, { dx: 3, dy: 3 }),
+      version: 0,
+      seed: 'tata',
       biomes: {
         water: 0.3,
         grass: 0.4,
@@ -37,14 +56,30 @@ export const App: FC = () => {
     });
     console.timeEnd('random');
 
+    for (let version = 1; version < 5; version++) {
+      console.time('cellular');
+      await cellular.run(WORLD, {
+        chunkSize: AREA.size.dx,
+        bbox: AREA,
+        // bbox: rect({ x: 1, y: 1 }, { dx: 3, dy: 3 }),
+        version,
+        previous: version - 1,
+      });
+      console.timeEnd('cellular');
+    }
+
     b.current = a;
     console.groupEnd();
   })(), [a]);
 
+  useEffect(() => {
+    setA(1);
+  }, []);
+
   // Render
   return (
     <div onClick={() => setA(b.current + 1)}>
-      <BiomeLayer world={{ name: WORLD, version: 0 }} area={AREA} />
+      <BiomeLayer world={WORLD} area={AREA} />
     </div>
   );
 };

@@ -39,7 +39,7 @@ const EnvPage: FC = () => {
         sand: 3,
       },
       seed: 'tata',
-      iterations: 4,
+      iterations: 0,
       outBiome: 'water'
     }));
   })(), []);
