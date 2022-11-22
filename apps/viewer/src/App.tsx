@@ -30,8 +30,6 @@ export const App: FC = () => {
   useEffect(() => void (async () => {
     if (a === 0) return;
 
-    await worldClient.clear(WORLD);
-
     console.group(`Generation n°${a}`);
     console.time('uniform');
     await uniform.run(WORLD, {
