@@ -39,7 +39,7 @@ export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
 
   private _select(biomes: Cumulated, val: number): string {
     for (const [biome, frq] of biomes) {
-      if (val < frq) {
+      if (val <= frq) {
         return biome;
       }
     }
@@ -49,13 +49,12 @@ export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
 
   protected *generate(world: string, opts: RandomGeneratorOpts): Generator<ITile> {
     const biomes = this._cumulate(opts.biomes);
-    const generator = seedrandom(opts.seed);
 
     const cnt: Record<string, number> = {};
 
     for (let y = opts.bbox.b; y < opts.bbox.t; ++y) {
       for (let x = opts.bbox.l; x < opts.bbox.r; ++x) {
-        const biome = this._select(biomes, generator());
+        const biome = this._select(biomes, seedrandom(`${opts.seed}-${x}-${y}`).quick());
         cnt[biome] = (cnt[biome] ?? 0) + 1;
 
         yield { pos: { x, y }, biome };

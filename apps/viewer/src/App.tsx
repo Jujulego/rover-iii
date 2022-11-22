@@ -8,6 +8,7 @@ import { BiomeLayer } from './layers/BiomeLayer';
 // Constant
 const WORLD = 'test';
 const AREA = rect({ x: 0, y: 0 }, { dx: 40, dy: 20 });
+const SEED = 'toto';
 
 // Utils
 const cellular = new CellularGenerator(worldClient);
@@ -33,8 +34,8 @@ export const App: FC = () => {
     console.group(`Generation n°${a}`);
     console.time('uniform');
     await uniform.run(WORLD, {
-      chunkSize: AREA.size.dx + 2,
-      bbox: rect({ x: -1, y: -1 }, { dx: 42, dy: 22 }),
+      // chunkSize: AREA.size.dx + 2,
+      bbox: rect(AREA.bl.add({ dx: -1, dy: -1 }), AREA.size.add({ dx: 2, dy: 2 })),
       // bbox: rect({ x: 0, y: 0 }, { dx: 5, dy: 5 }),
       version: 0,
       biome: 'water'
@@ -43,11 +44,11 @@ export const App: FC = () => {
 
     console.time('random');
     await random.run(WORLD, {
-      chunkSize: AREA.size.dx,
+      // chunkSize: AREA.size.dx,
       bbox: AREA,
       // bbox: rect({ x: 1, y: 1 }, { dx: 3, dy: 3 }),
       version: 0,
-      seed: 'tata',
+      seed: SEED,
       biomes: {
         water: 0.3,
         grass: 0.4,
@@ -56,14 +57,14 @@ export const App: FC = () => {
     });
     console.timeEnd('random');
 
-    for (let version = 1; version < 5; version++) {
+    for (let v = 0; v < 4; v++) {
       console.time('cellular');
       await cellular.run(WORLD, {
-        chunkSize: AREA.size.dx,
+        // chunkSize: AREA.size.dx,
         bbox: AREA,
         // bbox: rect({ x: 1, y: 1 }, { dx: 3, dy: 3 }),
-        version,
-        previous: version - 1,
+        version: v + 1,
+        previous: v,
       });
       console.timeEnd('cellular');
     }

@@ -35,7 +35,7 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
   protected abstract generate(world: string, opts: O): AwaitableGenerator<ITile>;
 
   async run(world: string, opts: O): Promise<void> {
-    const { chunkSize = 500, version } = opts;
+    const { chunkSize = 1000, version } = opts;
     const size = rect(opts.bbox).size;
 
     let chunk: ITile[] = [];
