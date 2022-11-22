@@ -1,6 +1,7 @@
 import { IPoint, IRect } from '@jujulego/2d-maths';
 
 import { ITile } from './tile';
+import { IWorld } from './world';
 
 // Class
 /**
@@ -14,7 +15,7 @@ export abstract class WorldClient {
    * @param world
    * @param pos
    */
-  abstract getTile(world: string, pos: IPoint): Promise<ITile | undefined>;
+  abstract getTile(world: IWorld, pos: IPoint): Promise<ITile | undefined>;
 
   /**
    * Load all tiles within the given bounding box
@@ -22,7 +23,7 @@ export abstract class WorldClient {
    * @param world
    * @param bbox
    */
-  abstract loadTilesIn(world: string, bbox: IRect): Promise<ITile[]>;
+  abstract loadTilesIn(world: IWorld, bbox: IRect): Promise<ITile[]>;
 
   /**
    * Store the tile
@@ -30,7 +31,7 @@ export abstract class WorldClient {
    * @param world
    * @param tile
    */
-  abstract putTile(world: string, tile: ITile): Promise<void>;
+  abstract putTile(world: IWorld, tile: ITile): Promise<void>;
 
   /**
    * Store all the tiles in one request
@@ -38,11 +39,11 @@ export abstract class WorldClient {
    * @param world
    * @param tiles
    */
-  abstract bulkPutTile(world: string, tiles: ITile[]): Promise<void>;
+  abstract bulkPutTile(world: IWorld, tiles: ITile[]): Promise<void>;
 
 
   /**
    * Deletes all data for given world
    */
-  abstract clear(world: string): Promise<void>;
+  abstract clear(world: IWorld): Promise<void>;
 }

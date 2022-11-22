@@ -2,6 +2,7 @@ import { IRect, rect } from '@jujulego/2d-maths';
 import { EventSource } from '@jujulego/event-tree';
 
 import { ITile } from '../tile';
+import { IWorld } from '../world';
 import { WorldClient } from '../world-client';
 
 // Types
@@ -29,9 +30,9 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
   }
 
   // Methods
-  protected abstract generate(world: string, opts: O): AsyncGenerator<ITile> | Generator<ITile>;
+  protected abstract generate(world: IWorld, opts: O): AsyncGenerator<ITile> | Generator<ITile>;
 
-  async run(world: string, opts: O): Promise<void> {
+  async run(world: IWorld, opts: O): Promise<void> {
     const { chunkSize = 500 } = opts;
     const size = rect(opts.bbox).size;
 

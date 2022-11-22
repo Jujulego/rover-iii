@@ -6,6 +6,7 @@ import { worldClient } from './world-client';
 import { BiomeLayer } from './layers/BiomeLayer';
 
 // Constant
+const WORLD = 'test';
 const AREA = rect({ x: 0, y: 0 }, { dx: 40, dy: 20 });
 
 // Utils
@@ -21,13 +22,11 @@ export const App: FC = () => {
 
   // Effects
   useEffect(() => void (async () => {
-    if (a === 0) {
-      return;
-    }
+    if (a === 0) return;
 
     console.group(`Generation n°${a}`);
     console.time('random');
-    await generator.run('test', {
+    await generator.run({ name: WORLD, version: 0 }, {
       chunkSize: AREA.size.dx,
       bbox: AREA,
       biomes: {
@@ -45,7 +44,7 @@ export const App: FC = () => {
   // Render
   return (
     <div onClick={() => setA(b.current + 1)}>
-      <BiomeLayer world="test" area={AREA} />
+      <BiomeLayer world={{ name: WORLD, version: 0 }} area={AREA} />
     </div>
   );
 };

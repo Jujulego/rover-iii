@@ -188,7 +188,6 @@ __metadata:
   resolution: "@ants/viewer@workspace:apps/viewer"
   dependencies:
     "@ants/world": 1.0.0
-    "@ants/world-idb": 1.0.0
     "@emotion/react": 11.10.5
     "@emotion/styled": 11.10.5
     "@jujulego/2d-maths": 1.4.1
@@ -231,7 +230,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ants/world-idb@1.0.0, @ants/world-idb@workspace:libs/world-idb":
+"@ants/world-idb@workspace:libs/world-idb":
   version: 0.0.0-use.local
   resolution: "@ants/world-idb@workspace:libs/world-idb"
   dependencies:

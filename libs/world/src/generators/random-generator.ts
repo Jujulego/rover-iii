@@ -2,6 +2,7 @@ import seedrandom from 'seedrandom';
 
 import { TileGenerator, TileGeneratorOpts } from './tile-generator';
 import { ITile } from '../tile';
+import { IWorld } from '../world';
 
 // Types
 export interface RandomGeneratorOpts extends TileGeneratorOpts {
@@ -47,7 +48,7 @@ export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
     return biomes[biomes.length - 1][0];
   }
 
-  protected *generate(world: string, opts: RandomGeneratorOpts): Generator<ITile> {
+  protected *generate(world: IWorld, opts: RandomGeneratorOpts): Generator<ITile> {
     const biomes = this._cumulate(opts.biomes);
     const generator = seedrandom(opts.seed);
 
