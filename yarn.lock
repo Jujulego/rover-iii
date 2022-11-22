@@ -191,7 +191,7 @@ __metadata:
     "@ants/world-idb": 1.0.0
     "@emotion/react": 11.10.5
     "@emotion/styled": 11.10.5
-    "@jujulego/2d-maths": 1.3.1
+    "@jujulego/2d-maths": 1.4.0
     "@mui/icons-material": 5.10.14
     "@mui/material": 5.10.14
     "@swc/core": 1.3.19
@@ -4181,10 +4181,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/2d-maths@npm:1.3.1":
-  version: 1.3.1
-  resolution: "@jujulego/2d-maths@npm:1.3.1"
-  checksum: d1ad5238590b9e6449afc6ca99a8dcad16ebaf32c90a8342d7467b055e4931b8bcd74db7a569b3e88d1f5b397b5808aea5a7d904b6f07b7ed23c373475f2b916
+"@jujulego/2d-maths@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@jujulego/2d-maths@npm:1.4.0"
+  checksum: 91c7da206cce15359ca4ce6fd56bdc28468769b573abafcba2c441359c781549189d2640b6d683896063ad900cae063a4f438ea069b2995464f8fab248754025
   languageName: node
   linkType: hard
 
