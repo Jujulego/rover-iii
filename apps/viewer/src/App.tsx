@@ -8,7 +8,8 @@ import { BiomeLayer } from './layers/BiomeLayer';
 // Constant
 const WORLD = 'test';
 const AREA = rect({ x: 0, y: 0 }, { dx: 40, dy: 20 });
-const SEED = 'toto';
+const EXPA = rect(AREA.bl.add({ dx: -1, dy: -1 }), AREA.size.add({ dx: 2, dy: 2 }));
+const SEED = 'tata';
 
 // Utils
 const cellular = new CellularGenerator(worldClient);
@@ -35,7 +36,7 @@ export const App: FC = () => {
     console.time('uniform');
     await uniform.run(WORLD, {
       // chunkSize: AREA.size.dx + 2,
-      bbox: rect(AREA.bl.add({ dx: -1, dy: -1 }), AREA.size.add({ dx: 2, dy: 2 })),
+      bbox: EXPA,
       // bbox: rect({ x: 0, y: 0 }, { dx: 5, dy: 5 }),
       version: 0,
       biome: 'water'
@@ -80,7 +81,7 @@ export const App: FC = () => {
   // Render
   return (
     <div onClick={() => setA(b.current + 1)}>
-      <BiomeLayer world={WORLD} area={AREA} />
+      <BiomeLayer world={WORLD} area={EXPA} />
     </div>
   );
 };

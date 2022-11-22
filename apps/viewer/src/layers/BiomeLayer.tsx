@@ -49,7 +49,8 @@ export const BiomeLayer: FC<BiomeLayerProps> = (props) => {
   const toScreen = useMemo(() => matrix({
     a: 1, c: 0,
     b: 0, d: -1,
-    tx: 0, ty: -props.area.size.dy
+    tx: props.area.l < 0 ? -props.area.l : 0,
+    ty: (props.area.b < 0 ? 2 * props.area.b : 0) + props.area.size.dy
   }), [props.area]);
 
   // Render
