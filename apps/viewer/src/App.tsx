@@ -1,27 +1,21 @@
 import { rect } from '@jujulego/2d-maths';
+import { UniformGenerator } from '@ants/world';
 import { FC, useEffect } from 'react';
 
 import { worldClient } from './world-client';
 import { BiomeLayer } from './layers/BiomeLayer';
 
 // Constant
-const AREA = rect({ x: 0, y: 0 }, { dx: 2, dy: 2 });
+const AREA = rect({ x: 0, y: 0 }, { dx: 15, dy: 10 });
+
+// Utils
+const generator = new UniformGenerator(worldClient);
 
 // Component
 export const App: FC = () => {
   // Effects
   useEffect(() => void (async () => {
-    await worldClient.bulkPutTile('test', [
-      { pos: { x: 0, y: 0 }, biome: 'rock' },
-      { pos: { x: 1, y: 0 }, biome: 'grass' },
-      { pos: { x: 1, y: 1 }, biome: 'sand' },
-      { pos: { x: 0, y: 1 }, biome: 'grass' },
-      { pos: { x: 2, y: 0 }, biome: 'grass' },
-      { pos: { x: 2, y: 1 }, biome: 'grass' },
-      { pos: { x: 2, y: 2 }, biome: 'grass' },
-      { pos: { x: 1, y: 2 }, biome: 'grass' },
-      { pos: { x: 0, y: 2 }, biome: 'grass' },
-    ]);
+    await generator.run({ world: 'test', bbox: AREA }, { biome: 'grass' });
   })(), []);
 
   // Render

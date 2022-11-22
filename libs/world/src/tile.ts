@@ -6,7 +6,7 @@ import { IPoint } from '@jujulego/2d-maths';
  */
 export interface ITile {
   /**
-   * Position of this time in the world
+   * Position of this tile in the world
    */
   readonly pos: IPoint;
 
