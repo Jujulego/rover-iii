@@ -2,6 +2,7 @@ import seedrandom from 'seedrandom';
 
 import { TileGenerator, TileGeneratorOpts } from './tile-generator';
 import { ITile } from '../tile';
+import { BST } from '../utils';
 
 // Types
 export interface RandomGeneratorOpts extends TileGeneratorOpts {
@@ -9,13 +10,13 @@ export interface RandomGeneratorOpts extends TileGeneratorOpts {
   readonly seed?: string;
 }
 
-type Cumulated = [biome: string, f: number][];
+type Cumulated = [biome: string, f: number];
 
 // Class
 export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
   // Methods
-  private _cumulate(biomes: Record<string, number>): Cumulated {
-    const cumulated: Cumulated = [];
+  private _cumulate(biomes: Record<string, number>): BST<Cumulated, number> {
+    const cumulated: Cumulated[] = [];
 
     // Cumulate
     let sum = 0;
@@ -34,17 +35,7 @@ export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
       cumulated[i][1] /= sum;
     }
 
-    return cumulated;
-  }
-
-  private _select(biomes: Cumulated, val: number): string {
-    for (const [biome, frq] of biomes) {
-      if (val <= frq) {
-        return biome;
-      }
-    }
-
-    return biomes[biomes.length - 1][0];
+    return BST.fromArray(cumulated, ([, f]) => f, (a, b) => b - a);
   }
 
   protected *generate(world: string, opts: RandomGeneratorOpts): Generator<ITile> {
@@ -54,10 +45,15 @@ export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
 
     for (let y = opts.bbox.b; y < opts.bbox.t; ++y) {
       for (let x = opts.bbox.l; x < opts.bbox.r; ++x) {
-        const biome = this._select(biomes, seedrandom(`${opts.seed}-${x}-${y}`).quick());
-        cnt[biome] = (cnt[biome] ?? 0) + 1;
+        const prng = seedrandom(`${opts.seed}-${x}-${y}`);
+        const res = biomes.nearest(prng.quick(), 'lte');
 
-        yield { pos: { x, y }, biome };
+        if (res) {
+          const biome = res[0];
+          cnt[biome] = (cnt[biome] ?? 0) + 1;
+
+          yield { pos: { x, y }, biome };
+        }
       }
     }
   }
