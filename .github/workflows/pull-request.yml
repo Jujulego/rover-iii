@@ -211,9 +211,9 @@ jobs:
     strategy:
       matrix:
         name:
-          - @ants/api
-          - @ants/frontend
-          - @ants/viewer
+          - '@ants/api'
+          - '@ants/frontend'
+          - '@ants/viewer'
 
     steps:
       - uses: actions/checkout@v3.0.2
