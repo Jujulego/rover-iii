@@ -237,7 +237,7 @@ jobs:
 
   complete:
     runs-on: ubuntu-latest
-    needs: [ terraform, lint, test, build-ants, build-api ]
+    needs: [ terraform, lint, test, build-apps ]
     if: ${{ always() }}
 
     steps:
