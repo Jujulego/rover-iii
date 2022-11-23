@@ -12,8 +12,7 @@
     "lint": "eslint .",
     "build": "webpack --config webpack.prod.ts",
     "start": "webpack serve --config webpack.dev.ts",
-    "stats": "webpack --config webpack.stats.ts",
-    "test": "jest"
+    "stats": "webpack --config webpack.stats.ts"
   },
   "dependencies": {
     "@ants/world": "1.0.0",
