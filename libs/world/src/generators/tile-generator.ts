@@ -38,27 +38,37 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
     const { chunkSize = 1000, version } = opts;
     const size = rect(opts.bbox).size;
 
+    const step = Math.ceil(Math.min(chunkSize, size.dx * size.dy) / 10);
+
     let chunk: ITile[] = [];
     let count = 0;
 
     for await (const tile of this.generate(world, opts)) {
       chunk.push(tile);
+      count++;
+
+      if (count % step === 0) {
+        this.emit('progress', {
+          count,
+          progress: count / (size.dx * size.dy),
+        });
+      }
 
       if (chunk.length >= chunkSize) {
         await this.client.bulkPutTile(world, chunk, { version });
-
-        count += chunk.length;
-        this.emit('progress', { count, progress: count / (size.dx * size.dy) });
-
         chunk = [];
       }
     }
 
     if (chunk.length > 0) {
       await this.client.bulkPutTile(world, chunk, { version });
+    }
 
-      count += chunk.length;
-      this.emit('progress', { count, progress: count / (size.dx * size.dy) });
+    if (count % step !== 0) {
+      this.emit('progress', {
+        count,
+        progress: count / (size.dx * size.dy),
+      });
     }
   }
 }
