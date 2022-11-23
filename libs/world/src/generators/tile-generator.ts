@@ -32,7 +32,7 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
   }
 
   // Methods
-  protected abstract generate(world: string, opts: O): AwaitableGenerator<ITile>;
+  protected abstract generate(world: string, opts: O): AwaitableGenerator<ITile | null>;
 
   async run(world: string, opts: O): Promise<void> {
     const { chunkSize = 1000, version } = opts;
@@ -44,7 +44,7 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
     let count = 0;
 
     for await (const tile of this.generate(world, opts)) {
-      chunk.push(tile);
+      // Progress events
       count++;
 
       if (count % step === 0) {
@@ -54,9 +54,14 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
         });
       }
 
-      if (chunk.length >= chunkSize) {
-        await this.client.bulkPutTile(world, chunk, { version });
-        chunk = [];
+      // Update
+      if (tile) {
+        chunk.push(tile);
+
+        if (chunk.length >= chunkSize) {
+          await this.client.bulkPutTile(world, chunk, { version });
+          chunk = [];
+        }
       }
     }
 

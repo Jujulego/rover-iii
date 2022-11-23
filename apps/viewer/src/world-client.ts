@@ -60,10 +60,27 @@ export class WorldIdbClient extends WorldClient {
     };
   }
 
-  async getTile(world: string, pos: IPoint, opts?: TileOpts): Promise<ITile | undefined> {
-    const tile = await this.tiles.get({ world, pos });
+  async getTile(world: string, pos: IPoint, opts?: TileOpts): Promise<ITile> {
+    const tile = await this.tiles.get({ world, 'pos.x': pos.x, 'pos.y': pos.y });
 
-    return tile && this._loadTileVersion(tile, opts?.version);
+    if (!tile) {
+      throw new Error(`Tile ${world}:${pos.x},${pos.y} not found`);
+    }
+
+    return this._loadTileVersion(tile, opts?.version);
+  }
+
+  async bulkGetTile(world: string, pos: IPoint[], opts?: TileOpts): Promise<ITile[]> {
+    const keys = pos.map((pt) => [world, pt.x, pt.y]);
+    const tiles: ITile[] = [];
+
+    for (const tile of await this.tiles.bulkGet(keys)) {
+      if (tile) {
+        tiles.push(this._loadTileVersion(tile, opts?.version));
+      }
+    }
+
+    return tiles;
   }
 
   async loadTilesIn(world: string, bbox: Rect, opts?: TileOpts): Promise<ITile[]> {

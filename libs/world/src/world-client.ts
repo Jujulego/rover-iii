@@ -20,7 +20,16 @@ export abstract class WorldClient {
    * @param pos
    * @param opts
    */
-  abstract getTile(world: string, pos: IPoint, opts?: TileOpts): Promise<ITile | undefined>;
+  abstract getTile(world: string, pos: IPoint, opts?: TileOpts): Promise<ITile>;
+
+  /**
+   * Direct access to many tiles
+   *
+   * @param world
+   * @param pos
+   * @param opts
+   */
+  abstract bulkGetTile(world: string, pos: IPoint[], opts?: TileOpts): Promise<ITile[]>;
 
   /**
    * Load all tiles within the given bounding box
