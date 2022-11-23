@@ -31,19 +31,22 @@ export const App: FC = () => {
     if (a === 0) return;
 
     console.group(`Generation n°${a}`);
+    console.time('generation');
+
+    console.groupCollapsed('uniform');
     console.time('uniform');
     await uniform.run(WORLD, {
-      // chunkSize: AREA.size.dx + 2,
       bbox: EXPA,
       // bbox: rect({ x: 0, y: 0 }, { dx: 5, dy: 5 }),
       version: 0,
       biome: 'water'
     });
     console.timeEnd('uniform');
+    console.groupEnd();
 
+    console.groupCollapsed('random');
     console.time('random');
     await random.run(WORLD, {
-      // chunkSize: AREA.size.dx,
       bbox: AREA,
       // bbox: rect({ x: 1, y: 1 }, { dx: 3, dy: 3 }),
       version: 0,
@@ -55,8 +58,10 @@ export const App: FC = () => {
       }
     });
     console.timeEnd('random');
+    console.groupEnd();
 
     for (let v = 0; v < 4; v++) {
+      console.groupCollapsed(`cellular ${v + 1}`);
       console.time('cellular');
       await cellular.run(WORLD, {
         // chunkSize: AREA.size.dx,
@@ -66,9 +71,11 @@ export const App: FC = () => {
         previous: v,
       });
       console.timeEnd('cellular');
+      console.groupEnd();
     }
 
     b.current = a;
+    console.timeEnd('generation');
     console.groupEnd();
   })(), [a]);
 
