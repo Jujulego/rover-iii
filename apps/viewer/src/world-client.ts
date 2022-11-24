@@ -47,6 +47,10 @@ export class WorldIdbClient extends WorldClient {
         old.history.push(old.biome);
       }
 
+      while (old.history.length > version) {
+        old.history.pop();
+      }
+
       old.history[version] = tile.biome;
     } else {
       old.history.push(tile.biome);
@@ -64,7 +68,7 @@ export class WorldIdbClient extends WorldClient {
     const w = parseWorld(world);
 
     // Load tile
-    const tile = await this.tiles.get({ world: w.world, 'pos.x': pos.x, 'pos.y': pos.y });
+    const tile = await this.tiles.get([w.world, pos.x, pos.y]);
 
     if (!tile) {
       throw new Error(`Tile ${w.world}:${pos.x},${pos.y} not found`);
