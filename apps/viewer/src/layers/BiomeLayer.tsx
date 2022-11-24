@@ -1,4 +1,4 @@
-import { tileKey } from '@ants/world';
+import { IWorld, tileKey } from '@ants/world';
 import { IPoint, matrix, Rect } from '@jujulego/2d-maths';
 import { styled } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -9,7 +9,7 @@ import { BiomeName, BIOMES } from '../biomes';
 
 // Types
 export interface BiomeLayerProps {
-  readonly world: string;
+  readonly world: string | IWorld;
   readonly area: Rect;
 }
 
@@ -31,10 +31,6 @@ const Tile = styled('img', { skipSx: true })<TileProps>(({ pos }) => ({
 }));
 
 const Layer = styled('div', { skipSx: true })<LayerProps>((props) => ({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-
   display: 'grid',
   gridAutoRows: props.s,
   gridAutoColumns: props.s,

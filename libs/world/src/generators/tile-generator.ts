@@ -2,22 +2,23 @@ import { IRect, rect } from '@jujulego/2d-maths';
 import { EventSource } from '@jujulego/event-tree';
 
 import { ITile } from '../tile';
+import { IWorld, parseWorld } from '../world';
 import { WorldClient } from '../world-client';
 
 // Types
 export interface TileGeneratorOpts {
+  readonly base?: Required<IWorld>;
   readonly bbox: IRect;
   readonly chunkSize?: number;
-  readonly version?: number;
 }
 
-export interface ProgressEvent {
+export interface GeneratorProgressEvent {
   readonly count: number;
   readonly progress: number;
 }
 
 export type TileGeneratorEventMap = {
-  progress: ProgressEvent;
+  progress: GeneratorProgressEvent;
 };
 
 export type AwaitableGenerator<T> = AsyncGenerator<T> | Generator<T>;
@@ -32,12 +33,13 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
   }
 
   // Methods
-  protected abstract generate(world: string, opts: O): AwaitableGenerator<ITile | null>;
+  protected abstract generate(world: IWorld, opts: O): AwaitableGenerator<ITile | null>;
 
-  async run(world: string, opts: O): Promise<void> {
-    const { chunkSize = 1000, version } = opts;
+  async run(world: string | IWorld, opts: O): Promise<void> {
+    world = parseWorld(world);
+
+    const { chunkSize = 1000 } = opts;
     const size = rect(opts.bbox).size;
-
     const step = Math.ceil(Math.min(chunkSize, size.dx * size.dy) / 10);
 
     let chunk: ITile[] = [];
@@ -59,14 +61,14 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
         chunk.push(tile);
 
         if (chunk.length >= chunkSize) {
-          await this.client.bulkPutTile(world, chunk, { version });
+          await this.client.bulkPutTile(world, chunk);
           chunk = [];
         }
       }
     }
 
     if (chunk.length > 0) {
-      await this.client.bulkPutTile(world, chunk, { version });
+      await this.client.bulkPutTile(world, chunk);
     }
 
     if (count % step !== 0) {
