@@ -96,7 +96,7 @@ __metadata:
     "@swc/jest": 0.2.23
     "@types/jest": 29.2.1
     "@types/node": 16.18.3
-    "@types/react": 18.0.24
+    "@types/react": 18.0.25
     "@types/react-dom": 18.0.8
     "@types/seedrandom": 3.0.2
     "@types/webpack-bundle-analyzer": 4.6.0
@@ -5596,17 +5596,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 4079f4f959cd4a4bfaeda8b89fe8a1b1f8bdc9d87acfdc5f74a0b39cec9ec6a470724357c62778c0f063180b360c250e920c5a142f1dbcda67d9cc25a6d43a85
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:18.0.24":
-  version: 18.0.24
-  resolution: "@types/react@npm:18.0.24"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 7d06125bac61e1c6661e5dfbeeeb56d5b6d1d4c743292faebaa6b0f30f8414c7af3cadf674923fd86e4ca14e82566ff9156cd40c56786be024600c31b97d6c03
   languageName: node
   linkType: hard
 
