@@ -4187,7 +4187,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/event-tree@npm:^1.1.0, @jujulego/event-tree@npm:^1.1.0-rc.2":
+"@jujulego/event-tree@npm:^1.1.0":
   version: 1.1.0
   resolution: "@jujulego/event-tree@npm:1.1.0"
   checksum: ff72181a20cccce2baa0b216388340e8134969279825471d4dbea21e995d5fc6d8c754786b40c221d9d9b9fd70834ea284f6dfb8c275d3cac68f5a716baafdd9
@@ -4203,12 +4203,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/jill@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@jujulego/jill@npm:2.0.0"
+"@jujulego/jill@npm:2.0.1":
+  version: 2.0.1
+  resolution: "@jujulego/jill@npm:2.0.1"
   dependencies:
-    "@jujulego/event-tree": ^1.1.0-rc.2
-    "@jujulego/tasks": ^1.0.0-rc.5
+    "@jujulego/event-tree": ^1.1.0
+    "@jujulego/tasks": ^1.0.0
     async-lock: ^1.3.1
     chalk: ^4.1.2
     ink: ^3.2.0
@@ -4217,7 +4217,7 @@ __metadata:
     inversify-inject-decorators: ^3.1.0
     log-symbols: ^4.1.0
     ms: ^2.1.3
-    normalize-package-data: ^4.0.0
+    normalize-package-data: ^5.0.0
     react: ^17.0.2
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
@@ -4228,7 +4228,7 @@ __metadata:
     yargs: ^17.6.0
   bin:
     jill: ./bin/jill.js
-  checksum: 5a599b574a9543ef871a288b52db50c2709e2e908e8467d53dbb95000f46cbeab8c79137414f1752a8bc01c6320cfc1b8e74ccd7dfebcaef53a17822f9577125
+  checksum: a8342dcd20774989da14c474e7b51856f8afd1f8e2228231e88308596288a824442633dd2a12186fa2f3518fcbb76fbcfcdaf4ec7a354576914ff13880bc53a4
   languageName: node
   linkType: hard
 
@@ -4262,7 +4262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/tasks@npm:^1.0.0-rc.5, @jujulego/tasks@npm:^1.1.2":
+"@jujulego/tasks@npm:^1.0.0, @jujulego/tasks@npm:^1.1.2":
   version: 1.1.2
   resolution: "@jujulego/tasks@npm:1.1.2"
   dependencies:
@@ -6570,7 +6570,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ants@workspace:."
   dependencies:
-    "@jujulego/jill": 2.0.0
+    "@jujulego/jill": 2.0.1
     "@typescript-eslint/eslint-plugin": 5.44.0
     "@typescript-eslint/parser": 5.44.0
     eslint: 8.28.0
@@ -11926,15 +11926,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hosted-git-info@npm:^5.0.0":
-  version: 5.1.0
-  resolution: "hosted-git-info@npm:5.1.0"
-  dependencies:
-    lru-cache: ^7.5.1
-  checksum: 22abbc6a7418344c883e2df6e791e94b38192b2a61256b19c955999d878b8d5365ea51683fd1f0cc8f217e9bd121db88d5aaa7cf0407c4b7ff287b79aabacbd3
-  languageName: node
-  linkType: hard
-
 "hosted-git-info@npm:^6.0.0":
   version: 6.1.1
   resolution: "hosted-git-info@npm:6.1.1"
@@ -16045,18 +16036,6 @@ __metadata:
     semver: 2 || 3 || 4 || 5
     validate-npm-package-license: ^3.0.1
   checksum: 7999112efc35a6259bc22db460540cae06564aa65d0271e3bdfa86876d08b0e578b7b5b0028ee61b23f1cae9fc0e7847e4edc0948d3068a39a2a82853efc8499
-  languageName: node
-  linkType: hard
-
-"normalize-package-data@npm:^4.0.0":
-  version: 4.0.1
-  resolution: "normalize-package-data@npm:4.0.1"
-  dependencies:
-    hosted-git-info: ^5.0.0
-    is-core-module: ^2.8.1
-    semver: ^7.3.5
-    validate-npm-package-license: ^3.0.4
-  checksum: 292e0aa740e73d62f84bbd9d55d4bfc078155f32d5d7572c32c9807f96d543af0f43ff7e5c80bfa6238667123fd68bd83cd412eae9b27b85b271fb041f624528
   languageName: node
   linkType: hard
 
