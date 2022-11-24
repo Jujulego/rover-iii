@@ -67,8 +67,6 @@ export class CellularGenerator extends TileGenerator<TileGeneratorOpts> {
       throw new Error('CellularGenerator needs a base world');
     }
 
-    console.log({ world, opts });
-
     // Clear cache
     this._cache.clear();
     this._cacheSize = rect(opts.bbox).size.dy * 2 + 2;

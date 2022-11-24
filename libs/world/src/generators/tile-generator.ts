@@ -64,7 +64,7 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
           await this.client.bulkPutTile(world, chunk);
           chunk = [];
         }
-      0}
+      }
     }
 
     if (chunk.length > 0) {
