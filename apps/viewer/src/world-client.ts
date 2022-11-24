@@ -1,4 +1,4 @@
-import { ITile, tileKey, TileOpts, WorldClient } from '@ants/world';
+import { ITile, IWorld, parseWorld, tileKey, WorldClient } from '@ants/world';
 import { IPoint, Rect } from '@jujulego/2d-maths';
 import Dexie from 'dexie';
 
@@ -60,66 +60,79 @@ export class WorldIdbClient extends WorldClient {
     };
   }
 
-  async getTile(world: string, pos: IPoint, opts?: TileOpts): Promise<ITile> {
-    const tile = await this.tiles.get({ world, 'pos.x': pos.x, 'pos.y': pos.y });
+  async getTile(world: string | IWorld, pos: IPoint): Promise<ITile> {
+    const w = parseWorld(world);
+
+    // Load tile
+    const tile = await this.tiles.get({ world: w.world, 'pos.x': pos.x, 'pos.y': pos.y });
 
     if (!tile) {
-      throw new Error(`Tile ${world}:${pos.x},${pos.y} not found`);
+      throw new Error(`Tile ${w.world}:${pos.x},${pos.y} not found`);
     }
 
-    return this._loadTileVersion(tile, opts?.version);
+    return this._loadTileVersion(tile, w.version);
   }
 
-  async bulkGetTile(world: string, pos: IPoint[], opts?: TileOpts): Promise<ITile[]> {
-    const keys = pos.map((pt) => [world, pt.x, pt.y]);
+  async bulkGetTile(world: string | IWorld, pos: IPoint[]): Promise<ITile[]> {
+    const w = parseWorld(world);
+
+    // Load tiles
+    const keys = pos.map((pt) => [w.world, pt.x, pt.y]);
     const tiles: ITile[] = [];
 
     for (const tile of await this.tiles.bulkGet(keys)) {
       if (tile) {
-        tiles.push(this._loadTileVersion(tile, opts?.version));
+        tiles.push(this._loadTileVersion(tile, w.version));
       }
     }
 
     return tiles;
   }
 
-  async loadTilesIn(world: string, bbox: Rect, opts?: TileOpts): Promise<ITile[]> {
+  async loadTilesIn(world: string | IWorld, bbox: Rect): Promise<ITile[]> {
+    const w = parseWorld(world);
+
+    // Load tiles
     const tiles = await this.tiles
-      .where(TILES_XY_INDEX).between([world, bbox.l, bbox.b], [world, bbox.r, bbox.t])
+      .where(TILES_XY_INDEX).between([w.world, bbox.l, bbox.b], [w.world, bbox.r, bbox.t])
       .filter((tile) => bbox.contains(tile.pos))
       .toArray();
 
-    return tiles.map((tile) => this._loadTileVersion(tile, opts?.version));
+    return tiles.map((tile) => this._loadTileVersion(tile, w.version));
   }
 
-  async putTile(world: string, tile: ITile, opts?: TileOpts): Promise<void> {
+  async putTile(world: string | IWorld, tile: ITile): Promise<void> {
+    const w = parseWorld(world);
+
+    // Update tile
     await this._database.transaction('rw', this.tiles, async () => {
       let old = await this.tiles.get({ world, 'pos.x': tile.pos.x, 'pos.y': tile.pos.y });
 
       // Create item
       old ??= {
-        world,
+        world: w.world,
         pos: tile.pos,
         biome: tile.biome,
         history: []
       };
 
       // Insert
-      await this.tiles.put(this._updateTile(old, tile, opts?.version));
+      await this.tiles.put(this._updateTile(old, tile, w.version));
     });
   }
 
-  async bulkPutTile(world: string, tiles: ITile[], opts?: TileOpts): Promise<void> {
+  async bulkPutTile(world: string | IWorld, tiles: ITile[]): Promise<void> {
+    const w = parseWorld(world);
     const toAdd = new Map(tiles.map(tile => [tileKey(tile), tile]));
 
     // Updates
     await this.tiles
-      .where(TILES_XY_INDEX).anyOf(tiles.map((tile) => [world, tile.pos.x, tile.pos.y]))
+      .where(TILES_XY_INDEX).anyOf(tiles.map((tile) => [w.world, tile.pos.x, tile.pos.y]))
       .modify((old, ref) => {
         const tile = toAdd.get(tileKey(old));
 
         if (tile) {
-          ref.value = this._updateTile(old, tile, opts?.version);
+          ref.value = this._updateTile(old, tile, w.version);
           toAdd.delete(tileKey(old));
         }
       });
@@ -129,14 +142,14 @@ export class WorldIdbClient extends WorldClient {
       .filter((tile) => toAdd.has(tileKey(tile)))
       .map((tile) => {
         const ent: ITileEntity = {
-          world,
+          world: w.world,
           pos: tile.pos,
           biome: tile.biome,
           history: [tile.biome],
         };
 
-        if (opts?.version) {
-          while (ent.history.length <= opts.version) {
+        if (w.version) {
+          while (ent.history.length <= w.version) {
             ent.history.push(ent.biome);
           }
         }
