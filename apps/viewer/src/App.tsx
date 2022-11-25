@@ -1,10 +1,11 @@
 import { rect } from '@jujulego/2d-maths';
-import { GeneratorStack, GeneratorStackConfig } from '@ants/world';
+import { GeneratorStackConfig } from '@ants/world';
 import { Button, Grid } from '@mui/material';
 import { FC, useEffect, useRef, useState } from 'react';
+import { filter, firstValueFrom, tap } from 'rxjs';
 
-import { worldClient } from './world-client';
 import { BiomeLayer } from './layers/BiomeLayer';
+import { WorldGenerator } from './workers';
 
 // Constant
 const WORLD = 'test';
@@ -61,6 +62,8 @@ const STACK: GeneratorStackConfig = {
   ]
 };
 
+const worldGenerator = new WorldGenerator();
+
 // Component
 export const App: FC = () => {
   // State
@@ -73,18 +76,14 @@ export const App: FC = () => {
   useEffect(() => void (async () => {
     if (a === 0) return;
 
-    console.group(`Generation n°${a}`);
-    console.time('generation');
-
-    const stack = new GeneratorStack(worldClient, STACK);
-    stack.subscribe('progress', (event) => console.log(`#${event.step} ${event.generator} ${(event.progress * 100).toFixed(2)}%`));
-
-    await stack.run(WORLD);
+    await firstValueFrom(worldGenerator.generate(WORLD, STACK)
+      .pipe(
+        //tap(({ event }) => console.log(`#${event.step} ${event.generator} ${(event.progress * 100).toFixed(2)}%`)),
+        filter(({ type }) => type === 'end'),
+      )
+    );
 
     b.current = a;
-
-    console.timeEnd('generation');
-    console.groupEnd();
   })(), [a]);
 
   useEffect(() => {
@@ -94,7 +93,7 @@ export const App: FC = () => {
   // Render
   return (
     <Grid container columns={1}>
-      <Grid item onClick={() => setA(b.current + 1)}>
+      <Grid item onClick={() => setA((old) => old + 1)}>
         <BiomeLayer world={{ world: WORLD, version }} area={EXPA} />
       </Grid>
       <Grid container item>
