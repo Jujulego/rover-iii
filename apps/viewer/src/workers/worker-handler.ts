@@ -13,7 +13,10 @@ export abstract class WorkerHandler<Req extends Message, Msg extends Message> {
   private _sessionId: string;
 
   // Constructor
-  constructor(source: Window) {
+  constructor(
+    readonly name: string,
+    source: Window,
+  ) {
     this._source = source;
 
     // Listen for events
@@ -21,7 +24,7 @@ export abstract class WorkerHandler<Req extends Message, Msg extends Message> {
 
     request$$.pipe(
       tap((req) => {
-        console.info(`[#${req.sessionId}] Received ${req.type} request`);
+        console.info(`[${this.name}] Received ${req.type} request (#${req.sessionId})`);
         performance.mark(`receive-${req.sessionId}`);
       }),
       concatMap(async (req) => {
@@ -30,7 +33,7 @@ export abstract class WorkerHandler<Req extends Message, Msg extends Message> {
         // Log queue time
         performance.mark(`end-queue-${req.sessionId}`);
         const queue = performance.measure(`queue-${req.sessionId}`, `receive-${req.sessionId}`, `end-queue-${req.sessionId}`);
-        console.info(`[#${req.sessionId}] ${req.type} waited ${queue.duration}ms`);
+        console.info(`[${this.name}] ${req.type} waited ${queue.duration}ms (#${req.sessionId})`);
 
         try {
           return await this.handle(req);
@@ -39,7 +42,7 @@ export abstract class WorkerHandler<Req extends Message, Msg extends Message> {
           performance.mark(`end-compute-${req.sessionId}`);
           const compute = performance.measure(`compute-${req.sessionId}`, `end-queue-${req.sessionId}`, `end-compute-${req.sessionId}`);
 
-          console.info(`[#${req.sessionId}] ${req.type} request took ${compute.duration}ms`);
+          console.info(`[${this.name}] ${req.type} request took ${compute.duration}ms (#${req.sessionId})`);
         }
       }),
     ).subscribe((res) => {
@@ -50,6 +53,12 @@ export abstract class WorkerHandler<Req extends Message, Msg extends Message> {
 
     this._source.addEventListener('message', (event: MessageEvent<Req>) => {
       request$$.next(event.data);
+    });
+
+    // Worker is ready
+    this._source.postMessage({
+      sessionId: '--init--',
+      type: '--started--',
     });
   }
 

@@ -1,28 +1,35 @@
-import { GeneratorStackConfig } from '@ants/world';
+import type { GeneratorStackConfig, StackProgressEvent } from '@ants/world';
 
-import { RequestSender } from './request-sender';
-import type { EndMessage, GenerateRequest, ProgressMessage } from './world-generator.worker';
+import { RequestWorker } from './request-worker';
+import { Message } from './message';
+
+// Types
+export interface GenerateRequest extends Message<'generate'> {
+  readonly world: string;
+  readonly stack: GeneratorStackConfig;
+}
+
+export interface ProgressMessage extends Message<'progress'> {
+  readonly event: StackProgressEvent;
+}
+
+export type EndMessage = Message<'end'>;
+
 
 // Class
-export class WorldGenerator {
-  // Attributes
-  private _sender?: RequestSender<GenerateRequest, ProgressMessage | EndMessage>;
+export class WorldGenerator extends RequestWorker<GenerateRequest, ProgressMessage | EndMessage> {
+  // Constructor
+  constructor() {
+    super('world-generator');
+  }
 
   // Methods
-  private _getSender(): RequestSender<GenerateRequest, ProgressMessage | EndMessage> {
-    if (!this._sender) {
-      this._sender = new RequestSender(
-        new Worker(new URL(/* webpackChunkName: "world-generator" */'./world-generator.worker.ts', import.meta.url))
-      );
-    }
-
-    return this._sender;
+  protected _loadWorker(): Worker {
+    return new Worker(new URL(/* webpackChunkName: "world-generator" */'./world-generator.worker.ts', import.meta.url));
   }
 
   generate(world: string, stack: GeneratorStackConfig) {
-    const sender = this._getSender();
-
-    return sender.request({
+    return this.request({
       type: 'generate',
       world, stack
     });

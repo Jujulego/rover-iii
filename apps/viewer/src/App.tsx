@@ -2,10 +2,10 @@ import { rect } from '@jujulego/2d-maths';
 import { GeneratorStackConfig } from '@ants/world';
 import { Button, Grid } from '@mui/material';
 import { FC, useEffect, useRef, useState } from 'react';
-import { filter, firstValueFrom, tap } from 'rxjs';
+import { filter, firstValueFrom } from 'rxjs';
 
 import { BiomeLayer } from './layers/BiomeLayer';
-import { WorldGenerator } from './workers';
+import { WorldGenerator, ProgressMessage } from './workers/world-generator';
 
 // Constant
 const WORLD = 'test';
@@ -76,12 +76,18 @@ export const App: FC = () => {
   useEffect(() => void (async () => {
     if (a === 0) return;
 
-    await firstValueFrom(worldGenerator.generate(WORLD, STACK)
-      .pipe(
-        //tap(({ event }) => console.log(`#${event.step} ${event.generator} ${(event.progress * 100).toFixed(2)}%`)),
-        filter(({ type }) => type === 'end'),
-      )
-    );
+    const msg$ = worldGenerator.generate(WORLD, STACK);
+
+    msg$.pipe(
+      filter((msg): msg is ProgressMessage => msg.type === 'progress'),
+      filter(({ event }) => event.generatorEvent.progress === 1),
+    ).subscribe(({ event }) => {
+      console.log(`#${event.step} ${event.generator} ${(event.progress * 100).toFixed(2)}%`);
+    });
+
+    await firstValueFrom(msg$.pipe(
+      filter(({ type }) => type === 'end'),
+    ));
 
     b.current = a;
   })(), [a]);

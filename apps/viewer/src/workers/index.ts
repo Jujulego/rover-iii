@@ -1,4 +1,3 @@
 export * from './message';
-export * from './request-sender';
+export * from './request-worker';
 export * from './worker-handler';
-export * from './world-generator';
