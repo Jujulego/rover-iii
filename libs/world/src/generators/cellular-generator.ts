@@ -1,4 +1,4 @@
-import { IPoint, Point, point, rect, vector } from '@jujulego/2d-maths';
+import { IPoint, Point, point, vector } from '@jujulego/2d-maths';
 
 import { TileGenerator, TileGeneratorOpts } from './tile-generator';
 import { ITile } from '../tile';
@@ -20,20 +20,9 @@ const DIRECTIONS = [
 // Class
 export class CellularGenerator extends TileGenerator<TileGeneratorOpts> {
   // Attributes
-  private _cacheSize = 0;
   private readonly _cache = BST.empty<ITile, IPoint>((tile) => tile.pos, Point.comparator('yx'));
 
   // Methods
-  private _addToCache(tile: ITile): void {
-    if (this._cache.search(tile.pos).length === 0) {
-      this._cache.insert(tile);
-
-      if (this._cache.length > this._cacheSize) {
-        this._cache.pop();
-      }
-    }
-  }
-
   private async _getNeighbors(world: IWorld, pos: Point): Promise<ITile[]> {
     const toRequest: IPoint[] = [];
     const result: ITile[] = [];
@@ -53,11 +42,11 @@ export class CellularGenerator extends TileGenerator<TileGeneratorOpts> {
     // Request missing
     for (const tile of await this.client.bulkGetTile(world, toRequest)) {
       result.push(tile);
-
-      if (tile) {
-        this._addToCache(tile);
-      }
+      this._cache.insert(tile);
     }
+
+    // Clean cache
+    this._cache.removeUntil(pos.add(vector(0, -1))); // <= will not be used later
 
     return result;
   }
@@ -69,7 +58,6 @@ export class CellularGenerator extends TileGenerator<TileGeneratorOpts> {
 
     // Clear cache
     this._cache.clear();
-    this._cacheSize = rect(opts.bbox).size.dy * 2 + 2;
 
     // Algorithm
     for (let y = opts.bbox.b; y < opts.bbox.t; ++y) {

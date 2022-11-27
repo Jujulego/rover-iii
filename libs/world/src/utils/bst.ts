@@ -123,6 +123,11 @@ export class BST<T, K = T> {
     return idx;
   }
 
+  /**
+   * Returns the nearest stored element according to the given mode
+   * @param key
+   * @param mode
+   */
   nearest(key: K, mode: 'lt' | 'lte' | 'gte' | 'gt'): T | null {
     if (this._array.length === 0) return null;
 
@@ -220,6 +225,31 @@ export class BST<T, K = T> {
     }
 
     return removed;
+  }
+
+  /**
+   * Removes all elements before the one matching the key (excluded).
+   *
+   * @param key
+   * @returns removed elements
+   */
+  removeUntil(key: K): T[] {
+    if (this._array.length === 0) {
+      return [];
+    }
+
+    // Search ordered index
+    let [idx,] = this._searchOne(key);
+
+    for (; idx > 0; idx--) {
+      const obj = this._array[idx];
+
+      if (this._comparator(this._extractor(obj), key) < 0) {
+        break;
+      }
+    }
+
+    return this._array.splice(0, idx + 1);
   }
 
   /**

@@ -104,3 +104,13 @@ describe('BST.remove', () => {
       .toEqual([1, 2, 2, 2, 4, 5]);
   });
 });
+
+describe('BST.removeUntil', () => {
+  test('an existing element', () => {
+    expect(bst.removeUntil(2))
+      .toEqual([1]);
+
+    expect(bst.array)
+      .toEqual([2, 2, 2, 4, 5]);
+  });
+});
