@@ -1,10 +1,11 @@
 import { rect } from '@jujulego/2d-maths';
-import { GeneratorStack, GeneratorStackConfig } from '@ants/world';
+import { GeneratorStackConfig } from '@ants/world';
 import { Button, Grid } from '@mui/material';
 import { FC, useEffect, useRef, useState } from 'react';
+import { filter, firstValueFrom } from 'rxjs';
 
-import { worldClient } from './world-client';
 import { BiomeLayer } from './layers/BiomeLayer';
+import { WorldGenerator, ProgressMessage } from './workers/world-generator';
 
 // Constant
 const WORLD = 'test';
@@ -61,30 +62,34 @@ const STACK: GeneratorStackConfig = {
   ]
 };
 
+const worldGenerator = new WorldGenerator();
+
 // Component
 export const App: FC = () => {
   // State
   const [a, setA] = useState(0);
   const b = useRef(0);
 
-  const [version, setVersion] = useState(0);
+  const [version, setVersion] = useState(STACK.steps.length - 1);
 
   // Effects
   useEffect(() => void (async () => {
     if (a === 0) return;
 
-    console.group(`Generation n°${a}`);
-    console.time('generation');
+    const msg$ = worldGenerator.generate(WORLD, STACK);
 
-    const stack = new GeneratorStack(worldClient, STACK);
-    stack.subscribe('progress', (event) => console.log(`#${event.step} ${event.generator} ${(event.progress * 100).toFixed(2)}%`));
+    msg$.pipe(
+      filter((msg): msg is ProgressMessage => msg.type === 'progress'),
+      filter(({ event }) => event.generatorEvent.progress === 1),
+    ).subscribe(({ event }) => {
+      console.log(`#${event.step} ${event.generator} ${(event.progress * 100).toFixed(2)}%`);
+    });
 
-    await stack.run(WORLD);
+    await firstValueFrom(msg$.pipe(
+      filter(({ type }) => type === 'end'),
+    ));
 
     b.current = a;
-
-    console.timeEnd('generation');
-    console.groupEnd();
   })(), [a]);
 
   useEffect(() => {
@@ -99,12 +104,12 @@ export const App: FC = () => {
       </Grid>
       <Grid container item>
         <Grid item>
-          <Button disabled={version === 0} onClick={() => setVersion((old) => old - 1)}>
+          <Button disabled={version <= 0} onClick={() => setVersion((old) => old - 1)}>
             prev
           </Button>
         </Grid>
         <Grid item>
-          <Button disabled={version === (STACK.steps.length - 1)} onClick={() => setVersion((old) => old + 1)}>
+          <Button disabled={version >= (STACK.steps.length - 1)} onClick={() => setVersion((old) => old + 1)}>
             next
           </Button>
         </Grid>
