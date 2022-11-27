@@ -1,10 +1,7 @@
-import { customAlphabet } from 'nanoid/async';
+import { nanoid } from 'nanoid/async';
 import { concatMap, defer, filter, Observable, share, Subject } from 'rxjs';
 
 import { Message } from './message';
-
-// Utils
-const nanoid = customAlphabet('azertyuiopmlkjhgfdsqwxcvbn0123456789-');
 
 // Class
 export abstract class RequestWorker<Req extends Message, Msg extends Message> {
@@ -58,7 +55,10 @@ export abstract class RequestWorker<Req extends Message, Msg extends Message> {
         console.warn(`Failed to load worker ${this.name} retrying in 1s`);
 
         tries--;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        if (tries > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
       }
     }
 

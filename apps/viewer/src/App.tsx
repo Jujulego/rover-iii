@@ -70,7 +70,7 @@ export const App: FC = () => {
   const [a, setA] = useState(0);
   const b = useRef(0);
 
-  const [version, setVersion] = useState(0);
+  const [version, setVersion] = useState(STACK.steps.length - 1);
 
   // Effects
   useEffect(() => void (async () => {
@@ -99,17 +99,17 @@ export const App: FC = () => {
   // Render
   return (
     <Grid container columns={1}>
-      <Grid item onClick={() => setA((old) => old + 1)}>
+      <Grid item onClick={() => setA(b.current + 1)}>
         <BiomeLayer world={{ world: WORLD, version }} area={EXPA} />
       </Grid>
       <Grid container item>
         <Grid item>
-          <Button disabled={version === 0} onClick={() => setVersion((old) => old - 1)}>
+          <Button disabled={version <= 0} onClick={() => setVersion((old) => old - 1)}>
             prev
           </Button>
         </Grid>
         <Grid item>
-          <Button disabled={version === (STACK.steps.length - 1)} onClick={() => setVersion((old) => old + 1)}>
+          <Button disabled={version >= (STACK.steps.length - 1)} onClick={() => setVersion((old) => old + 1)}>
             next
           </Button>
         </Grid>
