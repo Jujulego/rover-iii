@@ -190,7 +190,7 @@ __metadata:
     "@ants/world": 1.0.0
     "@emotion/react": 11.10.5
     "@emotion/styled": 11.10.5
-    "@jujulego/2d-maths": 1.4.1
+    "@jujulego/2d-maths": 1.5.0
     "@mui/icons-material": 5.10.14
     "@mui/material": 5.10.14
     "@swc/core": 1.3.20
@@ -238,7 +238,7 @@ __metadata:
   resolution: "@ants/world@workspace:libs/world"
   dependencies:
     "@ants/tools": "workspace:*"
-    "@jujulego/2d-maths": ^1.4.1
+    "@jujulego/2d-maths": ^1.5.0
     "@jujulego/event-tree": ^1.1.0
     "@jujulego/jill": 2.1.0-alpha.3
     "@swc/core": 1.3.20
@@ -3695,10 +3695,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jujulego/2d-maths@npm:1.4.1, @jujulego/2d-maths@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@jujulego/2d-maths@npm:1.4.1"
-  checksum: bed1974337139fa3af32cf8b452394a24a884edc0327ebb66d8304440eb830ffe3a06f9dabf4524532c38b3e0818e0913cc3febffc5f0f03eb00e045a505f196
+"@jujulego/2d-maths@npm:1.5.0, @jujulego/2d-maths@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@jujulego/2d-maths@npm:1.5.0"
+  checksum: 60b3472fd99a461b929f8fe5b81c10e9afdeaaede8d78e919c099cd3f5f27bbb7d14bc23ce1a973d0780a0fa417098695c207f80be9c10b28723809487e4b94d
   languageName: node
   linkType: hard
 

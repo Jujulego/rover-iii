@@ -1,4 +1,4 @@
-import { IPoint, Point, point, vector } from '@jujulego/2d-maths';
+import { IPoint, Point, pointsOf, vector } from '@jujulego/2d-maths';
 
 import { TileGenerator, TileGeneratorOpts } from './tile-generator';
 import { ITile } from '../tile';
@@ -20,7 +20,7 @@ const DIRECTIONS = [
 // Class
 export class CellularGenerator extends TileGenerator<TileGeneratorOpts> {
   // Attributes
-  private readonly _cache = BST.empty<ITile, IPoint>((tile) => tile.pos, Point.comparator('yx'));
+  private readonly _cache = BST.empty<ITile, IPoint>((tile) => tile.pos, Point.comparator());
 
   // Methods
   private async _getNeighbors(world: IWorld, pos: Point): Promise<ITile[]> {
@@ -60,35 +60,31 @@ export class CellularGenerator extends TileGenerator<TileGeneratorOpts> {
     this._cache.clear();
 
     // Algorithm
-    for (let y = opts.bbox.b; y < opts.bbox.t; ++y) {
-      for (let x = opts.bbox.l; x < opts.bbox.r; ++x) {
-        const pos = point(x, y);
+    for (const pos of pointsOf(opts.shape)) {
+      // Evaluate surroundings
+      const neighbors = await this._getNeighbors(opts.base, pos);
+      const biomes: Record<string, number> = {};
 
-        // Evaluate surroundings
-        const neighbors = await this._getNeighbors(opts.base, pos);
-        const biomes: Record<string, number> = {};
-
-        for (const n of neighbors) {
-          if (!pos.equals(n.pos)) {
-            biomes[n.biome] = (biomes[n.biome] ?? 0) + 1;
-          }
+      for (const n of neighbors) {
+        if (!pos.equals(n.pos)) {
+          biomes[n.biome] = (biomes[n.biome] ?? 0) + 1;
         }
+      }
 
-        // Update tile
-        let sent = false;
+      // Update tile
+      let sent = false;
 
-        for (const [biome, cnt] of Object.entries(biomes)) {
-          if (cnt > 4) {
-            yield { pos, biome };
+      for (const [biome, cnt] of Object.entries(biomes)) {
+        if (cnt > 4) {
+          yield { pos, biome };
 
-            sent = true;
-            break;
-          }
+          sent = true;
+          break;
         }
+      }
 
-        if (!sent) {
-          yield null;
-        }
+      if (!sent) {
+        yield null;
       }
     }
   }

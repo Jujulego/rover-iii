@@ -1,4 +1,4 @@
-import { IRect, rect } from '@jujulego/2d-maths';
+import { IShape } from '@jujulego/2d-maths';
 import { EventSource } from '@jujulego/event-tree';
 
 import { ITile } from '../tile';
@@ -8,7 +8,7 @@ import { WorldClient } from '../world-client';
 // Types
 export interface TileGeneratorOpts {
   readonly base?: Required<IWorld>;
-  readonly bbox: IRect;
+  readonly shape: IShape;
   readonly chunkSize?: number;
 }
 
@@ -39,7 +39,7 @@ export abstract class TileGenerator<O extends TileGeneratorOpts> extends EventSo
     world = parseWorld(world);
 
     const { chunkSize = 1000 } = opts;
-    const size = rect(opts.bbox).size;
+    const size = opts.shape.bbox.size;
     const step = Math.ceil(Math.min(chunkSize, size.dx * size.dy) / 10);
 
     let chunk: ITile[] = [];

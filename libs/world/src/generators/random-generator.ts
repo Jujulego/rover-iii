@@ -4,6 +4,7 @@ import { TileGenerator, TileGeneratorOpts } from './tile-generator';
 import { ITile } from '../tile';
 import { BST } from '../utils';
 import { IWorld } from '../world';
+import { pointsOf } from '@jujulego/2d-maths';
 
 // Types
 export interface RandomGeneratorOpts extends TileGeneratorOpts {
@@ -44,17 +45,15 @@ export class RandomGenerator extends TileGenerator<RandomGeneratorOpts> {
 
     const cnt: Record<string, number> = {};
 
-    for (let y = opts.bbox.b; y < opts.bbox.t; ++y) {
-      for (let x = opts.bbox.l; x < opts.bbox.r; ++x) {
-        const prng = seedrandom(`${opts.seed}-${x}-${y}`);
-        const res = biomes.nearest(prng.quick(), 'lte');
+    for (const pos of pointsOf(opts.shape)) {
+      const prng = seedrandom(`${opts.seed}-${pos.x}-${pos.y}`);
+      const res = biomes.nearest(prng.quick(), 'lte');
 
-        if (res) {
-          const biome = res[0];
-          cnt[biome] = (cnt[biome] ?? 0) + 1;
+      if (res) {
+        const biome = res[0];
+        cnt[biome] = (cnt[biome] ?? 0) + 1;
 
-          yield { pos: { x, y }, biome };
-        }
+        yield { pos, biome };
       }
     }
   }

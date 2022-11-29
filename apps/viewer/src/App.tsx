@@ -1,4 +1,4 @@
-import { rect } from '@jujulego/2d-maths';
+import { disk, rect } from '@jujulego/2d-maths';
 import { GeneratorStackConfig } from '@ants/world';
 import { Button, Grid } from '@mui/material';
 import { FC, useEffect, useRef, useState } from 'react';
@@ -11,7 +11,8 @@ import { WorldGenerator, ProgressMessage } from './workers/world-generator';
 const WORLD = 'test';
 // const AREA = rect({ x: 0, y: 0 }, { dx: 3, dy: 3 });
 const AREA = rect({ x: 0, y: 0 }, { dx: 40, dy: 20 });
-const EXPA = rect(AREA.bl.add({ dx: -1, dy: -1 }), AREA.size.add({ dx: 2, dy: 2 }));
+// const AREA = disk({ x: 10, y: 10 }, 10);
+const EXPA = rect(AREA.bbox.bl.add({ dx: -1, dy: -1 }), AREA.bbox.size.add({ dx: 2, dy: 2 }));
 const SEED = 'tata';
 
 const STACK: GeneratorStackConfig = {
@@ -19,14 +20,28 @@ const STACK: GeneratorStackConfig = {
     {
       generator: 'uniform',
       opts: {
-        bbox: EXPA,
+        shape: EXPA,
         biome: 'water',
       }
     },
+    // {
+    //   generator: 'uniform',
+    //   opts: {
+    //     shape: disk({ x: 10, y: 10 }, 10),
+    //     biome: 'sand',
+    //   }
+    // },
+    // {
+    //   generator: 'uniform',
+    //   opts: {
+    //     shape: disk({ x: 15, y: 10 }, 10),
+    //     biome: 'grass',
+    //   }
+    // },
     {
       generator: 'random',
       opts: {
-        bbox: AREA,
+        shape: AREA,
         seed: SEED,
         biomes: {
           water: 0.3,
@@ -38,25 +53,25 @@ const STACK: GeneratorStackConfig = {
     {
       generator: 'cellular',
       opts: {
-        bbox: AREA,
+        shape: AREA,
       }
     },
     {
       generator: 'cellular',
       opts: {
-        bbox: AREA,
+        shape: AREA,
       }
     },
     {
       generator: 'cellular',
       opts: {
-        bbox: AREA,
+        shape: AREA,
       }
     },
     {
       generator: 'cellular',
       opts: {
-        bbox: AREA,
+        shape: AREA,
       }
     }
   ]
