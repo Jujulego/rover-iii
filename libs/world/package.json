@@ -43,7 +43,7 @@
     "@swc/jest": "0.2.23",
     "@types/gulp": "4.0.10",
     "@types/jest": "29.2.3",
-    "@types/node": "16.18.3",
+    "@types/node": "16.18.126",
     "@types/seedrandom": "3.0.2",
     "@typescript-eslint/eslint-plugin": "5.44.0",
     "@typescript-eslint/parser": "5.44.0",
